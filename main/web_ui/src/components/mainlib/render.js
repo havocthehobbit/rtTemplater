@@ -1,4 +1,4 @@
-let $cn=require("../common/linNative").$cn
+let $cn=require("../common/libNative").$cn
 let cl=$cn.l
 let tof=$cn.tof
 let isUn=$cn.isUn
@@ -8,7 +8,7 @@ let isOb=$cn.isOb
 export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
     let tt=this
     let args=arguments
-    let tData={}        
+    let data={}        
     let tTmpl=""
     let tmpState={}
     let stateVar=""
@@ -20,8 +20,8 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
     if (tof(cbi)==="function"){ cb=cbi}
 
     // test
-    //tData.name="rob"
-    //tTmpl="`hello ${tData.name}`"
+    //data.name="rob"
+    //tTmpl="`hello ${data.name}`"
     //stateVar="tmplOut"
     ///////////////
 
@@ -32,7 +32,7 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
 
         temp="tData"
         if (a[temp]){
-            tData=a[temp]
+            data=a[temp]
         }
 
         temp="tTmpl"
@@ -62,7 +62,7 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
     }else{
         let a=args
         if (args.length > 0){
-            tData=a[0]
+            data=a[0]
         }
         if (args.length > 1){
             tTmpl=a[1]
@@ -77,6 +77,16 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
             cb=a[4]
         }
     }
+
+    let temp=tTmpl.trim()
+    if (temp[0]!=="`"){
+        temp="`" + temp
+    }
+    if (temp[temp.length - 1]!=="`"){
+        temp=temp + "`"
+    }
+
+    tTmpl=temp
 
     tmplOut=eval(tTmpl)
 

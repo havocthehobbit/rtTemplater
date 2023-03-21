@@ -41,9 +41,7 @@ let cool_native_js={
         }
         return ret
     },
-    isUn : function(inp){
-       return this.isUndefined(inp)
-    },
+    isUn : undefined,
     typeof : function(inp){
         var t=typeof(inp)
 
@@ -76,6 +74,7 @@ let cool_native_js={
 
         this.isPlainObject=this.isObject
         this.isOb=this.isObject
+        this.isUn=this.isUndefined
         
         this.tof=this.typeof      
     }

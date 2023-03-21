@@ -10,6 +10,7 @@
 /main/web_ui/startdevc.sh 
 
 
+/main/web_uic
 # production
 /main/web_ui/build
 
@@ -33,9 +34,13 @@
 /main/node_serv/startdevc.sh
 /main/node_serv/custom
 
+/main/node_servc
 #data
 /main/data/settings.json
 
+
+
+/main/datac
 
 #
 /main/temp
