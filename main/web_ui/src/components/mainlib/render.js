@@ -9,6 +9,10 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
     let tt=this
     let args=arguments
     let data={}        
+    let dataEx={}
+    let dataex={}
+    let dataExtra={}
+    let data_extra={}
     let tTmpl=""
     let tmpState={}
     let stateVar=""
@@ -36,6 +40,14 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
         temp="tData"
         if (a[temp]){
             data=a[temp]
+        }
+
+        temp="tDataExtra"
+        if (a[temp]){
+            dataEx=a[temp]
+            dataex=a[temp]
+            dataExtra=a[temp]
+            data_extra=a[temp]
         }
 
         temp="tTmpl"

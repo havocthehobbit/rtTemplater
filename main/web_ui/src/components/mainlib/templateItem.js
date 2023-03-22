@@ -27,6 +27,41 @@ export class TemplateItem extends Component {
             o[temp]=props[temp]
         }
 
+        temp="dataEx"
+        if (!isUn(props[temp])){ 
+            o.tDataExtra=props[temp]            
+        }
+
+        temp="dataex"
+        if (!isUn(props[temp])){ 
+            o.tDataExtra=props[temp]            
+        }
+
+        temp="dataExtra"
+        if (!isUn(props[temp])){ 
+            o.tDataExtra=props[temp]            
+        }
+
+        temp="data_extra"
+        if (!isUn(props[temp])){ 
+            o.tDataExtra=props[temp]            
+        }
+
+        temp="data_Extra"
+        if (!isUn(props[temp])){ 
+            o.tDataExtra=props[temp]            
+        }   
+        
+        temp="data_Ex"
+        if (!isUn(props[temp])){ 
+            o.tDataExtra=props[temp]            
+        }
+
+        temp="data_ex"
+        if (!isUn(props[temp])){ 
+            o.tDataExtra=props[temp]            
+        }
+
         temp="template"
         if (!isUn(props[temp])){ 
             o[temp]=props[temp]
@@ -105,7 +140,7 @@ export class TemplateItem extends Component {
         let tt=this
         let cb=()=>{}
         if (tof(cby)==="function"){ cb=cby}
-        tt.renderTemplate({ tData : tt.state.data , tTmpl : tt.state.template }, (dt,err)=>{
+        tt.renderTemplate({ tData : tt.state.data , tTmpl : tt.state.template, tDataExtra : tt.state.tDataExtra }, (dt,err)=>{
             if (err){dt=err}
             tt.setState({ tmplOut : dt,tmplOutErr : err },( )=>{              
               cb(dt ,err)

@@ -74,16 +74,16 @@ export class ReactNodeMongo extends Component {
                 },
         "object" :{            
             "objname" : "generalDbFN",
+            "objname2" : "gen",
         },
     }
 
 
     reactTmplate0=""
-    nodeTmplates={
-        
+    nodeTmplates={        
         tables : `\`
-        let generalDbFns={
-            name : "generalproj",
+        let \${dataEx.object.objname}={
+            name : "\${dataEx.object.objname}",
             db : undefined,
             \${data.name} : {
                 get\${data.name} : (params, cbp)=>{
@@ -193,7 +193,7 @@ export class ReactNodeMongo extends Component {
                 let re=<TemplateItem 
                             title={r.name}
                             data={r}                             
-                            data_db={tt.dbSchema.object}
+                            dataEx={{ object : tt.dbSchema.object }}
                             template={tt.nodeTmplates.tables}
                             runRender={tt.state.runRenderAllFns}
                             showRenderButton={false}
