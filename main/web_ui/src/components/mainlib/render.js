@@ -85,7 +85,7 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
     if (temp[temp.length - 1]!=="`"){
         temp=temp + "`"
     }
-
+    if (temp==="`"){temp="``"}
     tTmpl=temp
 
     tmplOut=eval(tTmpl)

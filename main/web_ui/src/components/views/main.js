@@ -3,6 +3,7 @@ import "../../App.css";
 import { ContextStore } from '../common/contextStore';
 import { RenderTmpl } from '../mainlib/render';
 import { TemplateItem } from '../mainlib/templateItem';
+import { ReactNodeMongo } from '../mainlib/reactnodemongo';
 
 export class Main extends Component {
     constructor(props){
@@ -16,32 +17,12 @@ export class Main extends Component {
     }
 
 
-    componentDidMount(){}
-
-    runRender={ fn : ()=>{}}
-  
-
     render(){
         let tt=this
 
         return (
             <div>
-                <button
-                    onClick={()=>{
-                        tt.runRender.fn()
-                    }}
-                >
-                    ParRender
-                </button>
-
-                <TemplateItem 
-                    title={"Db1"} 
-                    data={{name : "rob"}} 
-                    template={"hello my name is ${data.name}"}
-                    runRender={tt.runRender}
-                    showRenderButton={false}
-                
-                />
+                <ReactNodeMongo/>
             </div>
         )
     }
