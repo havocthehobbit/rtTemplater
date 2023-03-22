@@ -1,6 +1,6 @@
 import React,{ Component } from 'react';
 import "../../App.css";
-import { ContextStore } from '../common/contextStore';
+//import { ContextStore } from '../common/contextStore';
 import { RenderTmpl } from '../mainlib/render';
 import { TemplateItem } from '../mainlib/templateItem';
 
@@ -18,7 +18,7 @@ export class ReactNodeMongo extends Component {
      
         this.state={
             name : "", name2 : "",
-            tmplOut : ""
+            tmplOut : "", runRenderAllFns : {}
         }
     }
 
@@ -38,7 +38,7 @@ export class ReactNodeMongo extends Component {
     runRenderAll=()=>{
         let tt=this
         //{ fn : ()=>{}}
-        $cn.each(tt.runRenderAllFns,(r,i)=>{
+        $cn.each(tt.state.runRenderAllFns,(r,i)=>{
             if (tof(r.fn)==="function"){
                 r.fn()
             }
@@ -137,13 +137,14 @@ export class ReactNodeMongo extends Component {
             let i=0
             $cn.each(dt,(r,p)=>{
 
-                
-                tt.runRenderAllFns[r.name]={ fn : undefined}
+                if (typeof(tt.state.runRenderAllFns[r.name])==="undefined"){
+                    tt.state.runRenderAllFns[r.name]={ fn : undefined}
+                }
                 let re=<TemplateItem 
                             title={r.name}
                             data={r}                             
                             template={tt.nodeTmplates.tables}
-                            runRender={tt.runRenderAllFns}
+                            runRender={tt.state.runRenderAllFns}
                             showRenderButton={false}
                         />
                 E.push( 

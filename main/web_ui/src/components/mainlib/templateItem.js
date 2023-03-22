@@ -1,6 +1,6 @@
 import React,{ Component } from 'react';
 import "../../App.css";
-import { ContextStore } from '../common/contextStore';
+//import { ContextStore } from '../common/contextStore';
 import { RenderTmpl } from './render';
 
 let $cn=require("../common/libNative").$cn
