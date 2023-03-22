@@ -70,7 +70,12 @@ export class ReactNodeMongo extends Component {
                         "name" : "user_details",
                         "indexs" : {},
                         "cols" : {}
-                    }
+                    },
+                    "groups" : {
+                       "name" : "groups",
+                       "indexs" : {},
+                       "cols" : {}
+                   }
                 },
         "object" :{            
             "objname" : "generalDbFN",
