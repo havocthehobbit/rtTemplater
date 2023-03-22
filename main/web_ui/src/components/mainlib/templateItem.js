@@ -105,9 +105,10 @@ export class TemplateItem extends Component {
         let tt=this
         let cb=()=>{}
         if (tof(cby)==="function"){ cb=cby}
-        tt.renderTemplate({ tData : tt.state.data , tTmpl : tt.state.template }, (dt)=>{
-            tt.setState({ tmplOut : dt },()=>{              
-              cb()
+        tt.renderTemplate({ tData : tt.state.data , tTmpl : tt.state.template }, (dt,err)=>{
+            if (err){dt=err}
+            tt.setState({ tmplOut : dt,tmplOutErr : err },( )=>{              
+              cb(dt ,err)
             })
         })
     }

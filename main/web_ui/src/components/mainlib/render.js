@@ -16,8 +16,11 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
     let tmplOut
     let cb=()=>{}
     let useState=false
+    let tDataPreValFn=()=>{}
 
     if (tof(cbi)==="function"){ cb=cbi}
+    
+    
 
     // test
     //data.name="rob"
@@ -48,6 +51,13 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
         temp="useState"
         if (a[temp]){
             useState=a[temp]
+        }
+
+        temp="tDataPreValFn"
+        if (a[temp]){
+            if (tof(a[temp])==="function"){
+                tDataPreValFn=a[temp]
+            }            
         }
 
         temp="cb"
@@ -88,7 +98,15 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
     if (temp==="`"){temp="``"}
     tTmpl=temp
 
-    tmplOut=eval(tTmpl)
+    tDataPreValFn()
+
+    try {
+        tmplOut=eval(tTmpl)    
+    } catch (error) {
+        cb(tmplOut,error)    
+        return tmplOut
+    }
+    
 
     if (typeof(useStateIn)==="bool"){
         useState=useStateIn

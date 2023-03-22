@@ -71,36 +71,86 @@ export class ReactNodeMongo extends Component {
                         "indexs" : {},
                         "cols" : {}
                     }
-                }
+                },
+        "object" :{            
+            "objname" : "generalDbFN",
+        },
     }
 
 
     reactTmplate0=""
     nodeTmplates={
+        
         tables : `\`
-            get\${data.name} : ()=>{
-                db.collection("\${data.name}")
-                
-                return
-            }
+        let generalDbFns={
+            name : "generalproj",
+            db : undefined,
+            \${data.name} : {
+                get\${data.name} : (params, cbp)=>{
+                    let db=generalDbFns.db 
+                    let temp=""
+                    let details=undefined       
+                    let view=undefined       
 
-            get\${data.name} : ()=>{
-                db.collection("\${data.name}")
-                
-                return
-            }
+                    let cb=()=>{}
+                    if (typeof(cbp)==="function"){
+                        cb=cbp
+                    }
 
-            update\${data.name} : ()=>{
-                db.collection("\${data.name}")
-                
-                return
-            }
+                    searchBy={}
+                    temp="\${data.name}id"
+                    if (tof(params[temp])!=="undefined"){
+                        details=params[temp]
+                    }        
+                    temp="id"
+                    if (tof(params[temp])!=="undefined"){
+                        details=params[temp]
+                    }                
+                    temp="email"
+                    if (tof(params[temp])!=="undefined"){
+                        details=params[temp]
+                    }        
+                    temp="details"
+                    if (tof(params[temp])!=="undefined"){
+                        details=params[temp]
+                    }        
+                    temp="view"
+                    if (tof(params[temp])!=="undefined"){
+                        details=params[temp]
+                    }
 
-            delete\${data.name} : ()=>{
-                db.collection("\${data.name}")
-                
-                return
+                    let \${data.name}=db.collection("\${data.name}")
+                        \${data.name}.findOne(searchBy)
+                    .then((dt)=>{
+                        cb(dt)
+                    })
+                    .catch((err)=>{
+                        cb([], err)
+                    })
+                    
+                    return
+                }
+
+                get\${data.name} : ()=>{
+                    db.collection("\${data.name}")
+                    
+                    return
+                }
+
+                update\${data.name} : ()=>{
+                    db.collection("\${data.name}")
+                    
+                    return
+                }
+
+                delete\${data.name} : ()=>{
+                    db.collection("\${data.name}")
+                    
+                    return
+                }
             }
+        }
+            
         \``
     }
     mongoTemplate0=""
@@ -143,6 +193,7 @@ export class ReactNodeMongo extends Component {
                 let re=<TemplateItem 
                             title={r.name}
                             data={r}                             
+                            data_db={tt.dbSchema.object}
                             template={tt.nodeTmplates.tables}
                             runRender={tt.state.runRenderAllFns}
                             showRenderButton={false}

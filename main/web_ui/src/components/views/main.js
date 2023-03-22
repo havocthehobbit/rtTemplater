@@ -24,7 +24,7 @@ export class Main extends Component {
         let myStyle = document.createElement("style")
         document.head.appendChild(myStyle)
         let styleSheet = myStyle.sheet        
-        styleSheet.insertRule(`button { background: green;border-radius : 5px;padding : 10px;font-size : 18px;color : white ;border : none}`, 0)
+        styleSheet.insertRule(`button { background: green;border-radius : 5px;padding : 10px; margin : 3px;font-size : 18px;color : white ;border : none}`, 0)
         
 
     }
@@ -183,6 +183,12 @@ export class Main extends Component {
                                 
                             >
                                 load
+                            </button>
+                            <br/>
+                            <button
+                                
+                                >
+                                save
                             </button>
 
                     </div>
