@@ -18,17 +18,33 @@ export class ReactNodeMongo extends Component {
      
         this.state={
             name : "", name2 : "",
-            tmplOut : "", runRenderAllFns : {}
+            tmplOut : "", runRenderAllFns : {},
+            templatetxt : "",
+            datatxt : "",
+            data : {},
         }
     }
-
+    
 
     componentDidMount(){
-        let tt=this
-        setTimeout(()=>{
-            tt.runRenderAll()    
-        }
-        , 2000)
+        let tt=this       
+
+        tt.setState({ 
+            templatetxt : tt.nodeTmplates.tables,
+            template : tt.nodeTmplates.tables ,
+            data : tt.dbSchema.tables,
+            datatxt : JSON.stringify( tt.dbSchema.tables,null, 2),
+            dataExtxt : JSON.stringify( tt.dbSchema,null, 2)
+        },
+            ()=>{
+                setTimeout(()=>{
+                    tt.runRenderAll()    
+                }
+                , 2000)
+        })
+
+
+        
 
     }
 
@@ -92,7 +108,7 @@ export class ReactNodeMongo extends Component {
             db : undefined,
             \${data.name} : {
                 get\${data.name} : (params, cbp)=>{
-                    let db=generalDbFns.db 
+                    let db=\${dataEx.object.objname}.db 
                     let temp=""
                     let details=undefined       
                     let view=undefined       
@@ -198,7 +214,7 @@ export class ReactNodeMongo extends Component {
                 let re=<TemplateItem 
                             title={r.name}
                             data={r}                             
-                            dataEx={{ object : tt.dbSchema.object }}
+                            dataEx={tt.dbSchema}
                             template={tt.nodeTmplates.tables}
                             runRender={tt.state.runRenderAllFns}
                             showRenderButton={false}
@@ -237,6 +253,72 @@ export class ReactNodeMongo extends Component {
                 >
                     render tables
                 </button>
+                
+                <div style={{ position : "relative",}} >
+                    <label style={{ color : "white",fontSize : 14,height:5,padding : 0,margin : 0 }}>template</label>
+                    <div
+                        style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                    >                                           
+                        <textarea
+                            value={tt.state.templatetxt}
+                            style={{width : 600, height : 120 , borderRadius : 10, border : "none"}}
+                            onChange={(e)=>{
+                                tt.setState({ templatetxt : e.target.value })
+                            }}
+                            onBlur={(e)=>{  
+                                tt.nodeTmplates.tables= e.target.value                             
+                                tt.setState({ template : e.target.value })
+                            }}
+                        />
+                    </div>
+                    <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data</label>
+                    <div
+                        style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                    >                        
+                        <textarea
+                            value={tt.state.datatxt}
+                            style={{width : 600, height : 140 , borderRadius : 10, border : "none"}}
+                            onChange={(e)=>{
+                                tt.setState({ datatxt : e.target.value })
+                            }}
+                            onBlur={(e)=>{
+                                let jsnO
+                                try {
+                                    jsnO=JSON.parse(e.target.value)
+                                    tt.dbSchema.tables=jsnO
+                                    tt.setState({ data : jsnO })
+                                } catch (error) {
+                                    alert("error : " +  error)
+                                }
+                                
+                            }}
+                        />
+                    </div>
+                    <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data extra</label>
+                    <div
+                        style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                    >                        
+                        <textarea
+                            value={tt.state.dataExtxt}
+                            style={{width : 600, height : 140 , borderRadius : 10, border : "none"}}
+                            onChange={(e)=>{
+                                tt.setState({ dataExtxt : e.target.value })
+                            }}
+                            onBlur={(e)=>{
+                                let jsnO
+                                try {
+                                    jsnO=JSON.parse(e.target.value)
+                                    tt.dbSchema=jsnO
+                                    tt.setState({ dataEx : jsnO })
+                                } catch (error) {
+                                    alert("error : " +  error)
+                                }
+                                
+                            }}
+                        />
+                    </div>
+                </div >
+
                 {nodejsmongoCrudCollFnsE}
 
                 

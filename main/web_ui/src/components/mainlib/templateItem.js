@@ -16,6 +16,70 @@ export class TemplateItem extends Component {
 
         let tt=this
         let state={}
+        
+        let temp=""
+        let o=tt.getProps(props)
+        
+        let defState={
+            title : "output",
+
+            data : {},
+            tmplOut : "",
+
+            name : "", name2 : "",
+
+            showRenderButton : true,
+            templatetxt : "",
+            datatxt : "",
+            
+        }
+
+        state={...defState,...o}
+
+        temp="render" // runs this render function from outside of this component using prop drilling
+        if (!isUn(props[temp])){ 
+            if (isOb(props[temp])){
+                props[temp][props.title].render=tt.runRender
+                props[temp][props.title].runRender=tt.runRender
+                props[temp][props.title].run=tt.runRender
+                props[temp][props.title].fn=tt.runRender
+            }            
+        }
+        temp="runRender"
+        if (!isUn(props[temp])){ 
+            if (isOb(props[temp])){
+                props[temp][props.title].render=tt.runRender
+                props[temp][props.title].runRender=tt.runRender
+                props[temp][props.title].run=tt.runRender
+                props[temp][props.title].fn=tt.runRender
+            }            
+        }
+
+        this.state=state
+    }
+
+    itemType=""
+
+    style={}
+
+    componentDidMount(){
+        
+    }
+
+    componentDidUpdate(prv){
+        let tt=this        
+        
+        if (prv!==tt.props){
+            let o=tt.getProps(tt.props)
+            tt.setState(o)
+        }
+        
+        //cl( "props : ", tt.props)
+        //cl( "propsPrev : ", prv)
+    }
+
+    getProps=(props)=>{
+        let tt=this
         let o={}
         let temp=""        
         
@@ -25,6 +89,7 @@ export class TemplateItem extends Component {
         temp="data"
         if (!isUn(props[temp])){ 
             o[temp]=props[temp]
+            o["datatxt"]=JSON.stringify(props[temp],null,2)
         }
 
         temp="dataEx"
@@ -65,6 +130,7 @@ export class TemplateItem extends Component {
         temp="template"
         if (!isUn(props[temp])){ 
             o[temp]=props[temp]
+            o["templatetxt"]=props[temp]            
         }       
 
 
@@ -79,49 +145,8 @@ export class TemplateItem extends Component {
 
         temp="style"
         if (!isUn(props[temp])){ tt[temp]=props[temp]}
-        
-        let defState={
-            title : "output",
 
-            data : {},
-            tmplOut : "",
-
-            name : "", name2 : "",
-
-            showRenderButton : true
-            
-        }
-
-        state={...defState,...o}
-
-        temp="render" // runs this render function from outside of this component using prop drilling
-        if (!isUn(props[temp])){ 
-            if (isOb(props[temp])){
-                props[temp][props.title].render=tt.runRender
-                props[temp][props.title].runRender=tt.runRender
-                props[temp][props.title].run=tt.runRender
-                props[temp][props.title].fn=tt.runRender
-            }            
-        }
-        temp="runRender"
-        if (!isUn(props[temp])){ 
-            if (isOb(props[temp])){
-                props[temp][props.title].render=tt.runRender
-                props[temp][props.title].runRender=tt.runRender
-                props[temp][props.title].run=tt.runRender
-                props[temp][props.title].fn=tt.runRender
-            }            
-        }
-
-        this.state=state
-    }
-
-    itemType=""
-
-    style={}
-
-    componentDidMount(){
-        
+        return o
     }
     
 
@@ -156,7 +181,7 @@ export class TemplateItem extends Component {
         let props=tt.props
 
         return (
-            <div>
+            <div style={{}}>
              
 
                 <h3
@@ -164,25 +189,28 @@ export class TemplateItem extends Component {
                 >
                     {tt.state.title}
                 </h3>
-                <div>
+                <div style={{ position : "relative", float : "left",top : 35,marginBottom : 4}} >
                     {(()=>{
                         if (tt.state.showRenderButton===true){
                             return (
-                                <button
-                                    style={{padding : 8,margin : 3,fontSize: 20 , borderRadius : 4 , background : "lightgreen" , border : "none"}}
-                                    onClick={
-                                        (e)=>{
-                                            tt.runRender()
+                                <>
+                                    <button
+                                        style={{padding : 8,margin : 3,fontSize: 20 , borderRadius : 4 , background : "lightgreen" , border : "none"}}
+                                        onClick={
+                                            (e)=>{
+                                                tt.runRender()
+                                            }
                                         }
-                                    }
-                                >
-                                    render
-                                </button>
+                                    >
+                                        render
+                                    </button>
+                                    <br/>
+                                </>
                             )
                         }
                     })()}
                     
-                    <br/>
+                    
                     <div
                         style={{ background : "white",borderRadius : 10,overflow : "hidden"}}
                     >                    
@@ -196,7 +224,9 @@ export class TemplateItem extends Component {
                     </div>
                 </div>
                 
-
+                
+                
+                <div style={{clear : "left"}}/>
             </div>
         )
     }

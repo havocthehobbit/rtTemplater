@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import "../../App.css";
+//import "../../App.css";
 //import { ContextStore } from '../common/contextStore';
 import { RenderTmpl } from '../mainlib/render';
 import { TemplateItem } from '../mainlib/templateItem';
@@ -21,11 +21,12 @@ export class Main extends Component {
     componentDidMount(){
         
         // add global stylesheet
-        let myStyle = document.createElement("style")
-        document.head.appendChild(myStyle)
-        let styleSheet = myStyle.sheet        
-        styleSheet.insertRule(`button { background: green;border-radius : 5px;padding : 10px; margin : 3px;font-size : 18px;color : white ;border : none}`, 0)
-        
+        if (true){
+            let myStyle = document.createElement("style")
+            document.head.appendChild(myStyle)
+            let styleSheet = myStyle.sheet        
+            styleSheet.insertRule(`button { background: green;border-radius : 5px;padding : 10px; margin : 3px;font-size : 18px;color : white ;border : none}`, 0)
+        }
 
     }
 
@@ -179,6 +180,23 @@ export class Main extends Component {
                         >
                             {"==========="}
                         </div>
+                            <div
+                                 style={{position : "absolute",  
+                                            left : 0 , top : 0, zIndex : 999,
+                                            width : 20, height : "100%",
+                                            background : "lightblue"
+                                }}
+                            >
+                            </div>
+                            <div
+                                 style={{position : "absolute",  
+                                            right : 0 , top : 0, zIndex : 999,
+                                            width : 3, height : "100%",
+                                            background : "lightblue"
+                                }}
+                            />
+
+                        
                             <button
                                 
                             >
@@ -193,8 +211,9 @@ export class Main extends Component {
 
                     </div>
 
-
-                <ReactNodeMongo/>
+                <div style={{ position : "relative",left :35}}>
+                    <ReactNodeMongo/>
+                </div>
             </div>
         )
     }

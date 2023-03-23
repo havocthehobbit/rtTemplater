@@ -20,7 +20,7 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
     let tmplOut
     let cb=()=>{}
     let useState=false
-    let tDataPreValFn=()=>{}
+    let tDataPreValFn=(dt)=>dt
 
     if (tof(cbi)==="function"){ cb=cbi}
     
@@ -108,9 +108,9 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
         temp=temp + "`"
     }
     if (temp==="`"){temp="``"}
-    tTmpl=temp
-
-    tDataPreValFn()
+    
+    tTmpl=preValidateTemplate(temp)
+    
 
     try {
         tmplOut=eval(tTmpl)    
@@ -118,6 +118,16 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
         cb(tmplOut,error)    
         return tmplOut
     }
+
+    tmplOut=(()=>{ 
+        let td
+        td=tDataPreValFn(tmplOut)
+        if (tof(td)==="string"){
+            return td
+        }else{
+            return "`ERROR : custom data validation function issue(tDataPreValFn)`"
+        }
+    })()
     
 
     if (typeof(useStateIn)==="bool"){
@@ -132,4 +142,44 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
     cb(tmplOut)
     
     return tmplOut
+}
+
+let preValidateTemplate=(tp)=>{
+    let newTp=""
+    newTp=tp
+
+
+
+    return newTp
+}
+
+export const getAllStringVarsDetails=(tmpltStrIn , dataIn,dataExtraIn)=>{ // checks for errors in template and checks if variables exist in data
+    
+    let tmpltStr="" ,data={} , dataExtra={}
+    let ret={
+        vars : [],
+        indexedVars : {},
+        errors : "",
+        varsErr  : [],
+        properties : {
+            lineCount : 0,
+            wordCount : 0,
+        }
+    }
+
+    if (!isUn(tmpltStrIn)){
+        tmpltStr=tmpltStrIn
+    }
+
+    if (!isUn(dataIn)){
+        data=dataIn
+    }
+
+    if (!isUn(dataExtraIn)){
+        dataExtra=dataExtraIn
+    }
+
+
+
+    return ret
 }
