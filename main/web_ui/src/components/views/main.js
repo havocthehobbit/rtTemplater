@@ -129,10 +129,23 @@ export class Main extends Component {
     }
 
 
+    mainStyle={
+        backgroundColor: "#282c34",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        //font-size: calc(10px + 2vmin),
+        color: "white",
+        width : "100%"
+      }
+
+
     render(){
         let tt=this
         
-        let style_def={ position : "fixed",overflow : "hidden", zIndex : 9999, left : 0,height : "100%", width : 250,background : "white" }
+        let style_def={ position : "fixed",overflow : "hidden", zIndex : 9999, left : 0,top : 0,height : "100%", width : 250,background : "white" }
 
         // animation
         let style_anima = {
@@ -147,73 +160,77 @@ export class Main extends Component {
 
         let style={...style_def,...style_anima }
 
+        let mainStyle=tt.mainStyle
+
         return (
-            <div>
+            <div style={mainStyle}>                
                 
-                    <div
-                        style={style}
-                        //onClick={tt.animationClickHdl.bind(tt)}                        
-                        onClick={()=>{
-                            //tt.animationClickHdl(false)
-                        }}
-                        onMouseEnter={()=>{
-                            if (tt.sideBarisOpen===false){
-                                if (tt.animationBusy===false){ // prevent from kicking off too many animations at once 
-                                    tt.animationBusy=true
-                                    setTimeout(()=>{tt.animationBusy=false; tt.sideBarisOpen=true ;tt.forceUpdate() },300)
-                                    tt.animationClickHdl(true)
-                                }
-                            }
-                        }}
-                        onMouseLeave={()=>{
-                            if (tt.sideBarisOpen===true){
-                                if (tt.animationBusy===false){ // prevent from kicking off too many animations at once 
-                                    tt.animationBusy=true
-                                    setTimeout(()=>{tt.animationBusy=false; tt.sideBarisOpen=false;tt.forceUpdate()},300)
-                                    tt.animationClickHdl(false)
-                                }
-                            }
-                        }}                    
-                    >
-                        <div
-                            style={{ color : "black"  }}
-                        >
-                            {"==========="}
-                        </div>
-                            <div
-                                 style={{position : "absolute",  
-                                            left : 0 , top : 0, zIndex : 999,
-                                            width : 20, height : "100%",
-                                            background : "lightblue"
-                                }}
-                            >
-                            </div>
-                            <div
-                                 style={{position : "absolute",  
-                                            right : 0 , top : 0, zIndex : 999,
-                                            width : 3, height : "100%",
-                                            background : "lightblue"
-                                }}
-                            />
-
-                        
-                            <button
-                                
-                            >
-                                load
-                            </button>
-                            <br/>
-                            <button
-                                
-                                >
-                                save
-                            </button>
-
-                    </div>
-
-                <div style={{ position : "relative",left :35}}>
+                <div style={{ position : "relative",left :35,width :undefined}}>
                     <ReactNodeMongo/>
                 </div>
+
+                { /* left sidebar */}
+                <div
+                    style={style}
+                    //onClick={tt.animationClickHdl.bind(tt)}                        
+                    onClick={()=>{
+                        //tt.animationClickHdl(false)
+                    }}
+                    onMouseEnter={()=>{
+                        if (tt.sideBarisOpen===false){
+                            if (tt.animationBusy===false){ // prevent from kicking off too many animations at once 
+                                tt.animationBusy=true
+                                setTimeout(()=>{tt.animationBusy=false; tt.sideBarisOpen=true ;tt.forceUpdate() },300)
+                                tt.animationClickHdl(true)
+                            }
+                        }
+                    }}
+                    onMouseLeave={()=>{
+                        if (tt.sideBarisOpen===true){
+                            if (tt.animationBusy===false){ // prevent from kicking off too many animations at once 
+                                tt.animationBusy=true
+                                setTimeout(()=>{tt.animationBusy=false; tt.sideBarisOpen=false;tt.forceUpdate()},300)
+                                tt.animationClickHdl(false)
+                            }
+                        }
+                    }}                    
+                >
+                    <div
+                        style={{ color : "black"  }}
+                    >
+                        {"==========="}
+                    </div>
+                        <div
+                                style={{position : "absolute",  
+                                        left : 0 , top : 0, zIndex : 999,
+                                        width : 20, height : "100%",
+                                        background : "lightblue"
+                            }}
+                        >
+                        </div>
+                        <div
+                                style={{position : "absolute",  
+                                        right : 0 , top : 0, zIndex : 999,
+                                        width : 3, height : "100%",
+                                        background : "lightblue"
+                            }}
+                        />
+
+                    
+                        <button
+                            
+                        >
+                            load
+                        </button>
+                        <br/>
+                        <button
+                            
+                            >
+                            save
+                        </button>
+
+                </div>
+
             </div>
         )
     }

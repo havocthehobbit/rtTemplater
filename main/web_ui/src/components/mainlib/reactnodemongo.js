@@ -15,14 +15,17 @@ export class ReactNodeMongo extends Component {
     constructor(props){
         super(props)
 
-     
-        this.state={
+        let state={
             name : "", name2 : "",
             tmplOut : "", runRenderAllFns : {},
             templatetxt : "",
             datatxt : "",
-            data : {},
+            data : {},  
+
+            inputsTemplateHeightBool : true
         }
+     
+        this.state=state
     }
     
 
@@ -253,74 +256,98 @@ export class ReactNodeMongo extends Component {
                 >
                     render tables
                 </button>
-                
-                <div style={{ position : "relative",}} >
-                    <label style={{ color : "white",fontSize : 14,height:5,padding : 0,margin : 0 }}>template</label>
-                    <div
-                        style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
-                    >                                           
-                        <textarea
-                            value={tt.state.templatetxt}
-                            style={{width : 600, height : 120 , borderRadius : 10, border : "none"}}
-                            onChange={(e)=>{
-                                tt.setState({ templatetxt : e.target.value })
-                            }}
-                            onBlur={(e)=>{  
-                                tt.nodeTmplates.tables= e.target.value                             
-                                tt.setState({ template : e.target.value })
-                            }}
-                        />
-                    </div>
-                    <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data</label>
-                    <div
-                        style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
-                    >                        
-                        <textarea
-                            value={tt.state.datatxt}
-                            style={{width : 600, height : 140 , borderRadius : 10, border : "none"}}
-                            onChange={(e)=>{
-                                tt.setState({ datatxt : e.target.value })
-                            }}
-                            onBlur={(e)=>{
-                                let jsnO
-                                try {
-                                    jsnO=JSON.parse(e.target.value)
-                                    tt.dbSchema.tables=jsnO
-                                    tt.setState({ data : jsnO })
-                                } catch (error) {
-                                    alert("error : " +  error)
+
+                <div style={{ clear : "left" }}/>
+
+                <div style={{ position : "relative",float : "left",padding : 5,border : "blue solid thin", borderRadius : 10,
+                                height : tt.state.inputsTemplateHeight, overflow : tt.state.inputsTemplateHeightOverflow
+                            }} 
+                >
+                    <div style={{ position : "relative"}} >
+                        <label 
+                            style={{ color : "white",fontSize : 14,height:5,padding : 0,margin : 0,cursor : "pointer" }}
+                            onClick={()=>{
+                                if (!tt.state.inputsTemplateHeightBool){
+                                    tt.setState({ inputsTemplateHeight : 16,inputsTemplateHeightBool : true, inputsTemplateHeightOverflow : "hidden"})
+                                }else{
+                                    tt.setState({ inputsTemplateHeight : undefined,inputsTemplateHeightBool : false, inputsTemplateHeightOverflow : undefined})
                                 }
                                 
                             }}
-                        />
+                        >template</label>
+                        <div
+                            style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                        >                                           
+                            <textarea
+                                value={tt.state.templatetxt}
+                                style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
+                                onChange={(e)=>{
+                                    tt.setState({ templatetxt : e.target.value })
+                                }}
+                                onBlur={(e)=>{  
+                                    tt.nodeTmplates.tables= e.target.value                             
+                                    tt.setState({ template : e.target.value })
+                                }}
+                            />
+                        </div>
+                        <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data</label>
+                        <div
+                            style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                        >                        
+                            <textarea
+                                value={tt.state.datatxt}
+                                style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
+                                onChange={(e)=>{
+                                    tt.setState({ datatxt : e.target.value })
+                                }}
+                                onBlur={(e)=>{
+                                    let jsnO
+                                    try {
+                                        jsnO=JSON.parse(e.target.value)
+                                        tt.dbSchema.tables=jsnO
+                                        tt.setState({ data : jsnO })
+                                    } catch (error) {
+                                        alert("error : " +  error)
+                                    }
+                                    
+                                }}
+                            />
+                        </div>
+                        <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data extra</label>
+                        <div
+                            style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                        >                        
+                            <textarea
+                                value={tt.state.dataExtxt}
+                                style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
+                                onChange={(e)=>{
+                                    tt.setState({ dataExtxt : e.target.value })
+                                }}
+                                onBlur={(e)=>{
+                                    let jsnO
+                                    try {
+                                        jsnO=JSON.parse(e.target.value)
+                                        tt.dbSchema=jsnO
+                                        tt.setState({ dataEx : jsnO })
+                                    } catch (error) {
+                                        alert("error : " +  error)
+                                    }
+                                    
+                                }}
+                            />
+                        </div>
+                    </div >
+                </div>
+                 <div style={{ position : "relative",float : "left",width : 670,margin : 8,padding : 10,overflow : "hidden", borderRadius:10,border : "blue solid thin" }} >  
+                    <div style={{ position : "relative", overflow : "auto",padding : 50,width : 600, height : 600 }} >  
+                    
+                            {nodejsmongoCrudCollFnsE}
+                        
                     </div>
-                    <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data extra</label>
-                    <div
-                        style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
-                    >                        
-                        <textarea
-                            value={tt.state.dataExtxt}
-                            style={{width : 600, height : 140 , borderRadius : 10, border : "none"}}
-                            onChange={(e)=>{
-                                tt.setState({ dataExtxt : e.target.value })
-                            }}
-                            onBlur={(e)=>{
-                                let jsnO
-                                try {
-                                    jsnO=JSON.parse(e.target.value)
-                                    tt.dbSchema=jsnO
-                                    tt.setState({ dataEx : jsnO })
-                                } catch (error) {
-                                    alert("error : " +  error)
-                                }
-                                
-                            }}
-                        />
-                    </div>
-                </div >
+                </div>
 
-                {nodejsmongoCrudCollFnsE}
 
+                <div style={{ clear : "left" }}/>
                 
             </div>
         )

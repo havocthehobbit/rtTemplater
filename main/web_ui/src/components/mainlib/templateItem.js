@@ -185,11 +185,11 @@ export class TemplateItem extends Component {
              
 
                 <h3
-                    style={{padding : 0 , margin : 0}}
+                    style={{padding : 0 , margin : 0,color : "white"}}
                 >
                     {tt.state.title}
                 </h3>
-                <div style={{ position : "relative", float : "left",top : 35,marginBottom : 4}} >
+                <div style={{ position : "relative",top : 35,marginBottom : 4}} >
                     {(()=>{
                         if (tt.state.showRenderButton===true){
                             return (
