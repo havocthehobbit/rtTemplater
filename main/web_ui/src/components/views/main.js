@@ -56,8 +56,12 @@ export class Main extends Component {
   
 
     // animation
+    sidebarWidthOpen=250
+    sidebarWidthClosed=20    
+    sideBarisOpen=false
+    sideBarisPined=false
+    //
     animationBusy=false
-    sideBarisOpen=true
     addStylesheetRules(rules) {
         var styleEl = document.createElement("style")
         document.head.appendChild(styleEl)
@@ -78,11 +82,11 @@ export class Main extends Component {
                 @-webkit-keyframes ${animationName} 
                 {
                     from {                    
-                        width: 250;
+                        width: ${tt.sidebarWidthOpen}px;
                     }
                     
                     to {                        
-                        width: 20px;
+                        width: ${tt.sidebarWidthClosed}px;
                     }
                 }
             `;
@@ -94,11 +98,11 @@ export class Main extends Component {
                 @-webkit-keyframes ${animationName} 
                 {
                     from {                    
-                        width: 20px;
+                        width: ${tt.sidebarWidthClosed}px;
                     }
                     
                     to {                        
-                        width: 250;
+                        width: ${tt.sidebarWidthOpen}px;
                     }
                 }
             `;
@@ -186,7 +190,12 @@ export class Main extends Component {
     render(){
         let tt=this
         
-        let style_def={ position : "fixed",overflow : "hidden", zIndex : 9999, left : 0,top : 0,height : "100%", width : 250,background : "white" }
+        let sideBarWidthCurr=tt.sidebarWidthClosed
+        if (tt.sideBarisOpen){
+            sideBarWidthCurr=tt.sidebarWidthOpen
+        }
+
+        let style_def={ position : "fixed",overflow : "hidden", zIndex : 9999, left : 0,top : 0,height : "100%", width : sideBarWidthCurr, background : "white" }
 
         // animation
         let style_anima = {
@@ -217,20 +226,24 @@ export class Main extends Component {
                         //tt.animationClickHdl(false)
                     }}
                     onMouseEnter={()=>{
-                        if (tt.sideBarisOpen===false){
-                            if (tt.animationBusy===false){ // prevent from kicking off too many animations at once 
-                                tt.animationBusy=true
-                                setTimeout(()=>{tt.animationBusy=false; tt.sideBarisOpen=true ;tt.forceUpdate() },300)
-                                tt.animationClickHdl(true)
+                        if (tt.sideBarisPined===false){
+                            if (tt.sideBarisOpen===false){
+                                if (tt.animationBusy===false){ // prevent from kicking off too many animations at once 
+                                    tt.animationBusy=true
+                                    setTimeout(()=>{tt.animationBusy=false; tt.sideBarisOpen=true ;tt.forceUpdate() },300)
+                                    tt.animationClickHdl(true)
+                                }
                             }
                         }
                     }}
                     onMouseLeave={()=>{
-                        if (tt.sideBarisOpen===true){
-                            if (tt.animationBusy===false){ // prevent from kicking off too many animations at once 
-                                tt.animationBusy=true
-                                setTimeout(()=>{tt.animationBusy=false; tt.sideBarisOpen=false;tt.forceUpdate()},300)
-                                tt.animationClickHdl(false)
+                        if (tt.sideBarisPined===false){
+                            if (tt.sideBarisOpen===true){
+                                if (tt.animationBusy===false){ // prevent from kicking off too many animations at once 
+                                    tt.animationBusy=true
+                                    setTimeout(()=>{tt.animationBusy=false; tt.sideBarisOpen=false;tt.forceUpdate()},300)
+                                    tt.animationClickHdl(false)
+                                }
                             }
                         }
                     }}                    
