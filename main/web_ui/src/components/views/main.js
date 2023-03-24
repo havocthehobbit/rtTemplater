@@ -10,7 +10,8 @@ export class Main extends Component {
     constructor(props){
         super(props)
 
-     
+        this.reactmongoDBGetData=React.createRef()
+
         this.state={
             name : "", name2 : "",
             tmplOut : "",
@@ -101,6 +102,11 @@ export class Main extends Component {
         let newProj={}
 
         localStorage.setItem( "rtTemplater" , newProj )
+    }
+
+    reactmongoDBGetData={}
+    reactmongoDBGetDataRun=()=>{
+        this.reactmongoDBGetData.current.fn()
     }
 
 
