@@ -45,13 +45,13 @@ export class ReactNodeMongo extends Component {
                 }
                 , 2000)
         })
-
-        if (tt.props.getDetails){
-            tt.props.getDetails.fn=tt.getDetails
+     
+        if (tt.props.refData){
+            tt.props.refData.current.get=tt.getDetails
         }
 
         if (tt.props.refData){
-            tt.props.refData.current.fn=tt.getDetails
+            tt.props.refData.current.set=tt.setDetails
         }
 
         
@@ -189,8 +189,30 @@ export class ReactNodeMongo extends Component {
 
     getDetails=()=>{
         let tt=this
-        let dt={ data : tt.dbSchema, template : tt.nodeTmplates }
-        alert(JSON.stringify(dt))
+        let dt={ data : tt.dbSchema, template : tt.nodeTmplates }        
+        return dt
+    }
+
+    setDetails=(dt)=>{
+        let tt=this
+
+        tt.dbSchema=dt.schema
+        tt.nodeTmplates=dt.template
+
+        tt.setState({ 
+            templatetxt : tt.nodeTmplates.tables,
+            template : tt.nodeTmplates.tables ,
+            data : tt.dbSchema.tables,
+            datatxt : JSON.stringify( tt.dbSchema.tables,null, 2),
+            dataExtxt : JSON.stringify( tt.dbSchema,null, 2)
+        },
+            ()=>{
+                setTimeout(()=>{
+                    tt.runRenderAll()    
+                }
+                , 2000)
+        })
+
         return dt
     }
 

@@ -4,13 +4,14 @@ import React,{ Component } from 'react';
 import { RenderTmpl } from '../mainlib/render';
 import { TemplateItem } from '../mainlib/templateItem';
 import { ReactNodeMongo } from '../mainlib/reactnodemongo';
-
+let $cn=require( "../common/libNative").$cn
+let cl=$cn.l
 
 export class Main extends Component {
     constructor(props){
         super(props)
 
-        this.reactmongoDBGetDataRef=React.createRef(); this.reactmongoDBGetDataRef.current={}
+        this.reactmongoDBDataRef=React.createRef(); this.reactmongoDBDataRef.current={}        
 
         this.state={
             name : "", name2 : "",
@@ -20,7 +21,7 @@ export class Main extends Component {
     }
 
     componentDidMount(){
-        
+        let tt=this
         // add global CSS stylesheet string as ref eg for creating a local library later similar to style-components
         if (true){
             let myStyle = document.createElement("style")
@@ -29,6 +30,23 @@ export class Main extends Component {
             styleSheet.insertRule(`button { background: green;border-radius : 5px;padding : 10px; margin : 3px;font-size : 18px;color : white ;border : none}`, 0)
         }
 
+        setTimeout(()=>{
+            tt.reactmongoDBSetDataRun({ schema : {
+                "tables" : {
+                    "users" : {
+                                "name" : "some",
+                                "indexs" : {},
+                                "cols" : {}
+                                    },
+                                
+                            },
+                    "object" :{            
+                        "objname" : "",
+                        "objname2" : "",
+                    },
+
+            }, template : "" })
+        },3000)
     }
 
     // animation
@@ -104,10 +122,19 @@ export class Main extends Component {
         localStorage.setItem( "rtTemplater" , newProj )
     }
 
-    reactmongoDBGetDataRef={}
+    reactmongoDBDataRef={}
     reactmongoDBGetDataRun=()=>{
-        if (this.reactmongoDBGetDataRef.current.fn){
-            this.reactmongoDBGetDataRef.current.fn()
+        if (this.reactmongoDBDataRef.current.get){
+            let data={}
+            data=this.reactmongoDBDataRef.current.get()
+            //cl(data)
+        }
+        
+    }
+    
+    reactmongoDBSetDataRun=(data)=>{
+        if (this.reactmongoDBDataRef.current.set){
+            this.reactmongoDBDataRef.current.set(data)
         }
         
     }
@@ -148,14 +175,8 @@ export class Main extends Component {
 
         return (
             <div style={mainStyle}>                
-                <button
-                    onClick={()=>{
-                        tt.reactmongoDBGetDataRun()
-                    }}
-                >test</button>
-
                 <div style={{ position : "relative",left :35,width :undefined}}>
-                    <ReactNodeMongo  refData={tt.reactmongoDBGetDataRef} />
+                    <ReactNodeMongo  refData={tt.reactmongoDBDataRef} />
                 </div>
 
                 { /* left sidebar */}
