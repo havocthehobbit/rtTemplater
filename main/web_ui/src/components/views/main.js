@@ -40,32 +40,7 @@ export class Main extends Component {
         styleSheet.insertRule(rules, 0)
     }
     animationClickHdl=(showhide)=>{
-        let tt=this
-        /*
-            // stack anim tip 
-            let animationName = `animation${300}`;  
-            let keyframes = `
-                @-webkit-keyframes ${animationName} 
-                {
-                    10% {
-                            -webkit-transform:translate(
-                                ${Math.random() * 300}px, 
-                                ${Math.random() * 300}px
-                            )
-                        } 
-                    90% {
-                            -webkit-transform:translate(
-                                ${Math.random() * 300}px, 
-                                ${Math.random() * 300}px)
-                        }
-                    100% {
-                            -webkit-transform:translate(
-                                ${Math.random() * 300}px, 
-                                ${Math.random() * 300}px)
-                        }
-                }
-            `;
-        */
+        let tt=this        
 
         let animationName 
         
