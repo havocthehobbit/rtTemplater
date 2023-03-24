@@ -46,7 +46,9 @@ export class ReactNodeMongo extends Component {
                 , 2000)
         })
 
-
+        if (tt.props.getDetails){
+            tt.props.getDetails.fn=tt.getDetails
+        }
         
 
     }
@@ -178,6 +180,11 @@ export class ReactNodeMongo extends Component {
         \``
     }
     mongoTemplate0=""
+
+    getDetails=()=>{
+        let tt=this
+        return { data : tt.dbSchema, template : tt.nodeTmplates }
+    }
 
     render(){
         let tt=this
