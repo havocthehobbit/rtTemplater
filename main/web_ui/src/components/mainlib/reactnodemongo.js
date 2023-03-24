@@ -189,14 +189,14 @@ export class ReactNodeMongo extends Component {
 
     getDetails=()=>{
         let tt=this
-        let dt={ data : tt.dbSchema, template : tt.nodeTmplates }        
+        let dt={ schemadata : tt.dbSchema, template : tt.nodeTmplates }        
         return dt
     }
 
     setDetails=(dt)=>{
         let tt=this
 
-        tt.dbSchema=dt.schema
+        tt.dbSchema=dt.schemadata
         tt.nodeTmplates=dt.template
 
         tt.setState({ 

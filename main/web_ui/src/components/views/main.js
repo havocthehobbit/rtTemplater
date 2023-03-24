@@ -117,14 +117,17 @@ export class Main extends Component {
     loadDataLocal=(nameIn)=>{
         let tt=this
         let loaddataSTR=localStorage.getItem( "rtTemplaterProjects" )
+        let str
         if (tof(loaddataSTR)==="string"){
             try {
-                let str=JSON.parse(loaddataSTR)
-                tt.reactmongoDBSetDataRun(str)
+                str=JSON.parse(loaddataSTR)
+                
                 
             } catch (error) {
-                alert("load : ", error)
+                alert("load err : ", error)
             }
+
+            tt.reactmongoDBSetDataRun(str)                
             
         }
     }
@@ -140,6 +143,7 @@ export class Main extends Component {
         try {
             newProj=JSON.stringify(temp)
             localStorage.setItem( "rtTemplaterProjects" , newProj )  
+            localStorage.setItem( "rtTemplaterProjects2" , temp )  
         } catch (error) {
             alert("save err : ", error)
         }
@@ -153,6 +157,7 @@ export class Main extends Component {
             let data={}
             data=this.reactmongoDBDataRef.current.get()
             //cl(data)
+            return data
         }
         
     }
