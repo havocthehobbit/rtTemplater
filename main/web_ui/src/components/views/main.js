@@ -6,6 +6,7 @@ import { TemplateItem } from '../mainlib/templateItem';
 import { ReactNodeMongo } from '../mainlib/reactnodemongo';
 let $cn=require( "../common/libNative").$cn
 let cl=$cn.l
+let tof=$cn.tof
 
 export class Main extends Component {
     constructor(props){
@@ -30,24 +31,29 @@ export class Main extends Component {
             styleSheet.insertRule(`button { background: green;border-radius : 5px;padding : 10px; margin : 3px;font-size : 18px;color : white ;border : none}`, 0)
         }
 
-        setTimeout(()=>{
-            tt.reactmongoDBSetDataRun({ schema : {
-                "tables" : {
-                    "users" : {
-                                "name" : "some",
-                                "indexs" : {},
-                                "cols" : {}
-                                    },
-                                
-                            },
-                    "object" :{            
-                        "objname" : "",
-                        "objname2" : "",
-                    },
+        /*
+            setTimeout(()=>{
+                tt.reactmongoDBSetDataRun({ schema : {
+                    "tables" : {
+                        "users" : {
+                                    "name" : "some",
+                                    "indexs" : {},
+                                    "cols" : {}
+                                        },
+                                    
+                                },
+                        "object" :{            
+                            "objname" : "",
+                            "objname2" : "",
+                        },
 
-            }, template : "" })
-        },3000)
+                }, template : "" })
+            },3000)
+        */
+
+
     }
+  
 
     // animation
     animationBusy=false
@@ -108,18 +114,37 @@ export class Main extends Component {
 
     data={}
 
-    loadDataLocal=()=>{
-        let loaddataSTR=localStorage.getItem( "rtTemplater" )
+    loadDataLocal=(nameIn)=>{
+        let tt=this
+        let loaddataSTR=localStorage.getItem( "rtTemplaterProjects" )
+        if (tof(loaddataSTR)==="string"){
+            try {
+                let str=JSON.parse(loaddataSTR)
+                tt.reactmongoDBSetDataRun(str)
+                
+            } catch (error) {
+                alert("load : ", error)
+            }
+            
+        }
     }
 
-    loadDataLocal=()=>{
+    saveDataLocal=(nameIn)=>{
+        let tt=this
         let def={
 
         }
 
         let newProj={}
-
-        localStorage.setItem( "rtTemplater" , newProj )
+        let temp=tt.reactmongoDBGetDataRun()
+        try {
+            newProj=JSON.stringify(temp)
+            localStorage.setItem( "rtTemplaterProjects" , newProj )  
+        } catch (error) {
+            alert("save err : ", error)
+        }
+        
+        
     }
 
     reactmongoDBDataRef={}
@@ -228,14 +253,18 @@ export class Main extends Component {
 
                     
                         <button
-                            
+                            onClick={()=>{
+                                tt.loadDataLocal()
+                            }}
                         >
                             load
                         </button>
                         <br/>
                         <button
-                            
-                            >
+                            onClick={()=>{
+                                tt.saveDataLocal()
+                            }}
+                        >
                             save
                         </button>
 
