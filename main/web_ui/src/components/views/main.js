@@ -10,7 +10,7 @@ export class Main extends Component {
     constructor(props){
         super(props)
 
-        this.reactmongoDBGetData=React.createRef()
+        this.reactmongoDBGetDataRef=React.createRef(); this.reactmongoDBGetDataRef.current={}
 
         this.state={
             name : "", name2 : "",
@@ -21,7 +21,7 @@ export class Main extends Component {
 
     componentDidMount(){
         
-        // add global stylesheet
+        // add global CSS stylesheet string as ref eg for creating a local library later similar to style-components
         if (true){
             let myStyle = document.createElement("style")
             document.head.appendChild(myStyle)
@@ -104,9 +104,12 @@ export class Main extends Component {
         localStorage.setItem( "rtTemplater" , newProj )
     }
 
-    reactmongoDBGetData={}
+    reactmongoDBGetDataRef={}
     reactmongoDBGetDataRun=()=>{
-        this.reactmongoDBGetData.current.fn()
+        if (this.reactmongoDBGetDataRef.current.fn){
+            this.reactmongoDBGetDataRef.current.fn()
+        }
+        
     }
 
 
@@ -145,9 +148,14 @@ export class Main extends Component {
 
         return (
             <div style={mainStyle}>                
-                
+                <button
+                    onClick={()=>{
+                        tt.reactmongoDBGetDataRun()
+                    }}
+                >test</button>
+
                 <div style={{ position : "relative",left :35,width :undefined}}>
-                    <ReactNodeMongo/>
+                    <ReactNodeMongo  refData={tt.reactmongoDBGetDataRef} />
                 </div>
 
                 { /* left sidebar */}
