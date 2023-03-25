@@ -191,6 +191,7 @@ export class TemplateItem extends Component {
                     >
                         {tt.state.title}
                     </h3>
+                    
                     {(()=>{
                         if (tt.state.showRenderButton===true){
                             return (

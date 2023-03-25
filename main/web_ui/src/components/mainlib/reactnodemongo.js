@@ -33,11 +33,11 @@ export class ReactNodeMongo extends Component {
         let tt=this       
 
         tt.setState({ 
-            templatetxt : tt.nodeTmplates.tables,
-            template : tt.nodeTmplates.tables ,
-            data : tt.dbSchema.tables,
-            datatxt : JSON.stringify( tt.dbSchema.tables,null, 2),
-            dataExtxt : JSON.stringify( tt.dbSchema,null, 2)
+            templatetxt : tt.template.tables,
+            template : tt.template.tables ,
+            data : tt.schema.tables,
+            datatxt : JSON.stringify( tt.schema.tables,null, 2),
+            dataExtxt : JSON.stringify( tt.schema,null, 2)
         },
             ()=>{
                 setTimeout(()=>{
@@ -74,7 +74,14 @@ export class ReactNodeMongo extends Component {
         })
     }
 
-    dbSchemaTmplbase={
+    loopOption={
+        hasRecords : true ,
+        name : "tables",
+        titleVar : "name",
+               
+    }
+
+    schemaBase={
 
         tables : {
                     col1 : {
@@ -85,7 +92,7 @@ export class ReactNodeMongo extends Component {
                 }
     }
 
-    dbSchema={
+    schema={
 
         "tables" : {
                     "users" : {
@@ -112,7 +119,7 @@ export class ReactNodeMongo extends Component {
 
 
     reactTmplate0=""
-    nodeTmplates={        
+    template={        
         tables : `\`
         let \${dataEx.object.objname}={
             name : "\${dataEx.object.objname}",
@@ -184,27 +191,26 @@ export class ReactNodeMongo extends Component {
         }
             
         \``
-    }
-    mongoTemplate0=""
+    }    
 
     getDetails=()=>{
         let tt=this
-        let dt={ schemadata : tt.dbSchema, template : tt.nodeTmplates }        
+        let dt={ schemadata : tt.schema, template : tt.template }        
         return dt
     }
 
     setDetails=(dt)=>{
         let tt=this
 
-        tt.dbSchema=dt.schemadata
-        tt.nodeTmplates=dt.template
+        tt.schema=dt.schemadata
+        tt.template=dt.template
 
         tt.setState({ 
-            templatetxt : tt.nodeTmplates.tables,
-            template : tt.nodeTmplates.tables ,
-            data : tt.dbSchema.tables,
-            datatxt : JSON.stringify( tt.dbSchema.tables,null, 2),
-            dataExtxt : JSON.stringify( tt.dbSchema,null, 2)
+            templatetxt : tt.template.tables,
+            template : tt.template.tables ,
+            data : tt.schema.tables,
+            datatxt : JSON.stringify( tt.schema.tables,null, 2),
+            dataExtxt : JSON.stringify( tt.schema,null, 2)
         },
             ()=>{
                 setTimeout(()=>{
@@ -240,38 +246,80 @@ export class ReactNodeMongo extends Component {
                 />
         */
 
-        let nodejsmongoCrudCollFnsE
-        nodejsmongoCrudCollFnsE=(()=>{
-            let E=[]
-            let dt=tt.dbSchema.tables
+        let CollFnsE
+        CollFnsE=(()=>{
+            let E
+            let dt
 
-            let i=0
-            $cn.each(dt,(r,p)=>{
+            
+            let loopVarName="tables"
+            let titleVar=""
+            let title=""
+            let template
+            let hasRecords=tt.loopOption.hasRecords
+            let showRenderButton=false
 
-                if (typeof(tt.state.runRenderAllFns[r.name])==="undefined"){
-                    tt.state.runRenderAllFns[r.name]={ fn : undefined}
-                }
-                let re=<TemplateItem 
-                            title={r.name}
+            if (isUn(hasRecords)){
+                hasRecords=false
+            }
+
+            if (hasRecords){
+                E=[]
+                dt=tt.schema[tt.loopOption.name]
+                titleVar=tt.loopOption.titleVar
+                template=tt.template[tt.loopOption.name]
+                showRenderButton=false
+                
+            }else{
+                dt=tt.schema
+                template=tt.template          
+                showRenderButton=true      
+            }
+            
+            let rEle=(r)=>{
+                return (
+
+                    <TemplateItem 
+                            title={title}
                             data={r}                             
-                            dataEx={tt.dbSchema}
-                            template={tt.nodeTmplates.tables}
+                            dataEx={tt.schema}
+                            template={template}
                             runRender={tt.state.runRenderAllFns}
-                            showRenderButton={false}
+                            showRenderButton={showRenderButton}
                         />
-                E.push( 
-                    <div
-                        key={i}
-                    >                        
-                        {re}
-                    </div>
+
                 )
+            }
 
+            if (hasRecords===false){
+                if (typeof(tt.state.runRenderAllFns["default"])==="undefined"){
+                    tt.state.runRenderAllFns["default"]={ fn : undefined}
+                }
+                E=rEle(dt)
+            }
 
+            if (tt.loopOption.hasRecords===true){
+                let i=0            
+                $cn.each(dt,(r,p)=>{
 
-                i++
-            })
+                    if (typeof(tt.state.runRenderAllFns[r.name])==="undefined"){
+                        tt.state.runRenderAllFns[r.name]={ fn : undefined}
+                    }
+                    
+                    title=r[titleVar]                    
 
+                    let re=rEle(r)
+                    E.push( 
+                        <div
+                            key={i}
+                        >                        
+                            {re}
+                        </div>
+                    )
+
+                    i++
+                })
+            }
 
             return (
                 <div>
@@ -322,7 +370,7 @@ export class ReactNodeMongo extends Component {
                                     tt.setState({ templatetxt : e.target.value })
                                 }}
                                 onBlur={(e)=>{  
-                                    tt.nodeTmplates.tables= e.target.value                             
+                                    tt.template.tables= e.target.value                             
                                     tt.setState({ template : e.target.value })
                                 }}
                             />
@@ -341,7 +389,7 @@ export class ReactNodeMongo extends Component {
                                     let jsnO
                                     try {
                                         jsnO=JSON.parse(e.target.value)
-                                        tt.dbSchema.tables=jsnO
+                                        tt.schema.tables=jsnO
                                         tt.setState({ data : jsnO })
                                     } catch (error) {
                                         alert("error : " +  error)
@@ -364,7 +412,7 @@ export class ReactNodeMongo extends Component {
                                     let jsnO
                                     try {
                                         jsnO=JSON.parse(e.target.value)
-                                        tt.dbSchema=jsnO
+                                        tt.schema=jsnO
                                         tt.setState({ dataEx : jsnO })
                                     } catch (error) {
                                         alert("error : " +  error)
@@ -376,13 +424,10 @@ export class ReactNodeMongo extends Component {
                     </div >
                 </div>
                  <div style={{ position : "relative",float : "left",width : 670,margin : 8,padding : 10,overflow : "hidden", borderRadius:10,border : "blue solid thin" }} >  
-                    <div style={{ position : "relative", overflow : "auto",padding : 50,width : 600, height : 600 }} >  
-                    
-                            {nodejsmongoCrudCollFnsE}
-                        
+                    <div style={{ position : "relative", overflow : "auto",padding : 50,width : 600, height : 600 }} >                    
+                            {CollFnsE}                        
                     </div>
                 </div>
-
 
                 <div style={{ clear : "left" }}/>
                 
