@@ -3,7 +3,8 @@ import React,{ Component } from 'react';
 //import { ContextStore } from '../common/contextStore';
 import { RenderTmpl } from '../mainlib/render';
 import { TemplateItem } from '../mainlib/templateItem';
-import { ReactNodeMongo } from '../mainlib/reactnodemongo';
+import { JSNodeMongo } from '../mainlib/JSNodeMongo';
+import { SideBar } from '../mainlib/SideBar';
 let $cn=require( "../common/libNative").$cn
 let cl=$cn.l
 let tof=$cn.tof
@@ -269,78 +270,33 @@ export class Main extends Component {
         return (
             <div style={mainStyle}>                
                 <div style={{ position : "relative",left :35,width :undefined}}>
-                    <ReactNodeMongo  refData={tt.reactmongoDBDataRef} />
+                    <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRef}  />
                 </div>
 
-                { /* left sidebar */}
-                <div
-                    style={style}
-                    //onClick={tt.animationClickHdl.bind(tt)}                        
-                    onClick={()=>{
-                        //tt.animationClickHdl(false)
-                    }}
-                    onMouseEnter={()=>{
-                        if (tt.sideBarisPined===false){
-                            if (tt.sideBarisOpen===false){
-                                if (tt.animationBusy===false){ // prevent from kicking off too many animations at once 
-                                    tt.animationBusy=true
-                                    setTimeout(()=>{tt.animationBusy=false; tt.sideBarisOpen=true ;tt.forceUpdate() },300)
-                                    tt.animationClickHdl(true)
-                                }
-                            }
-                        }
-                    }}
-                    onMouseLeave={()=>{
-                        if (tt.sideBarisPined===false){
-                            if (tt.sideBarisOpen===true){
-                                if (tt.animationBusy===false){ // prevent from kicking off too many animations at once 
-                                    tt.animationBusy=true
-                                    setTimeout(()=>{tt.animationBusy=false; tt.sideBarisOpen=false;tt.forceUpdate()},300)
-                                    tt.animationClickHdl(false)
-                                }
-                            }
-                        }
-                    }}                    
-                >
+                <SideBar>
                     <div
                         style={{ color : "black"  }}
                     >
                         {"==========="}
                     </div>
-                        <div
-                                style={{position : "absolute",  
-                                        left : 0 , top : 0, zIndex : 999,
-                                        width : 20, height : "100%",
-                                        background : "lightblue"
-                            }}
-                        >
-                        </div>
-                        <div
-                                style={{position : "absolute",  
-                                        right : 0 , top : 0, zIndex : 999,
-                                        width : 3, height : "100%",
-                                        background : "lightblue"
-                            }}
-                        />
-
                     
-                        <button
-                            onClick={()=>{
-                                tt.loadDataLocal()
-                            }}
-                        >
-                            load
-                        </button>
-                        <br/>
-                        <button
-                            onClick={()=>{
-                                tt.saveDataLocal()
-                            }}
-                        >
-                            save
-                        </button>
+                    <button
+                        onClick={()=>{
+                            tt.loadDataLocal()
+                        }}
+                    >
+                        load
+                    </button>
+                    <br/>
+                    <button
+                        onClick={()=>{
+                            tt.saveDataLocal()
+                        }}
+                    >
+                        save
+                    </button>
 
-                </div>
+                </SideBar>
 
             </div>
         )
