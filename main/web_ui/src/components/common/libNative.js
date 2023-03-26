@@ -46,7 +46,7 @@ let cool_native_js={
         var t=typeof(inp)
 
         if (t==="object"){
-            if (this.isObject()){
+            if (cool_native_js.isObject(t)){
                 t="object"
 
             }else{
@@ -73,7 +73,7 @@ let cool_native_js={
         this.l_this=this ;
 
         this.isPlainObject=this.isObject
-        this.isOb=this.isObject
+        this.isOb=cool_native_js.isObject
         this.isUn=this.isUndefined
         
         this.tof=this.typeof      

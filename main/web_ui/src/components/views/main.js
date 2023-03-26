@@ -8,6 +8,7 @@ let $cn=require( "../common/libNative").$cn
 let cl=$cn.l
 let tof=$cn.tof
 let isUn=$cn.isUn
+let isOb=$cn.isOb
 
 export class Main extends Component {
     constructor(props){
@@ -121,18 +122,38 @@ export class Main extends Component {
 
     loadDataLocal=(nameIn)=>{
         let tt=this
+        let cancel=false
         let loaddataSTR=localStorage.getItem( "rtTemplaterProjects" )
+        let all
         let str
+
+        if (isUn(nameIn)){ nameIn="__default" }
+
         if (tof(loaddataSTR)==="string"){
             try {
-                str=JSON.parse(loaddataSTR)
-                
-                
+                all=JSON.parse(loaddataSTR)                
             } catch (error) {
                 alert("load err : ", error)
             }
 
-            tt.reactmongoDBSetDataRun(str)                
+            if (cancel===true){
+                return
+            }
+
+            if (isOb(all)){
+                cl("all " , all)
+                let proj=all.projects[nameIn].data
+
+
+                tt.reactmongoDBSetDataRun(proj)
+            }else{
+                cl(all)
+                alert("load error ")
+            }
+
+            
+
+
             
         }
     }
@@ -142,15 +163,45 @@ export class Main extends Component {
         let def={
 
         }
+        let cancel=false
+        
+        let loaddataSTR=localStorage.getItem( "rtTemplaterProjects" )
+        let loadedFile
+        if (tof(loaddataSTR)==="string"){
+            try {
+                loadedFile=JSON.parse(loaddataSTR)                
+            } catch (error) {
+                alert("save err unable to load file before saving : ", error)        
+            }
+        }
+
+        if (cancel===true){
+            return
+        }
 
         if (isUn(nameIn)){ nameIn="__default" }
 
         let newProj={}
+        let all
+        if (isOb(loadedFile)){
+            all=loadedFile
+        }else{
+            all={projects : {} , lastProj : "" }
+        }
+
+        all.projects[nameIn]=newProj
+        newProj.name=nameIn
+        newProj.lastUpdated=new Date()
+        
+        
+
         let temp=tt.reactmongoDBGetDataRun()
         try {
-            newProj=JSON.stringify(temp)
-            localStorage.setItem( "rtTemplaterProjects" , newProj )  
-            localStorage.setItem( "rtTemplaterProjects2" , temp )  
+            let saveFile=""
+            all.lastProj=nameIn
+            newProj.data=temp
+            saveFile=JSON.stringify(all)
+            localStorage.setItem( "rtTemplaterProjects" , saveFile )              
         } catch (error) {
             alert("save err : ", error)
         }
