@@ -19,8 +19,7 @@ export class Main extends Component {
 
         this.state={
             name : "", name2 : "",
-            tmplOut : "",
-            animationName : "", openclose : true
+            tmplOut : "",            
         }
     }
 
@@ -32,92 +31,11 @@ export class Main extends Component {
             document.head.appendChild(myStyle)
             let styleSheet = myStyle.sheet        
             styleSheet.insertRule(`button { background: green;border-radius : 5px;padding : 10px; margin : 3px;font-size : 18px;color : white ;border : none}`, 0)
-        }
-
-        /*
-            setTimeout(()=>{
-                tt.reactmongoDBSetDataRun({ schema : {
-                    "tables" : {
-                        "users" : {
-                                    "name" : "some",
-                                    "indexs" : {},
-                                    "cols" : {}
-                                        },
-                                    
-                                },
-                        "object" :{            
-                            "objname" : "",
-                            "objname2" : "",
-                        },
-
-                }, template : "" })
-            },3000)
-        */
-
+        }      
 
     }
   
 
-    // animation
-    sidebarWidthOpen=250
-    sidebarWidthClosed=20    
-    sideBarisOpen=false
-    sideBarisPined=false
-    //
-    animationBusy=false
-    addStylesheetRules(rules) {
-        var styleEl = document.createElement("style")
-        document.head.appendChild(styleEl)
-        var styleSheet = styleEl.sheet
-        styleSheet.insertRule(rules, 0)
-    }
-    animationClickHdl=(showhide)=>{
-        let tt=this        
-
-        let animationName 
-        
-        let keyframes =""
-        //if (tt.state.openclose){
-        if (showhide===false){
-            
-            animationName = `animation${250}`;  
-            keyframes =`
-                @-webkit-keyframes ${animationName} 
-                {
-                    from {                    
-                        width: ${tt.sidebarWidthOpen}px;
-                    }
-                    
-                    to {                        
-                        width: ${tt.sidebarWidthClosed}px;
-                    }
-                }
-            `;
-        }
-        //else{
-        if (showhide===true){
-            animationName = `animation${20}`;  
-            keyframes =`
-                @-webkit-keyframes ${animationName} 
-                {
-                    from {                    
-                        width: ${tt.sidebarWidthClosed}px;
-                    }
-                    
-                    to {                        
-                        width: ${tt.sidebarWidthOpen}px;
-                    }
-                }
-            `;
-        }
-    
-        this.addStylesheetRules(keyframes);
-    
-        this.setState({
-          animationName: animationName, 
-          //openclose : !tt.state.openclose
-        });
-    }
 
     data={}
 
@@ -143,19 +61,15 @@ export class Main extends Component {
 
             if (isOb(all)){
                 cl("all " , all)
-                let proj=all.projects[nameIn].data
+                let proj=all.projects[nameIn]
+                let JSNodeMongoTemp=proj.data.JSNodeMongo
 
 
-                tt.reactmongoDBSetDataRun(proj)
+                tt.reactmongoDBSetDataRun(JSNodeMongoTemp)
             }else{
                 cl(all)
                 alert("load error ")
-            }
-
-            
-
-
-            
+            }            
         }
     }
 
@@ -182,7 +96,7 @@ export class Main extends Component {
 
         if (isUn(nameIn)){ nameIn="__default" }
 
-        let newProj={}
+        let newProj={ data : {},name : "",lastUpdated : new Date() }
         let all
         if (isOb(loadedFile)){
             all=loadedFile
@@ -196,11 +110,11 @@ export class Main extends Component {
         
         
 
-        let temp=tt.reactmongoDBGetDataRun()
+        let JSNodeMongoTemp=tt.reactmongoDBGetDataRun()
         try {
             let saveFile=""
             all.lastProj=nameIn
-            newProj.data=temp
+            newProj.data["JSNodeMongo"]=JSNodeMongoTemp
             saveFile=JSON.stringify(all)
             localStorage.setItem( "rtTemplaterProjects" , saveFile )              
         } catch (error) {
@@ -243,34 +157,14 @@ export class Main extends Component {
 
 
     render(){
-        let tt=this
+        let tt=this       
         
-        let sideBarWidthCurr=tt.sidebarWidthClosed
-        if (tt.sideBarisOpen){
-            sideBarWidthCurr=tt.sidebarWidthOpen
-        }
-
-        let style_def={ position : "fixed",overflow : "hidden", zIndex : 9999, left : 0,top : 0,height : "100%", width : sideBarWidthCurr, background : "white" }
-
-        // animation
-        let style_anima = {
-            animationName: this.state.animationName,
-            animationTimingFunction: "ease-in-out",
-            animationDuration: "0.6s",
-            animationDelay: "0.0s",
-            animationIterationCount: 1,
-            animationDirection: "normal",
-            animationFillMode: "forwards"
-        }
-
-        let style={...style_def,...style_anima }
-
         let mainStyle=tt.mainStyle
 
         return (
             <div style={mainStyle}>                
                 <div style={{ position : "relative",left :35,width :undefined}}>
-                    <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRef}  />
+                    <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRef}  startEx={false}/>
                 </div>
 
                 <SideBar>

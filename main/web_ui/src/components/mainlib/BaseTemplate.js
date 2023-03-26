@@ -18,16 +18,28 @@ export class BaseTemplate extends Component {
 
         let tmp=""
         
-        let startEx=0
-        tmp="schemaBase"
-        tt[tmp]=tt.examples[startEx].data[tmp]
-        tmp="loopOption"
-        tt[tmp]=tt.examples[startEx].data[tmp]
-        tmp="schema"
-        tt[tmp]=tt.examples[startEx].data[tmp]
-        tmp="template"
-        tt[tmp]=tt.examples[startEx].data[tmp]
+        if (props.startEx){
+            let startEx=props.startEx
+            let useexample=false
+            let startExI=0
+            
+            if (tof(startEx)==="boolean"){ 
+                if (startEx===true){}  
+            }
+            if (tof(startEx)!=="number"){ startExI=0 }
 
+            if (useexample){
+                tmp="schemaBase"
+                tt[tmp]=tt.examples[startExI].data[tmp]
+                tmp="loopOption"
+                tt[tmp]=tt.examples[startExI].data[tmp]
+                tmp="schema"
+                tt[tmp]=tt.examples[startExI].data[tmp]
+                tmp="template"
+                tt[tmp]=tt.examples[startExI].data[tmp]
+            }
+            
+        }
 
         
         let state={

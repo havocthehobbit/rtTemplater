@@ -100,6 +100,10 @@ export const RenderTmpl=function(tDataIn, tTmplIn, stateVarIn, useStateIn,cbi){
         }
     }
 
+    if (typeof(tTmpl)!=="string"){
+        return "`ERROR : template is not a string`"
+    }
+
     let temp=tTmpl.trim()
     if (temp[0]!=="`"){
         temp="`" + temp

@@ -36,22 +36,28 @@ export class TemplateItem extends Component {
 
         state={...defState,...o}
 
+        
+
         temp="render" // runs this render function from outside of this component using prop drilling
         if (!isUn(props[temp])){ 
             if (isOb(props[temp])){
-                props[temp][props.title].render=tt.runRender
-                props[temp][props.title].runRender=tt.runRender
-                props[temp][props.title].run=tt.runRender
-                props[temp][props.title].fn=tt.runRender
+                if (props[temp][state.title]){
+                    props[temp][state.title].render=tt.runRender
+                    props[temp][state.title].runRender=tt.runRender
+                    props[temp][state.title].run=tt.runRender
+                    props[temp][state.title].fn=tt.runRender
+                }
             }            
         }
         temp="runRender"
         if (!isUn(props[temp])){ 
             if (isOb(props[temp])){
-                props[temp][props.title].render=tt.runRender
-                props[temp][props.title].runRender=tt.runRender
-                props[temp][props.title].run=tt.runRender
-                props[temp][props.title].fn=tt.runRender
+                if (props[temp][state.title]){
+                    props[temp][state.title].render=tt.runRender
+                    props[temp][state.title].runRender=tt.runRender
+                    props[temp][state.title].run=tt.runRender
+                    props[temp][state.title].fn=tt.runRender
+                }
             }            
         }
 
@@ -199,7 +205,7 @@ export class TemplateItem extends Component {
                                     <button
                                         style={{padding : 8,margin : 3,fontSize: 20 , borderRadius : 4 , background : "lightgreen" , border : "none"}}
                                         onClick={
-                                            (e)=>{
+                                            (e)=>{                                                
                                                 tt.runRender()
                                             }
                                         }
