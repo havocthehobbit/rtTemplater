@@ -7,6 +7,7 @@ import { ReactNodeMongo } from '../mainlib/reactnodemongo';
 let $cn=require( "../common/libNative").$cn
 let cl=$cn.l
 let tof=$cn.tof
+let isUn=$cn.isUn
 
 export class Main extends Component {
     constructor(props){
@@ -141,6 +142,8 @@ export class Main extends Component {
         let def={
 
         }
+
+        if (isUn(nameIn)){ nameIn="__default" }
 
         let newProj={}
         let temp=tt.reactmongoDBGetDataRun()
