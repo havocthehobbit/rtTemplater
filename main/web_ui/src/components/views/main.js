@@ -5,7 +5,9 @@ import { RenderTmpl } from '../mainlib/render';
 import { TemplateItem } from '../mainlib/templateItem';
 import { JSNodeMongo } from '../mainlib/JSNodeMongo';
 import { SideBar } from '../mainlib/SideBar';
+import $lnd from  "../common/libNativeDom"
 let $cn=require( "../common/libNative").$cn
+
 let cl=$cn.l
 let tof=$cn.tof
 let isUn=$cn.isUn
@@ -39,10 +41,12 @@ export class Main extends Component {
 
     data={}
 
+    localAllProjFile="rtTemplaterProjects"
+
     loadDataLocal=(nameIn)=>{
         let tt=this
         let cancel=false
-        let loaddataSTR=localStorage.getItem( "rtTemplaterProjects" )
+        let loaddataSTR=localStorage.getItem( tt.localAllProjFile )
         let all
         let str
 
@@ -73,6 +77,26 @@ export class Main extends Component {
         }
     }
 
+    downloadDataLocal=(nameIn)=>{
+        let tt=this
+        let cancel=false
+        let loaddataSTR=localStorage.getItem( tt.localAllProjFile )
+        let all
+        let str
+
+        if (isUn(nameIn)){ nameIn="__default" }
+
+        if (tof(loaddataSTR)==="string"){
+            try {
+                $lnd.download( nameIn + ".json" ,loaddataSTR)
+            } catch (error) {
+                alert("load err : ", error)
+            }
+
+         
+        }
+    }
+
     saveDataLocal=(nameIn)=>{
         let tt=this
         let def={
@@ -80,7 +104,7 @@ export class Main extends Component {
         }
         let cancel=false
         
-        let loaddataSTR=localStorage.getItem( "rtTemplaterProjects" )
+        let loaddataSTR=localStorage.getItem( tt.localAllProjFile )
         let loadedFile
         if (tof(loaddataSTR)==="string"){
             try {
@@ -115,8 +139,8 @@ export class Main extends Component {
             let saveFile=""
             all.lastProj=nameIn
             newProj.data["JSNodeMongo"]=JSNodeMongoTemp
-            saveFile=JSON.stringify(all)
-            localStorage.setItem( "rtTemplaterProjects" , saveFile )              
+            saveFile=JSON.stringify(all,null,2)
+            localStorage.setItem( tt.localAllProjFile , saveFile )              
         } catch (error) {
             alert("save err : ", error)
         }
@@ -156,6 +180,7 @@ export class Main extends Component {
       }
 
 
+    
     render(){
         let tt=this       
         
@@ -179,7 +204,7 @@ export class Main extends Component {
                             tt.loadDataLocal()
                         }}
                     >
-                        load
+                        load local
                     </button>
                     <br/>
                     <button
@@ -187,7 +212,21 @@ export class Main extends Component {
                             tt.saveDataLocal()
                         }}
                     >
-                        save
+                        save local
+                    </button>
+                    <button
+                        onClick={()=>{
+                          tt.downloadDataLocal()
+                        }}
+                    >
+                        download local
+                    </button>
+                    <button
+                        onClick={()=>{
+                         
+                        }}
+                    >
+                        import project
                     </button>
 
                 </SideBar>
