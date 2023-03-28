@@ -69,7 +69,8 @@ export class BaseTemplate extends Component {
             template : tt.template.tables ,
             data : tt.schema.tables,
             datatxt : JSON.stringify( tt.schema.tables,null, 2),
-            dataExtxt : JSON.stringify( tt.schema,null, 2)
+            dataExtxt : JSON.stringify( tt.schema,null, 2),
+            loopOption : JSON.stringify(tt.loopOption,null, 2),
         },
             ()=>{
                 setTimeout(()=>{
@@ -256,13 +257,15 @@ export class BaseTemplate extends Component {
 
         tt.schema=dt.schemadata
         tt.template=dt.template
+        tt.loopOption=dt.loopOption
 
         tt.setState({ 
             templatetxt : tt.template.tables,
             template : tt.template.tables ,
             data : tt.schema.tables,
             datatxt : JSON.stringify( tt.schema.tables,null, 2),
-            dataExtxt : JSON.stringify( tt.schema,null, 2)
+            dataExtxt : JSON.stringify( tt.schema,null, 2),
+            loopOption : JSON.stringify(tt.loopOption,null, 2),
         },
             ()=>{
                 setTimeout(()=>{
@@ -490,6 +493,29 @@ export class BaseTemplate extends Component {
                                         jsnO=JSON.parse(e.target.value)
                                         tt.schema=jsnO
                                         tt.setState({ dataEx : jsnO })
+                                    } catch (error) {
+                                        alert("error : " +  error)
+                                    }
+                                    
+                                }}
+                            />
+                        </div>
+                        <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>options</label>
+                        <div
+                            style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                        >                        
+                            <textarea
+                                value={tt.state.loopOption}
+                                style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
+                                onChange={(e)=>{
+                                    tt.setState({ loopOption : e.target.value })
+                                }}
+                                onBlur={(e)=>{
+                                    let jsnO
+                                    try {
+                                        jsnO=JSON.parse(e.target.value)
+                                        tt.loopOption=jsnO
+                                        tt.setState({ loopOption : jsnO })
                                     } catch (error) {
                                         alert("error : " +  error)
                                     }
