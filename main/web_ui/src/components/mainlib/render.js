@@ -157,7 +157,8 @@ let preValidateTemplate=(tp)=>{
     return newTp
 }
 
-export const getAllStringVarsDetails=(tmpltStrIn , dataIn,dataExtraIn)=>{ // checks for errors in template and checks if variables exist in data
+// test //getAllStringVarsDetails( 'let ${ data.name }  and ${ data.name2 } with ${ data.age }', { name : "rob"},
+export const getAllStringVarsDetails=(tmpltStrIn , dataIn,dataExtraIn, options)=>{ // checks for errors in template and checks if variables exist in data
     
     let tmpltStr="" ,data={} , dataExtra={}
     let ret={
@@ -184,6 +185,60 @@ export const getAllStringVarsDetails=(tmpltStrIn , dataIn,dataExtraIn)=>{ // che
     }
 
 
+    // find template fields
+        let p={ in : tmpltStr, cbs : [] , arr : [] , stOp : "${",stCl : "}" }
+        let nr={ stOp : "${",stCl : "}" ,fnOp : ()=>{},fnCl : ()=>{} }
+        p.cbs.push(nr)
+        
+        let findTemplateStartEnds=(params)=>{
+            let opChar=params.stOp
+            let clChar=params.stCl
+            let str=params.in
+            let arr=params.arr
+            let openPos=str.indexOf(opChar ) + opChar.length
+            let newtmp1=str.substr(openPos)
+
+            let closePos=newtmp1.indexOf(clChar) - 1
+            let midTemp=newtmp1.substr(0, closePos ).trim()
+            let nextTemp=newtmp1.substr(closePos + 1 + clChar.length )
+
+            let nr={ "openPos" : openPos , "data" :  midTemp ,"closePos" : closePos }
+            arr.push(nr)
+            params.arr=arr
+            params.in=nextTemp
+            //cl ("nextTemp : " ,nextTemp)
+            //cl ("if  : " , params.in.length ,  " openPos : ", openPos , " closePos : ", closePos )
+            if (params.in.length <=  0 || openPos=== -1 || closePos === -1 ){
+                return arr
+            }
+            arr=findTemplateStartEnds(params)
+            
+            //cl("op : ", openPos , " , opChar : ", opChar)
+            //cl("openPos : ", openPos , ", mid data : " , midTemp ,", closePos : " ,closePos )
+            
+            return arr
+        }
+
+        let posdata=[]
+        posdata=findTemplateStartEnds(p)
+        cl("p.arr " , p.arr )
+        //cl("posdata " , posdata )
+        //cl("p.arr len" , p.arr.length )
+
+        let validateObjPath=()=>{ // loop through arrary of
+
+        }
+
+        posdata.forEach((r,i)=>{
+            let tmp=[]
+            tmp=r.data.split(".")
+
+            cl("tmp : " ,tmp)
+
+        });
+
 
     return ret
 }
+
+window.getAllStringVarsDetails=getAllStringVarsDetails
