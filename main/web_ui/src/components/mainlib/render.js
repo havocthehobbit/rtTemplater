@@ -221,19 +221,69 @@ export const getAllStringVarsDetails=(tmpltStrIn , dataIn,dataExtraIn, options)=
 
         let posdata=[]
         posdata=findTemplateStartEnds(p)
-        cl("p.arr " , p.arr )
+        //cl("p.arr " , p.arr )
         //cl("posdata " , posdata )
         //cl("p.arr len" , p.arr.length )
 
-        let validateObjPath=()=>{ // loop through arrary of
-
+        let splitObjectPath=(str)=>{ // loop through arrary of
+            //let splitstr=str.split(/(\.+|\[+|\]+)/);  // keep delimeters
+            let splitstr=str.split(/\.|\[|\]/); // round braces make regex keep delims
+            return splitstr
         }
+
+
+        let validateObjPath=(str, data)=>{ // loop through arrary of
+            
+            const result = splitObjectPath(str)
+            let fnc=(arrObjIn, DataIn )=>{
+                let ntmp
+                let isValid=true
+                arrObjIn.forEach((v,i)=>{
+                    let tmp=v
+                    
+                    if (isValid!==false){
+                        if (v==="." | v==="[" | v==="]" ){
+                    
+                        }else{
+                    
+                            let nob=DataIn
+                            if (( i + 1 )!==arrObjIn.length){
+                                if ( typeof(nob[ arrObjIn[ i + 1 ] ])==="undefined" ){
+                                    isValid=false
+                                    return isValid
+                                }else{
+                                    
+                                    isValid=true      
+                                    if (nob[ arrObjIn[ i + 1 ]]){                              
+                                        isValid=fnc( arrObjIn.slice(1,arrObjIn.length) , nob[ arrObjIn[ i + 1 ]])
+                                        return isValid
+                                    }else{
+                                        return isValid
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                })
+
+                return isValid
+            }
+
+            //let tmpO=result.slice(1,result.length)
+            let tmpO=result
+            let nv=fnc( tmpO , data )
+            console.log("nv : ", nv)
+            return nv
+        }
+
+        let isValid=validateObjPath(posdata[0].data,data)
 
         posdata.forEach((r,i)=>{
             let tmp=[]
             tmp=r.data.split(".")
 
-            cl("tmp : " ,tmp)
+           // cl("tmp : " ,tmp)
 
         });
 
