@@ -157,6 +157,97 @@ let preValidateTemplate=(tp)=>{
     return newTp
 }
 
+export const splitObjectPathDelim=(str)=>{ // loop through arrary of
+    //let splitstr=str.split(/(\.+|\[+|\]+)/);  // keep delimeters
+    let splitstr=str.split(/\.|\[|\]/); // round braces make regex keep delims
+    return splitstr
+}
+
+export const splitObjectPath=(str)=>{ // loop through arrary of
+    //let splitstr=str.split(/(\.+|\[+|\]+)/);  // keep delimeters
+    let splitstr=str.split(/\.|\[|\]/); // round braces make regex keep delims
+    return splitstr
+}
+window.splitObjectPath=splitObjectPath
+
+export const findTemplateStartEnds=(params)=>{
+    let opChar=params.stOp
+    let clChar=params.stCl
+    let str=params.in
+    let arr=params.arr
+    let openPos=str.indexOf(opChar ) + opChar.length
+    let newtmp1=str.substr(openPos)
+
+    let closePos=newtmp1.indexOf(clChar)
+    let midTemp=newtmp1.substr(0, closePos ).trim()
+    let nextTemp=newtmp1.substr(closePos + 1 + clChar.length )
+
+    let nr={ "openPos" : openPos , "data" :  midTemp ,"closePos" : closePos }
+    arr.push(nr)
+    params.arr=arr
+    params.in=nextTemp
+    if (params.in.length <=  0 || openPos=== -1 || closePos === -1 ){
+        return arr
+    }
+    arr=findTemplateStartEnds(params)
+        
+    return arr
+}
+window.findTemplateStartEnds=findTemplateStartEnds
+
+export const  validateObjPath=(str, data)=>{ // loop through arrary of          
+    let fnc=(arrObjInArr, DataIn )=>{
+        let ntmp
+        let isValid=true
+        let arrObjIn=arrObjInArr.slice(1,arrObjInArr.length) // remove first rec from array as it should be the the main data object
+        let nobj={}
+        let nobj2=DataIn
+        let ret=false
+        let retrec={ isValid : true , fullPath : str ,invalidaPath : arrObjInArr[0]  , type : "" }
+        arrObjIn.forEach((v,i)=>{            
+            if (ret===true){return} // continue / break hack                        
+            if (isValid!==false){
+                if (v==="." | v==="[" | v==="]" ){
+            
+                }else{
+                    let prfx="."
+                    //if (i===0){ prfx="" }
+
+                    if (typeof(nobj2[v])==="undefined"){
+                        isValid=false
+                        retrec.isValid=isValid
+                        retrec.invalidaPath+=prfx + v
+                        ret=false
+                        return
+                    }
+                    nobj=nobj2[v]
+                    nobj2=nobj
+                    let tpo=typeof(nobj)
+                    if (tpo==="object"){
+                        if (Array.isArray(nobj)){
+                            tpo="array"
+                        }
+                    }   
+
+                    retrec.type=tpo
+
+
+                    retrec.invalidaPath+= prfx + v
+                }
+            }
+        })
+
+        return retrec
+    }
+    
+    const result = splitObjectPath(str)
+    let tmpO=result
+    let nv=fnc( tmpO , data )
+    
+    return nv
+}
+window.validateObjPath=validateObjPath
+
 // test //getAllStringVarsDetails( 'let ${ data.name }  and ${ data.name2 } with ${ data.age }', { name : "rob"},
 export const getAllStringVarsDetails=(tmpltStrIn , dataIn,dataExtraIn, options)=>{ // checks for errors in template and checks if variables exist in data
     
@@ -166,10 +257,13 @@ export const getAllStringVarsDetails=(tmpltStrIn , dataIn,dataExtraIn, options)=
         indexedVars : {},
         errors : "",
         varsErr  : [],
-        properties : {
-            lineCount : 0,
-            wordCount : 0,
-        }
+        lineCount : 0,
+        lines : [],
+        wordCount : 0,
+        words : [],
+        hasInvalid : false,
+        invalidPaths : [],
+
     }
 
     if (!isUn(tmpltStrIn)){
@@ -183,112 +277,151 @@ export const getAllStringVarsDetails=(tmpltStrIn , dataIn,dataExtraIn, options)=
     if (!isUn(dataExtraIn)){
         dataExtra=dataExtraIn
     }
-
-
+    
     // find template fields
         let p={ in : tmpltStr, cbs : [] , arr : [] , stOp : "${",stCl : "}" }
         let nr={ stOp : "${",stCl : "}" ,fnOp : ()=>{},fnCl : ()=>{} }
-        p.cbs.push(nr)
+        p.cbs.push(nr)       
         
-        let findTemplateStartEnds=(params)=>{
-            let opChar=params.stOp
-            let clChar=params.stCl
-            let str=params.in
-            let arr=params.arr
-            let openPos=str.indexOf(opChar ) + opChar.length
-            let newtmp1=str.substr(openPos)
-
-            let closePos=newtmp1.indexOf(clChar) - 1
-            let midTemp=newtmp1.substr(0, closePos ).trim()
-            let nextTemp=newtmp1.substr(closePos + 1 + clChar.length )
-
-            let nr={ "openPos" : openPos , "data" :  midTemp ,"closePos" : closePos }
-            arr.push(nr)
-            params.arr=arr
-            params.in=nextTemp
-            //cl ("nextTemp : " ,nextTemp)
-            //cl ("if  : " , params.in.length ,  " openPos : ", openPos , " closePos : ", closePos )
-            if (params.in.length <=  0 || openPos=== -1 || closePos === -1 ){
-                return arr
-            }
-            arr=findTemplateStartEnds(params)
-            
-            //cl("op : ", openPos , " , opChar : ", opChar)
-            //cl("openPos : ", openPos , ", mid data : " , midTemp ,", closePos : " ,closePos )
-            
-            return arr
-        }
-
         let posdata=[]
-        posdata=findTemplateStartEnds(p)
-        //cl("p.arr " , p.arr )
-        //cl("posdata " , posdata )
-        //cl("p.arr len" , p.arr.length )
+        posdata=findTemplateStartEnds(p) // get all templated variables
 
-        let splitObjectPath=(str)=>{ // loop through arrary of
-            //let splitstr=str.split(/(\.+|\[+|\]+)/);  // keep delimeters
-            let splitstr=str.split(/\.|\[|\]/); // round braces make regex keep delims
-            return splitstr
+    let isValid=true
+    let isValidRec={}
+    let hasInvalid=false
+    //let posDataLoopBreak=false
+    posdata.forEach((r,i)=>{           
+        //if (posDataLoopBreak===true){return}
+        let vars={ name : r.data }
+        ret.vars.push(vars)
+        ret.indexedVars[r.data]={ i : i}
+
+        // check for incalid variables (i.e. dont exist in data)
+        isValidRec=validateObjPath(r.data,data)
+        isValid=isValidRec.isValid
+        let invalidPath=""
+        if (isValid===false){
+            hasInvalid=true  
+            invalidPath=isValidRec.invalidaPath  
+            ret.invalidPaths.push({ path : r.data, invalidaPath : isValidRec.invalidaPath })
+            ret.errors+=`invalid template variable "${r.data}" ;\n`
         }
 
+        let idxVar=ret.indexedVars[r.data].i
+        ret.vars[idxVar].type=isValidRec.type
+        ret.vars[idxVar].isValid=isValid
+        ret.vars[idxVar].invalidPath=invalidPath
 
-        let validateObjPath=(str, data)=>{ // loop through arrary of
-            
-            const result = splitObjectPath(str)
-            let fnc=(arrObjIn, DataIn )=>{
-                let ntmp
-                let isValid=true
-                arrObjIn.forEach((v,i)=>{
-                    let tmp=v
-                    
-                    if (isValid!==false){
-                        if (v==="." | v==="[" | v==="]" ){
-                    
-                        }else{
-                    
-                            let nob=DataIn
-                            if (( i + 1 )!==arrObjIn.length){
-                                if ( typeof(nob[ arrObjIn[ i + 1 ] ])==="undefined" ){
-                                    isValid=false
-                                    return isValid
-                                }else{
-                                    
-                                    isValid=true      
-                                    if (nob[ arrObjIn[ i + 1 ]]){                              
-                                        isValid=fnc( arrObjIn.slice(1,arrObjIn.length) , nob[ arrObjIn[ i + 1 ]])
-                                        return isValid
-                                    }else{
-                                        return isValid
-                                    }
-                                }
-                            }
-                            
-                        }
-                    }
-                })
+        //if (isValid===false){posDataLoopBreak=true}
+    });
+    ret.hasInvalid=hasInvalid
 
-                return isValid
-            }
-
-            //let tmpO=result.slice(1,result.length)
-            let tmpO=result
-            let nv=fnc( tmpO , data )
-            console.log("nv : ", nv)
-            return nv
+    let lines=tmpltStrIn.split("\n")
+    ret.lineCount=lines.length
+    ret.lines=lines.length
+    
+    let wordsTMP=tmpltStrIn.split(/\s+|\t+/)
+    let words=[]
+    wordsTMP.forEach((v,i)=>{
+        if (v==="${" || v==="}" ){
+            return
         }
-
-        let isValid=validateObjPath(posdata[0].data,data)
-
-        posdata.forEach((r,i)=>{
-            let tmp=[]
-            tmp=r.data.split(".")
-
-           // cl("tmp : " ,tmp)
-
-        });
-
-
+        words.push({ name : v })
+    })
+    ret.wordCount=words.length
+    ret.words=words        
     return ret
 }
-
 window.getAllStringVarsDetails=getAllStringVarsDetails
+
+export const parseLang=(params)=>{
+    let ret={}
+
+    let keywords=[]
+    let keywordCodeTypes={} // maped keywords linked to , records that have types like "loop" { "for" : { type "loop", }   }
+    let strictSpacing=false
+    let openSubCodeBlock="{"
+    let closeSubCodeBlock="}"
+    let openFunctionParenth="("
+    let closeFunctionParenth=")"
+    let openArrParenth="["
+    let closeArrParenth="]"
+    let lineEndChar=";"
+    let requiresLineEnd=false
+    let lineTxtEnd="\n"
+
+    //split lines up
+    let lines=[]
+    let lineTxtTmp=[]
+    let linesTmp=[]
+    lineTxtTmp=params.text.split(lineTxtEnd)
+
+    ret.lineCount=lineTxtTmp.length
+
+    lineTxtTmp.forEach((v,i)=>{
+        let nr={ 
+            lineNo : i ,  
+            charCount : v.length ,  
+            lastCharNo : -1 ,  
+            lastChar : "" ,  
+            lastCharReal : "" ,  
+            firstCharReal : "" ,  
+            firstChar : "" ,  
+            firstCharNo : -1 ,  
+            text : "",
+            wordsTxt : [],
+            words : [],
+            wordCount : 0
+        
+        }
+
+        nr.txt=v
+
+        nr.wordsTxt=v.split(/\s+|\t+/)
+        nr.wordCount=nr.words.length
+        
+        nr.lastCharNo=v.length
+        nr.lastCharReal=v[ v.length -1 ] 
+
+
+        nr.wordsTx.forEach((vw,iw)=>{
+            let nrw={
+                word : "",
+                nextChar : "",
+                nextWord : "",
+                prevChar : "",
+                prevWord : "",
+            }
+
+            let isLastWord=false
+            if ( iw <= nr.wordsTx.length - 1 ){ // last word
+                isLastWord=true
+            }
+
+            if ( iw > 1 ){
+                nrw.prevWord=nr.nextWord=nr.wordsTx[ iw - 1 ]
+            }
+
+            if (isLastWord){
+                nrw.nextWord=nr.wordsTx[ iw + 1 ]
+                nrw.prevChar=nrw.nextWord[ nrw.prevChar.length - 1 ]
+            }
+
+            nrw.word=vw
+
+            nr.words.push(nrw)
+        })
+
+        //nr.firstCharNo= // num without blanks or tabs // usefull later for finding indentation
+
+        lines.push(nr)
+    })
+
+
+
+
+    
+
+    return ret
+} 
+window.parseLang=parseLang
