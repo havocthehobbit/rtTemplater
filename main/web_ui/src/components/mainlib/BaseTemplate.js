@@ -3,6 +3,7 @@ import "../../App.css";
 //import { ContextStore } from '../common/contextStore';
 import { RenderTmpl } from '../mainlib/render';
 import { TemplateItem } from '../mainlib/templateItem';
+import { getAllStringVarsDetails } from './render'
 
 let $cn=require("../common/libNative").$cn
 let cl=$cn.l
@@ -246,6 +247,12 @@ export class BaseTemplate extends Component {
         },
     ]
 
+    validate=()=>{
+        let tt=this
+        let tmp=getAllStringVarsDetails(tt.template.tables, tt.schema)
+        tt.setState({properties : JSON.stringify(tmp,null,2) })
+    }
+
     getDetails=()=>{
         let tt=this
         let dt={ schemadata : tt.schema, template : tt.template,loopOption : tt.loopOption }        
@@ -279,7 +286,6 @@ export class BaseTemplate extends Component {
 
     render(){
         let tt=this
-
         
         /*
 
@@ -405,8 +411,7 @@ export class BaseTemplate extends Component {
         
 
         return (
-            <div>
-                
+            <div>                
                 <button
                     onClick={()=>{
                         tt.runRenderAll()
@@ -450,7 +455,9 @@ export class BaseTemplate extends Component {
                                 }}
                                 onBlur={(e)=>{  
                                     tt.template.tables= e.target.value                             
-                                    tt.setState({ template : e.target.value })
+                                    tt.setState({ template : e.target.value },()=>{
+                                        tt.validate()
+                                    })
                                 }}
                             />
                         </div>
@@ -469,7 +476,9 @@ export class BaseTemplate extends Component {
                                     try {
                                         jsnO=JSON.parse(e.target.value)
                                         tt.schema.tables=jsnO
-                                        tt.setState({ data : jsnO })
+                                        tt.setState({ data : jsnO },()=>{
+                                            tt.validate()
+                                        })
                                     } catch (error) {
                                         alert("error : " +  error)
                                     }
@@ -492,7 +501,9 @@ export class BaseTemplate extends Component {
                                     try {
                                         jsnO=JSON.parse(e.target.value)
                                         tt.schema=jsnO
-                                        tt.setState({ dataEx : jsnO })
+                                        tt.setState({ dataEx : jsnO },()=>{
+                                            tt.validate()
+                                        })
                                     } catch (error) {
                                         alert("error : " +  error)
                                     }
@@ -521,6 +532,15 @@ export class BaseTemplate extends Component {
                                     }
                                     
                                 }}
+                            />
+                        </div>
+                        <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>properties</label>
+                        <div
+                            style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                        >                           
+                            <textarea
+                                value={tt.state.properties}
+                                style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
                             />
                         </div>
                     </div >
