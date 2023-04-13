@@ -5,6 +5,8 @@ import { RenderTmpl } from '../mainlib/render';
 import { TemplateItem } from '../mainlib/templateItem';
 import { getAllStringVarsDetails } from './render'
 
+import { v4 as uuid } from 'uuid';
+
 let $cn=require("../common/libNative").$cn
 let cl=$cn.l
 let tof=$cn.tof
@@ -18,6 +20,8 @@ export class BaseTemplate extends Component {
         let tt=this
 
         let tmp=""
+
+        this.uuid=uuid()
         
         if (props.startEx){
             let startEx=props.startEx
@@ -51,7 +55,8 @@ export class BaseTemplate extends Component {
             data : {},  
             mainTitle : "mainTitle", 
 
-            inputsTemplateHeightBool : true
+            inputsTemplateHeightBool : true,
+            minAll : false,
         }
 
         if (tt.props.mainTitle){
@@ -71,7 +76,7 @@ export class BaseTemplate extends Component {
             data : tt.schema.tables,
             datatxt : JSON.stringify( tt.schema.tables,null, 2),
             dataExtxt : JSON.stringify( tt.schema,null, 2),
-            loopOption : JSON.stringify(tt.loopOption,null, 2),
+            loopOption : JSON.stringify(tt.loopOption,null, 2),            
         },
             ()=>{
                 setTimeout(()=>{
@@ -82,16 +87,33 @@ export class BaseTemplate extends Component {
      
         if (tt.props.refData){
             tt.props.refData.current.get=tt.getDetails
+            tt.props.refData.current[tt.uuid].set=tt.setDetails
         }
 
         if (tt.props.refData){
             tt.props.refData.current.set=tt.setDetails
+            tt.props.refData.current[tt.uuid].set=tt.setDetails
         }
 
         
         
 
     }
+    
+    componentDidUpdate(prevProps){
+        let tt=this
+        if (prevProps !==tt.props){
+            if (tt.props.refData){
+                tt.props.refData.current.get=tt.getDetails
+            }
+
+            if (tt.props.refData){
+                tt.props.refData.current.set=tt.setDetails
+            }
+        }
+    }
+
+    uuid=0
 
     runRender={ fn : ()=>{}}
     
@@ -413,152 +435,176 @@ export class BaseTemplate extends Component {
             )
         })()
         
-
+        let renderbutshow=undefined
+        let styleBox={position : "relative",border : "blue thin solid", padding :5,borderRadius : 15}
+        if (!tt.state.minAll){
+            styleBox.width= 400
+            styleBox.height= 45
+            styleBox.overflow= "hidden"
+            renderbutshow="none"
+        }
         return (
-            <div>                
+            <div
+                style={styleBox}
+            >    
+                <div style={{position : "absolute",background : 'blue',top : 0,left : 0, width : "100%", height :"100%",
+                                opacity : 0.1,zIndex : -1
+                }}/>
                 <button
+                    style={{background : "lightgreen",color : "black" ,display : renderbutshow}}
                     onClick={()=>{
                         tt.runRenderAll()
                     }}
                 >
                     render tables
                 </button>
-
-                <div style={{ clear : "left" }}/>
-
-                <div style={{ position : "relative",float : "left",padding : 5,border : "blue solid thin", borderRadius : 10,
-                                height : tt.state.inputsTemplateHeight, overflow : tt.state.inputsTemplateHeightOverflow
-                            }} 
+                <button
+                    style={{background : "lightgreen",color : "black",cursor : "pointer", marginBottom : 10, width : undefined }}
+                    onClick={()=>{
+                        
+                            tt.setState({ minAll : !tt.state.minAll })
+                    }}
                 >
-                    <div style={{ position : "relative"}} >
-                        <div
-                            style={{ cursor : "pointer" }}
-                            onClick={()=>{
-                                if (!tt.state.inputsTemplateHeightBool){
-                                    tt.setState({ inputsTemplateHeight : 16,inputsTemplateHeightBool : true, inputsTemplateHeightOverflow : "hidden"})
-                                }else{
-                                    tt.setState({ inputsTemplateHeight : undefined,inputsTemplateHeightBool : false, inputsTemplateHeightOverflow : undefined})
-                                }
-                                
-                            }}
-                        >
-                            <label 
-                                style={{ color : "white",fontSize : 14,height:5,cursor : "",pointerEvents: "none" , userSelect: "none"}}
-                                disabled={true}
-                                
-                            >template</label>
-                        </div>
-                        <div
-                            style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
-                        >                                           
-                            <textarea
-                                value={tt.state.templatetxt}
-                                style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
-                                onChange={(e)=>{
-                                    tt.setState({ templatetxt : e.target.value })
-                                }}
-                                onBlur={(e)=>{  
-                                    tt.template.tables= e.target.value                             
-                                    tt.setState({ template : e.target.value },()=>{
-                                        tt.validate()
-                                    })
-                                }}
-                            />
-                        </div>
-                        <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data</label>
-                        <div
-                            style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
-                        >                        
-                            <textarea
-                                value={tt.state.datatxt}
-                                style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
-                                onChange={(e)=>{
-                                    tt.setState({ datatxt : e.target.value })
-                                }}
-                                onBlur={(e)=>{
-                                    let jsnO
-                                    try {
-                                        jsnO=JSON.parse(e.target.value)
-                                        tt.schema.tables=jsnO
-                                        tt.setState({ data : jsnO },()=>{
-                                            tt.validate()
-                                        })
-                                    } catch (error) {
-                                        alert("error : " +  error)
-                                    }
-                                    
-                                }}
-                            />
-                        </div>
-                        <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data extra</label>
-                        <div
-                            style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
-                        >                        
-                            <textarea
-                                value={tt.state.dataExtxt}
-                                style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
-                                onChange={(e)=>{
-                                    tt.setState({ dataExtxt : e.target.value })
-                                }}
-                                onBlur={(e)=>{
-                                    let jsnO
-                                    try {
-                                        jsnO=JSON.parse(e.target.value)
-                                        tt.schema=jsnO
-                                        tt.setState({ dataEx : jsnO },()=>{
-                                            tt.validate()
-                                        })
-                                    } catch (error) {
-                                        alert("error : " +  error)
-                                    }
-                                    
-                                }}
-                            />
-                        </div>
-                        <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>options</label>
-                        <div
-                            style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
-                        >                        
-                            <textarea
-                                value={tt.state.loopOption}
-                                style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
-                                onChange={(e)=>{
-                                    tt.setState({ loopOption : e.target.value })
-                                }}
-                                onBlur={(e)=>{
-                                    let jsnO
-                                    try {
-                                        jsnO=JSON.parse(e.target.value)
-                                        tt.loopOption=jsnO
-                                        tt.setState({ loopOption : jsnO })
-                                    } catch (error) {
-                                        alert("error : " +  error)
-                                    }
-                                    
-                                }}
-                            />
-                        </div>
-                        <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>properties</label>
-                        <div
-                            style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
-                        >                           
-                            <textarea
-                                value={tt.state.properties}
-                                style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
-                            />
-                        </div>
-                    </div >
-                </div>
-                 <div style={{ position : "relative",float : "left",height : tt.state.outputTemplateHeight, width : 670,margin : 8,padding : 10,paddingTop : 0,overflow : "hidden", borderRadius:10,border : "blue solid thin" }} >  
-                    <div 
-                        style={{ position : "relative", overflow : "auto",padding : 50,paddingTop : 0,width : 600, height : 600 }}                         
-                    >                    
-                            {CollFnsE}                        
-                    </div>
-                </div>
+                     {tt.name} min(-)
+                </button>
 
                 <div style={{ clear : "left" }}/>
-                
+                <div 
+                    style={{ dispaly : renderbutshow}}
+                >
+                    <div style={{ position : "relative",float : "left",padding : 5,border : "blue solid thin", borderRadius : 10,
+                                    height : tt.state.inputsTemplateHeight, overflow : tt.state.inputsTemplateHeightOverflow
+                                }} 
+                    >
+                        <div style={{ position : "relative"}} >
+                            <div
+                                style={{ cursor : "pointer" }}
+                                onClick={()=>{
+                                    if (!tt.state.inputsTemplateHeightBool){
+                                        tt.setState({ inputsTemplateHeight : 16,inputsTemplateHeightBool : true, inputsTemplateHeightOverflow : "hidden"})
+                                    }else{
+                                        tt.setState({ inputsTemplateHeight : undefined,inputsTemplateHeightBool : false, inputsTemplateHeightOverflow : undefined})
+                                    }
+                                    
+                                }}
+                            >
+                                <label 
+                                    style={{ color : "white",fontSize : 14,height:5,cursor : "",pointerEvents: "none" , userSelect: "none"}}
+                                    disabled={true}
+                                    
+                                >template</label>
+                            </div>
+                            <div
+                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                            >                                           
+                                <textarea
+                                    value={tt.state.templatetxt}
+                                    style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
+                                    onChange={(e)=>{
+                                        tt.setState({ templatetxt : e.target.value })
+                                    }}
+                                    onBlur={(e)=>{  
+                                        tt.template.tables= e.target.value                             
+                                        tt.setState({ template : e.target.value },()=>{
+                                            tt.validate()
+                                        })
+                                    }}
+                                />
+                            </div>
+                            <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data</label>
+                            <div
+                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                            >                        
+                                <textarea
+                                    value={tt.state.datatxt}
+                                    style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
+                                    onChange={(e)=>{
+                                        tt.setState({ datatxt : e.target.value })
+                                    }}
+                                    onBlur={(e)=>{
+                                        let jsnO
+                                        try {
+                                            jsnO=JSON.parse(e.target.value)
+                                            tt.schema.tables=jsnO
+                                            tt.setState({ data : jsnO },()=>{
+                                                tt.validate()
+                                            })
+                                        } catch (error) {
+                                            alert("error : " +  error)
+                                        }
+                                        
+                                    }}
+                                />
+                            </div>
+                            <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data extra</label>
+                            <div
+                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                            >                        
+                                <textarea
+                                    value={tt.state.dataExtxt}
+                                    style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
+                                    onChange={(e)=>{
+                                        tt.setState({ dataExtxt : e.target.value })
+                                    }}
+                                    onBlur={(e)=>{
+                                        let jsnO
+                                        try {
+                                            jsnO=JSON.parse(e.target.value)
+                                            tt.schema=jsnO
+                                            tt.setState({ dataEx : jsnO },()=>{
+                                                tt.validate()
+                                            })
+                                        } catch (error) {
+                                            alert("error : " +  error)
+                                        }
+                                        
+                                    }}
+                                />
+                            </div>
+                            <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>options</label>
+                            <div
+                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                            >                        
+                                <textarea
+                                    value={tt.state.loopOption}
+                                    style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
+                                    onChange={(e)=>{
+                                        tt.setState({ loopOption : e.target.value })
+                                    }}
+                                    onBlur={(e)=>{
+                                        let jsnO
+                                        try {
+                                            jsnO=JSON.parse(e.target.value)
+                                            tt.loopOption=jsnO
+                                            tt.setState({ loopOption : JSON.stringify(jsnO,null,2) })
+                                        } catch (error) {
+                                            alert("error : " +  error)
+                                        }
+                                        
+                                    }}
+                                />
+                            </div>
+                            <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>properties</label>
+                            <div
+                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                            >                           
+                                <textarea
+                                    value={tt.state.properties}
+                                    style={{width : 600, height : 220 , borderRadius : 10, border : "none"}}
+                                />
+                            </div>
+                        </div >
+                    </div>
+                    <div style={{ position : "relative",float : "left",height : tt.state.outputTemplateHeight, width : 670,margin : 8,padding : 10,paddingTop : 0,overflow : "hidden", borderRadius:10,border : "blue solid thin" }} >  
+                        <div 
+                            style={{ position : "relative", overflow : "auto",padding : 50,paddingTop : 0,width : 600, height : 600 }}                         
+                        >                    
+                                {CollFnsE}                        
+                        </div>
+                    </div>
+
+                    <div style={{ clear : "left" }}/>
+                </div>
             </div>
         )
     }

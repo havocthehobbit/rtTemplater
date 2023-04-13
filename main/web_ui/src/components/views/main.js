@@ -18,13 +18,16 @@ export class Main extends Component {
     constructor(props){
         super(props)
 
-        this.reactmongoDBDataRef=React.createRef(); this.reactmongoDBDataRef.current={}        
+        this.reactmongoDBDataRef=React.createRef(); this.reactmongoDBDataRef.current={}
+        this.reactmongoDBDataRefs=React.createRef(); this.reactmongoDBDataRefs.current=[]
+        
 
         this.importBrowseButtonRef=React.createRef()
 
         this.state={
             name : "", name2 : "",
-            tmplOut : "",            
+            tmplOut : "",  
+            data :{}          
         }
     }
 
@@ -36,7 +39,9 @@ export class Main extends Component {
             document.head.appendChild(myStyle)
             let styleSheet = myStyle.sheet        
             styleSheet.insertRule(`button { background: green;border-radius : 5px;padding : 10px; margin : 3px;font-size : 18px;color : white ;border : none}`, 0)
-        }      
+        } 
+        
+        
 
     }
   
@@ -67,9 +72,19 @@ export class Main extends Component {
             if (isOb(all)){
                 cl("all " , all)
                 let proj=all.projects[nameIn]
-                let JSNodeMongoTemp=proj.data.JSNodeMongo
+                let JSNodeMongoTemp
+                
+                
+                tt.setState({data : proj.data },()=>{
+                    if (isOb(tt.state.data.JSNodeMongo)){
+                        JSNodeMongoTemp=proj.data.JSNodeMongo
+                        tt.reactmongoDBSetDataRun(JSNodeMongoTemp)
+                    }else{
+                        tt.reactmongoDBSetDataRuns()
+                    }
+                })
 
-                tt.reactmongoDBSetDataRun(JSNodeMongoTemp)
+                
             }else{                
                 alert("load error ")
             }            
@@ -116,37 +131,11 @@ export class Main extends Component {
 
         var reader = new FileReader();
         reader.onload = function() {
-            var text = reader.result;
-            console.log("text : ", text)
+            var text = reader.result;            
 
             tt.loadtextProj(text)
 
-            //if reader.readAsDataURL is used ...for binary only
-            if (false){
-                let b64encodedhash = text.split(',')[1];
-                let mimetype = text.split(',')[0].split(':')[1].split(';')[0];
-                //
-                    let data = atob(b64encodedhash); //ascii to binary            
-                //converting to Uint8Array
-                    let blob
-                    var ab = new ArrayBuffer(data.length); 
-                    var ia = new Uint8Array(ab);
-                    for(var i = 0;i<data.length;i++){
-                        ia[i] = data.charCodeAt(i);
-                    }
-                    blob = new Blob([ia],{ "type": mimetype});          
-                // Downloadable binary as link
-                    let filenamenew="somefile.ext"
-                    let file = new File([blob], filenamenew);
-                    //let link= document.createElement('a');
-                    //link.href = window.URL.createObjectURL(file); // element.setAttribute('href', `data:${mimetype};charset=utf-8,` + encodeURIComponent(file)); // mimetype : text/plain may need to replace ;charset=utf-8
-                    //link.download = filenamenew; // link.setAttribute('download', filename);
-                    //link.click();
-                //cl("b64decoded : ",b64encodedhash)
-                //cl("mimetype : ",mimetype)
-                //cl("data : ",data)
-                // cl("blob : ",blob)
-            }
+            
         };
         reader.readAsText(files);
         //reader.readAsDataURL(files)
@@ -228,6 +217,29 @@ export class Main extends Component {
         
     }
 
+    reactmongoDBDataRefs=[]
+    reactmongoDBGetDataRuns=()=>{
+        if (this.reactmongoDBDataRef.current.get){
+            let data={}
+            data=this.reactmongoDBDataRef.current.get()
+            //cl(data)
+            return data
+        }
+        
+    }
+    reactmongoDBSetDataRuns=()=>{
+        let tt=this
+
+        if (tof(tt.state.data.JSNodeMongo)==="array"){
+            tt.state.data.JSNodeMongo.forEach((r,i)=>{
+                let data=r
+                if (tt.reactmongoDBDataRefs[i].current.set){
+                    tt.reactmongoDBDataRefs[i].current.set(data)
+                }
+            })
+        }        
+    }
+
 
     mainStyle={
         backgroundColor: "#282c34",
@@ -248,6 +260,44 @@ export class Main extends Component {
         
         let mainStyle=tt.mainStyle
 
+        let JSNodeMongoEs
+        JSNodeMongoEs=(()=>{
+            let Es=[]
+            let i=0
+
+            // array or single object
+            if (isOb(tt.state.data.JSNodeMongo)){
+                Es.push(
+                    <div key={i}>
+                        <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRef}  startEx={false}/>
+                    </div>
+                )
+            }else{                
+                if (typeof(tt.state.data.JSNodeMongo)==="object"){ 
+                    //tt.reactmongoDBDataRefs=[]
+                    tt.state.data.JSNodeMongo.forEach((r ,i) => {
+                        //let reactmongoDBDataRef={ current : {} }
+                        //let reactmongoDBDataRef=React.createRef(); reactmongoDBDataRef.current={}
+                        //tt.reactmongoDBDataRefs.push(reactmongoDBDataRef)
+                        //tt.reactmongoDBDataRefs[i]
+                        Es.push(
+                            <div key={i}>
+                                <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRef}  startEx={false}/>
+                            </div>
+                        )
+                      
+                    });
+                    
+                }
+            }
+
+            return (
+                <div>
+                    {Es}
+                </div>
+            )
+        })()
+
         return (
             <div style={mainStyle}> 
                 <div
@@ -255,8 +305,8 @@ export class Main extends Component {
                 >
                     <HeaderPanel/>
                 </div>               
-                <div style={{ position : "relative",left :35,width :undefined}}>
-                    <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRef}  startEx={false}/>
+                <div style={{ position : "relative",left :35,width :undefined}}>                    
+                    {JSNodeMongoEs}
                 </div>
 
                 <SideBar>
