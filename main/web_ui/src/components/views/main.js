@@ -19,7 +19,7 @@ export class Main extends Component {
         super(props)
 
         this.reactmongoDBDataRef=React.createRef(); this.reactmongoDBDataRef.current={}
-        this.reactmongoDBDataRefs=React.createRef(); this.reactmongoDBDataRefs.current=[]
+        this.reactmongoDBDataRefs=React.createRef(); this.reactmongoDBDataRefs.current={}
         
 
         this.importBrowseButtonRef=React.createRef()
@@ -185,7 +185,12 @@ export class Main extends Component {
         
         
 
-        let JSNodeMongoTemp=tt.reactmongoDBGetDataRun()
+        let JSNodeMongoTemp
+
+        //JSNodeMongoTemp=tt.reactmongoDBGetDataRun()
+
+        JSNodeMongoTemp=tt.reactmongoDBGetDataRuns()
+
         try {
             let saveFile=""
             all.lastProj=nameIn
@@ -217,15 +222,26 @@ export class Main extends Component {
         
     }
 
-    reactmongoDBDataRefs=[]
+    reactmongoDBDataRefs={}
     reactmongoDBGetDataRuns=()=>{
-        if (this.reactmongoDBDataRef.current.get){
-            let data={}
-            data=this.reactmongoDBDataRef.current.get()
-            //cl(data)
-            return data
-        }
-        
+        let tt=this
+        let data=[]
+        $cn.each(tt.reactmongoDBDataRefs.current,(r,i)=>{
+            if (tt.reactmongoDBDataRefs.current[r.uuid]){
+                
+                //data[r.uuid]=tt.reactmongoDBDataRefs.current[r.uuid].get()                
+                data.push(tt.reactmongoDBDataRefs.current[r.uuid].get())               
+               
+            }else{
+                if (tt.reactmongoDBDataRefs.current[i]){
+                    
+                    //data[i]=tt.reactmongoDBDataRefs.current[i].get()                    
+                    data.push(tt.reactmongoDBDataRefs.current[i].get())                   
+                    
+                }
+            }
+        })
+        return data
     }
     reactmongoDBSetDataRuns=()=>{
         let tt=this
@@ -233,9 +249,16 @@ export class Main extends Component {
         if (tof(tt.state.data.JSNodeMongo)==="array"){
             tt.state.data.JSNodeMongo.forEach((r,i)=>{
                 let data=r
-                if (tt.reactmongoDBDataRefs[i].current.set){
-                    tt.reactmongoDBDataRefs[i].current.set(data)
+                if (tt.reactmongoDBDataRefs.current[r.uuid]){
+                    if (tt.reactmongoDBDataRefs.current[r.uuid].set){
+                        tt.reactmongoDBDataRefs.current[r.uuid].set(data)
+                    }    
+                }else{
+                    if (tt.reactmongoDBDataRefs.current[i]){
+                        tt.reactmongoDBDataRefs.current[i].set(data)
+                    }  
                 }
+                
             })
         }        
     }
@@ -264,7 +287,7 @@ export class Main extends Component {
         JSNodeMongoEs=(()=>{
             let Es=[]
             let i=0
-
+            let itot=0
             // array or single object
             if (isOb(tt.state.data.JSNodeMongo)){
                 Es.push(
@@ -275,6 +298,7 @@ export class Main extends Component {
             }else{                
                 if (typeof(tt.state.data.JSNodeMongo)==="object"){ 
                     //tt.reactmongoDBDataRefs=[]
+                    
                     tt.state.data.JSNodeMongo.forEach((r ,i) => {
                         //let reactmongoDBDataRef={ current : {} }
                         //let reactmongoDBDataRef=React.createRef(); reactmongoDBDataRef.current={}
@@ -282,17 +306,47 @@ export class Main extends Component {
                         //tt.reactmongoDBDataRefs[i]
                         Es.push(
                             <div key={i}>
-                                <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRef}  startEx={false}/>
+                                <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRefs} iter={i} startEx={false}/>
                             </div>
                         )
-                      
+                        itot=i
                     });
                     
                 }
             }
 
+            let addbuttonE=(()=>{
+                itot++
+                let i=itot
+                return (
+                    <button
+                        onClick={
+                            ()=>{
+                                let data={...tt.state.data}
+
+                                if (isUn(data.JSNodeMongo)){
+                                    data={}
+                                }
+                                if (isUn(data.JSNodeMongo)){
+                                    data.JSNodeMongo=[]
+                                }
+
+                                let nr={}
+                                data.JSNodeMongo.push(nr)
+                           
+                                
+                                tt.setState({ data : data })
+                            }
+                        }
+                    >
+                        add mongo/js
+                    </button>
+                )
+            })()
+
             return (
                 <div>
+                    {addbuttonE}
                     {Es}
                 </div>
             )

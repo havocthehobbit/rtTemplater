@@ -22,7 +22,10 @@ export class BaseTemplate extends Component {
         let tmp=""
 
         this.uuid=uuid()
-        
+        if (!isUn(props.iter)){
+            tt.iter=props.iter
+        }
+
         if (props.startEx){
             let startEx=props.startEx
             let useexample=false
@@ -68,7 +71,21 @@ export class BaseTemplate extends Component {
     
 
     componentDidMount(){
-        let tt=this       
+        let tt=this  
+        
+        if (tt.props.refData){
+            //tt.props.refData.current[tt.uuid]={}
+            tt.props.refData.current[tt.iter]={}
+
+            //tt.props.refData.current.get=tt.getDetails   
+            //tt.props.refData.current.set=tt.setDetails
+
+            //tt.props.refData.current[tt.uuid].get=tt.getDetails 
+            //tt.props.refData.current[tt.uuid].set=tt.setDetails 
+
+            tt.props.refData.current[tt.iter].get=tt.getDetails
+            tt.props.refData.current[tt.iter].set=tt.setDetails                  
+        }
 
         tt.setState({ 
             templatetxt : tt.template.tables,
@@ -84,19 +101,6 @@ export class BaseTemplate extends Component {
                 }
                 , 2000)
         })
-     
-        if (tt.props.refData){
-            tt.props.refData.current.get=tt.getDetails
-            tt.props.refData.current[tt.uuid].set=tt.setDetails
-        }
-
-        if (tt.props.refData){
-            tt.props.refData.current.set=tt.setDetails
-            tt.props.refData.current[tt.uuid].set=tt.setDetails
-        }
-
-        
-        
 
     }
     
@@ -104,16 +108,23 @@ export class BaseTemplate extends Component {
         let tt=this
         if (prevProps !==tt.props){
             if (tt.props.refData){
-                tt.props.refData.current.get=tt.getDetails
-            }
-
-            if (tt.props.refData){
-                tt.props.refData.current.set=tt.setDetails
+                //tt.props.refData.current[tt.uuid]={}
+                tt.props.refData.current[tt.iter]={}
+    
+                //tt.props.refData.current.get=tt.getDetails   
+                //tt.props.refData.current.set=tt.setDetails
+    
+                //tt.props.refData.current[tt.uuid].get=tt.getDetails 
+                //tt.props.refData.current[tt.uuid].set=tt.setDetails 
+    
+                tt.props.refData.current[tt.iter].get=tt.getDetails
+                tt.props.refData.current[tt.iter].set=tt.setDetails                  
             }
         }
     }
 
     uuid=0
+    iter=-1
 
     runRender={ fn : ()=>{}}
     
