@@ -75,7 +75,7 @@ export class BaseTemplate extends Component {
         },
             ()=>{
                 setTimeout(()=>{
-                    tt.runRenderAll()    
+                    tt.runRenderAll(()=>{tt.validate()})    
                 }
                 , 2000)
         })
@@ -96,7 +96,7 @@ export class BaseTemplate extends Component {
     runRender={ fn : ()=>{}}
     
     runRenderAllFns={}
-    runRenderAll=()=>{
+    runRenderAll=(...args)=>{
         let tt=this
         //{ fn : ()=>{}}
         $cn.each(tt.state.runRenderAllFns,(r,i)=>{
@@ -106,6 +106,10 @@ export class BaseTemplate extends Component {
             
 
         })
+
+        if (tof(args[0])==="function"){            
+            args[0]()
+        }
     }
 
     name="JSNodeMongo"
