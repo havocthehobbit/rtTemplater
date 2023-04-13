@@ -6,6 +6,7 @@ import { TemplateItem } from '../mainlib/templateItem';
 import { JSNodeMongo } from '../mainlib/JSNodeMongo';
 import { SideBar } from '../mainlib/SideBar';
 import $lnd from  "../common/libNativeDom"
+import { HeaderPanel } from './headerPanel';
 let $cn=require( "../common/libNative").$cn
 
 let cl=$cn.l
@@ -248,7 +249,12 @@ export class Main extends Component {
         let mainStyle=tt.mainStyle
 
         return (
-            <div style={mainStyle}>                
+            <div style={mainStyle}> 
+                <div
+                     style={{ position : "relative"}}
+                >
+                    <HeaderPanel/>
+                </div>               
                 <div style={{ position : "relative",left :35,width :undefined}}>
                     <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRef}  startEx={false}/>
                 </div>

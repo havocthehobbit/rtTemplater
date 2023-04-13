@@ -1,0 +1,53 @@
+.headerPanels {
+    width : 300px;     
+}
+.headerPanel3  {
+    width : 100px;
+}
+@media screen and (min-width: 100px) { /* if using min-width : screen > min-with  or using max-width :  screen < max-width   */
+    .headerPanels {        
+        width : 100px;        
+    }
+}
+
+@media screen and (min-width: 400px) {
+    .headerPanels {
+        width : 130px;
+    }
+    
+}
+
+@media screen and (min-width: 500px) {
+    .headerPanels {
+        width : 200px;
+    }
+    .headerPanel3  {
+        width : 415px;
+    }
+}
+
+
+@media screen and (min-width: 501px) {
+    .headerPanels {
+        width : 150px;
+    }
+    
+}
+
+@media screen and (min-width: 1000px) {
+    .headerPanels {
+        width : 430px;
+       
+    }
+    .headerPanel3  {
+        width : 875px;
+    }
+  
+}
+
+@media screen and (min-width: 1499px) {
+    .headerPanels {
+        width : 430px;
+       
+    }
+}
