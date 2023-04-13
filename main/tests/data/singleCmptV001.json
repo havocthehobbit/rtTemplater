@@ -1,0 +1,40 @@
+{
+    "projects": {
+      "__default": {
+        "data": {
+          "JSNodeMongo": {
+            "schemadata": {
+              "tables": {
+                "users": {
+                  "name": "users",
+                  "indexs": {},
+                  "cols": {}
+                },
+                "user_details": {
+                  "name": "user_details",
+                  "indexs": {},
+                  "cols": {}
+                },
+                "groups": {
+                  "name": "groups",
+                  "indexs": {},
+                  "cols": {}
+                }
+              },
+              "object": {
+                "objname": "generalDbFN",
+                "objname2": "gen"
+              }
+            },
+            "template": {
+              "tables": "`\n        let ${dataEx.object.objname2}={\n            name : \"${dataEx.object.objname}\",\n            db : undefined,\n            ${data.name} : {\n                get${data.name} : (params, cbp)=>{\n                    let db=${dataEx.object.objname}.db \n                    let temp=\"\"\n                    let details=undefined       \n                    let view=undefined       \n\n                    let cb=()=>{}\n                    if (typeof(cbp)===\"function\"){\n                        cb=cbp\n                    }\n\n                    searchBy={}\n                    temp=\"${data.name}id\"\n                    if (tof(params[temp])!==\"undefined\"){\n                        details=params[temp]\n                    }        \n                    temp=\"id\"\n                    if (tof(params[temp])!==\"undefined\"){\n                        details=params[temp]\n                    }                \n                    temp=\"email\"\n                    if (tof(params[temp])!==\"undefined\"){\n                        details=params[temp]\n                    }        \n                    temp=\"details\"\n                    if (tof(params[temp])!==\"undefined\"){\n                        details=params[temp]\n                    }        \n                    temp=\"view\"\n                    if (tof(params[temp])!==\"undefined\"){\n                        details=params[temp]\n                    }\n\n                    let ${data.name}=db.collection(\"${data.name}\")\n                        ${data.name}.findOne(searchBy)\n                    .then((dt)=>{\n                        cb(dt)\n                    })\n                    .catch((err)=>{\n                        cb([], err)\n                    })\n                    \n                    return\n                }\n\n                get${data.name} : ()=>{\n                    db.collection(\"${data.name}\")\n                    \n                    return\n                }\n\n                update${data.name} : ()=>{\n                    db.collection(\"${data.name}\")\n                    \n                    return\n                }\n\n                delete${data.name} : ()=>{\n                    db.collection(\"${data.name}\")\n                    \n                    return\n                }\n            }\n        }\n            \n        `"
+            },
+            "loopOption": {}
+          }
+        },
+        "name": "__default",
+        "lastUpdated": "2023-03-27T17:46:03.885Z"
+      }
+    },
+    "lastProj": "__default"
+  }
