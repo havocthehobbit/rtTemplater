@@ -484,7 +484,7 @@ export class BaseTemplate extends Component {
                     style={{ dispaly : renderbutshow}}
                 >
                     <div style={{ position : "relative",float : "left",padding : 5,border : "blue solid thin", borderRadius : 10,
-                                    height : tt.state.inputsTemplateHeight, overflow : tt.state.inputsTemplateHeightOverflow
+                                   // height : tt.state.inputsTemplateHeight, overflow : tt.state.inputsTemplateHeightOverflow
                                 }} 
                     >
                         <div style={{ position : "relative"}} >
@@ -506,7 +506,9 @@ export class BaseTemplate extends Component {
                                 >template</label>
                             </div>
                             <div
-                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2,
+                                            height : tt.state.inputsTemplateHeight, overflow : tt.state.inputsTemplateHeightOverflow,
+                                }}
                             >                                           
                                 <textarea
                                     value={tt.state.templatetxt}
@@ -522,9 +524,34 @@ export class BaseTemplate extends Component {
                                     }}
                                 />
                             </div>
-                            <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data</label>
                             <div
-                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                                style={{ cursor : "pointer" }}
+                                onClick={()=>{
+                                    let nr={}
+                                    let tmpName="Data"
+                                    nr[ "inputs" + tmpName + "Height"]=16
+                                    nr[ "inputs" + tmpName + "HeightBool"]=true
+                                    nr[ "inputs" + tmpName + "HeightOverflow"]="hidden"
+
+                                    if (!tt.state[ "inputs" + tmpName + "HeightBool"]){
+                                        
+                                    }else{
+                                        nr[ "inputs" + tmpName + "Height"]=undefined
+                                        nr[ "inputs" + tmpName + "HeightBool"]=false
+                                        nr[ "inputs" + tmpName + "HeightOverflow"]=undefined
+                                    }
+                                    tt.setState(nr)
+                                    
+                                }}
+                            >
+                                <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0,
+                                                pointerEvents: "none" , userSelect: "none",
+                                }}>data</label>
+                            </div>
+                            <div
+                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2,
+                                            height : tt.state["inputs" + "Data" + "Height"], overflow : tt.state["inputs" + "Data" + "HeightOverflow"],
+                                }}
                             >                        
                                 <textarea
                                     value={tt.state.datatxt}
@@ -547,9 +574,34 @@ export class BaseTemplate extends Component {
                                     }}
                                 />
                             </div>
-                            <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>data extra</label>
                             <div
-                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                                style={{ cursor : "pointer" }}
+                                onClick={()=>{
+                                    let nr={}
+                                    let tmpName="DataEx"
+                                    nr[ "inputs" + tmpName + "Height"]=16
+                                    nr[ "inputs" + tmpName + "HeightBool"]=true
+                                    nr[ "inputs" + tmpName + "HeightOverflow"]="hidden"
+
+                                    if (!tt.state[ "inputs" + tmpName + "HeightBool"]){
+                                        
+                                    }else{
+                                        nr[ "inputs" + tmpName + "Height"]=undefined
+                                        nr[ "inputs" + tmpName + "HeightBool"]=false
+                                        nr[ "inputs" + tmpName + "HeightOverflow"]=undefined
+                                    }
+                                    tt.setState(nr)
+                                    
+                                }}
+                            >
+                                <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0,
+                                                pointerEvents: "none" , userSelect: "none",
+                                }}>data extra</label>
+                            </div>
+                            <div
+                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2,
+                                            height : tt.state["inputs" + "DataEx" + "Height"], overflow : tt.state["inputs" + "DataEx" + "HeightOverflow"],
+                                }}
                             >                        
                                 <textarea
                                     value={tt.state.dataExtxt}
@@ -572,9 +624,34 @@ export class BaseTemplate extends Component {
                                     }}
                                 />
                             </div>
-                            <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>options</label>
                             <div
-                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                                style={{ cursor : "pointer" }}
+                                onClick={()=>{
+                                    let nr={}
+                                    let tmpName="Options"
+                                    nr[ "inputs" + tmpName + "Height"]=16
+                                    nr[ "inputs" + tmpName + "HeightBool"]=true
+                                    nr[ "inputs" + tmpName + "HeightOverflow"]="hidden"
+
+                                    if (!tt.state[ "inputs" + tmpName + "HeightBool"]){
+                                        
+                                    }else{
+                                        nr[ "inputs" + tmpName + "Height"]=undefined
+                                        nr[ "inputs" + tmpName + "HeightBool"]=false
+                                        nr[ "inputs" + tmpName + "HeightOverflow"]=undefined
+                                    }
+                                    tt.setState(nr)
+                                    
+                                }}
+                            >
+                                <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0,
+                                                pointerEvents: "none" , userSelect: "none",
+                                }}>options</label>
+                            </div>
+                            <div
+                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2,
+                                                height : tt.state["inputs" + "Options" + "Height"], overflow : tt.state["inputs" + "Options" + "HeightOverflow"],                                    
+                                }}
                             >                        
                                 <textarea
                                     value={tt.state.loopOption}
@@ -595,9 +672,34 @@ export class BaseTemplate extends Component {
                                     }}
                                 />
                             </div>
-                            <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0}}>properties</label>
                             <div
-                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2}}
+                                style={{ cursor : "pointer" }}
+                                onClick={()=>{
+                                    let nr={}
+                                    let tmpName="Properties"
+                                    nr[ "inputs" + tmpName + "Height"]=16
+                                    nr[ "inputs" + tmpName + "HeightBool"]=true
+                                    nr[ "inputs" + tmpName + "HeightOverflow"]="hidden"
+
+                                    if (!tt.state[ "inputs" + tmpName + "HeightBool"]){
+                                        
+                                    }else{
+                                        nr[ "inputs" + tmpName + "Height"]=undefined
+                                        nr[ "inputs" + tmpName + "HeightBool"]=false
+                                        nr[ "inputs" + tmpName + "HeightOverflow"]=undefined
+                                    }
+                                    tt.setState(nr)
+                                    
+                                }}
+                            >
+                                <label style={{ color : "white",fontSize : 14,padding : 0,margin : 0,
+                                                    pointerEvents: "none" , userSelect: "none",
+                                }}>properties</label>
+                            </div>
+                            <div
+                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2,
+                                            height : tt.state["inputs" + "Properties" + "Height"], overflow : tt.state["inputs" + "Properties" + "HeightOverflow"],                                    
+                                }}
                             >                           
                                 <textarea
                                     value={tt.state.properties}

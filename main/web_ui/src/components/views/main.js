@@ -18,10 +18,8 @@ export class Main extends Component {
     constructor(props){
         super(props)
 
-        this.reactmongoDBDataRef=React.createRef(); this.reactmongoDBDataRef.current={}
         this.reactmongoDBDataRefs=React.createRef(); this.reactmongoDBDataRefs.current={}
         
-
         this.importBrowseButtonRef=React.createRef()
 
         this.state={
@@ -44,8 +42,6 @@ export class Main extends Component {
         
 
     }
-  
-
 
     data={}
 
@@ -204,23 +200,6 @@ export class Main extends Component {
         
     }
 
-    reactmongoDBDataRef={}
-    reactmongoDBGetDataRun=()=>{
-        if (this.reactmongoDBDataRef.current.get){
-            let data={}
-            data=this.reactmongoDBDataRef.current.get()
-            //cl(data)
-            return data
-        }
-        
-    }
-    
-    reactmongoDBSetDataRun=(data)=>{
-        if (this.reactmongoDBDataRef.current.set){
-            this.reactmongoDBDataRef.current.set(data)
-        }
-        
-    }
 
     reactmongoDBDataRefs={}
     reactmongoDBGetDataRuns=()=>{
@@ -289,13 +268,7 @@ export class Main extends Component {
             let i=0
             let itot=0
             // array or single object
-            if (isOb(tt.state.data.JSNodeMongo)){
-                Es.push(
-                    <div key={i}>
-                        <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRef}  startEx={false}/>
-                    </div>
-                )
-            }else{                
+            if (isOb(tt.state.data.JSNodeMongo)){}else{                
                 if (typeof(tt.state.data.JSNodeMongo)==="object"){ 
                     //tt.reactmongoDBDataRefs=[]
                     
