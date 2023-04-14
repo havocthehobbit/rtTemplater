@@ -7,6 +7,7 @@ import { JSNodeMongo } from '../mainlib/JSNodeMongo';
 import { SideBar } from '../mainlib/SideBar';
 import $lnd from  "../common/libNativeDom"
 import { HeaderPanel } from './headerPanel';
+import { Tools } from './tools';
 let $cn=require( "../common/libNative").$cn
 
 let cl=$cn.l
@@ -43,7 +44,9 @@ export class Main extends Component {
 
     }
 
-    data={}
+    data={
+        tools : [],
+    }
 
     localAllProjFile="rtTemplaterProjects"
 
@@ -272,11 +275,7 @@ export class Main extends Component {
                 if (typeof(tt.state.data.JSNodeMongo)==="object"){ 
                     //tt.reactmongoDBDataRefs=[]
                     
-                    tt.state.data.JSNodeMongo.forEach((r ,i) => {
-                        //let reactmongoDBDataRef={ current : {} }
-                        //let reactmongoDBDataRef=React.createRef(); reactmongoDBDataRef.current={}
-                        //tt.reactmongoDBDataRefs.push(reactmongoDBDataRef)
-                        //tt.reactmongoDBDataRefs[i]
+                    tt.state.data.JSNodeMongo.forEach((r ,i) => {                      
                         Es.push(
                             <div key={i}>
                                 <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRefs} iter={i} startEx={false}/>
@@ -327,6 +326,7 @@ export class Main extends Component {
 
         return (
             <div style={mainStyle}> 
+                <Tools />
                 <div
                      style={{ position : "relative"}}
                 >

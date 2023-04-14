@@ -76,13 +76,6 @@ export class BaseTemplate extends Component {
         if (tt.props.refData){
             //tt.props.refData.current[tt.uuid]={}
             tt.props.refData.current[tt.iter]={}
-
-            //tt.props.refData.current.get=tt.getDetails   
-            //tt.props.refData.current.set=tt.setDetails
-
-            //tt.props.refData.current[tt.uuid].get=tt.getDetails 
-            //tt.props.refData.current[tt.uuid].set=tt.setDetails 
-
             tt.props.refData.current[tt.iter].get=tt.getDetails
             tt.props.refData.current[tt.iter].set=tt.setDetails                  
         }
@@ -109,14 +102,7 @@ export class BaseTemplate extends Component {
         if (prevProps !==tt.props){
             if (tt.props.refData){
                 //tt.props.refData.current[tt.uuid]={}
-                tt.props.refData.current[tt.iter]={}
-    
-                //tt.props.refData.current.get=tt.getDetails   
-                //tt.props.refData.current.set=tt.setDetails
-    
-                //tt.props.refData.current[tt.uuid].get=tt.getDetails 
-                //tt.props.refData.current[tt.uuid].set=tt.setDetails 
-    
+                tt.props.refData.current[tt.iter]={}    
                 tt.props.refData.current[tt.iter].get=tt.getDetails
                 tt.props.refData.current[tt.iter].set=tt.setDetails                  
             }
