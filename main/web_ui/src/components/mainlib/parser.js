@@ -508,7 +508,7 @@ const getAllStringVarsDetails=(tmpltStrIn , dataIn,dataExtraIn, options)=>{ // c
         words : [],
         hasInvalid : false,
         invalidPaths : [],
-
+        
     }
 
     if (!isUn(tmpltStrIn)){

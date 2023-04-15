@@ -247,8 +247,9 @@ export class Main extends Component {
 
 
     mainStyle={
-        backgroundColor: "#282c34",
-        minHeight: "100vh",
+        //backgroundColor: "#282c34",
+        // minHeight: "100vh",
+        height : "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -324,9 +325,39 @@ export class Main extends Component {
             )
         })()
 
+        let background=(()=>{
+            return (
+                <div 
+                    style={{
+                        position : "absolute",
+                        top : 0,
+                        left : 0,
+                        zIndex : -10,
+                        background : "linear-gradient(black ,70%, darkblue)",
+                        //background : "linear-gradient(purple, darkblue)",
+                        //background : "#282c34",
+                        width : "100%",
+                        height : "100%",
+                        position : "absolute",
+                        textAlign: "center",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        minHeight: "100vh",
+
+                    }}
+                />  
+            )
+        })()
+
+
         return (
             <div style={mainStyle}> 
-                <Tools />
+                {background}
+
+                <Tools style={{zIndex :99}} />
+               
                 <div
                      style={{ position : "relative"}}
                 >

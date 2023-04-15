@@ -444,7 +444,7 @@ export class BaseTemplate extends Component {
             <div
                 style={styleBox}
             >    
-                <div style={{position : "absolute",background : 'blue',top : 0,left : 0, width : "100%", height :"100%",
+                <div style={{position : "absolute",background : 'transparent',top : 0,left : 0, width : "100%", height :"100%",
                                 opacity : 0.1,zIndex : -1
                 }}/>
                 <button
