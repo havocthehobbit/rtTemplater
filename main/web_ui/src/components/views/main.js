@@ -8,6 +8,7 @@ import { SideBar } from '../mainlib/SideBar';
 import $lnd from  "../common/libNativeDom"
 import { HeaderPanel } from './headerPanel';
 import { Tools } from './tools';
+import { Background } from './common/backround'
 let $cn=require( "../common/libNative").$cn
 
 let cl=$cn.l
@@ -20,13 +21,14 @@ export class Main extends Component {
         super(props)
 
         this.reactmongoDBDataRefs=React.createRef(); this.reactmongoDBDataRefs.current={}
+        this.JSNodeAPIRefs=React.createRef(); this.JSNodeAPIRefs.current={}
         
         this.importBrowseButtonRef=React.createRef()
 
         this.state={
             name : "", name2 : "",
             tmplOut : "",  
-            data :{}          
+            data :{} ,        
         }
     }
 
@@ -245,6 +247,49 @@ export class Main extends Component {
         }        
     }
 
+    JSNodeAPIRefs={}
+    JSNodeAPIGetRefsRuns=()=>{
+        let nameref="JSNodeAPI"
+        let tt=this
+        let data=[]
+        $cn.each(tt[nameref + "Refs"].current,(r,i)=>{
+            if (tt[nameref + "Refs"].current[r.uuid]){
+                
+                //data[r.uuid]=tt.reactmongoDBDataRefs.current[r.uuid].get()                
+                data.push(tt[nameref + "Refs"].current[r.uuid].get())               
+               
+            }else{
+                if (tt[nameref + "Refs"].current[i]){
+                    
+                    //data[i]=tt.reactmongoDBDataRefs.current[i].get()                    
+                    data.push(tt[nameref + "Refs"].current[i].get())                   
+                    
+                }
+            }
+        })
+        return data
+    }
+    JSNodeAPISetRefsRuns=()=>{
+        let nameref="JSNodeAPI"
+        let tt=this
+
+        if (tof(tt.state.data[nameref])==="array"){
+            tt.state.data[nameref].forEach((r,i)=>{
+                let data=r
+                if (tt[nameref + "Refs"].current[r.uuid]){
+                    if (tt[nameref + "Refs"].current[r.uuid].set){
+                        tt[nameref + "Refs"].current[r.uuid].set(data)
+                    }    
+                }else{
+                    if (tt[nameref + "Refs"].current[i]){
+                        tt[nameref + "Refs"].current[i].set(data)
+                    }  
+                }
+                
+            })
+        }        
+    }
+
 
     mainStyle={
         //backgroundColor: "#282c34",
@@ -256,15 +301,15 @@ export class Main extends Component {
         justifyContent: "center",
         //font-size: calc(10px + 2vmin),
         color: "white",
-        width : "100%"
-      }
+        width : "100%",
+    }
 
-
-    
     render(){
         let tt=this       
         
         let mainStyle=tt.mainStyle
+
+        
 
         let JSNodeMongoEs
         JSNodeMongoEs=(()=>{
@@ -325,36 +370,72 @@ export class Main extends Component {
             )
         })()
 
-        let background=(()=>{
-            return (
-                <div 
-                    style={{
-                        position : "absolute",
-                        top : 0,
-                        left : 0,
-                        zIndex : -10,
-                        background : "linear-gradient(black ,70%, darkblue)",
-                        //background : "linear-gradient(purple, darkblue)",
-                        //background : "#282c34",
-                        width : "100%",
-                        height : "100%",
-                        position : "absolute",
-                        textAlign: "center",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        minHeight: "100vh",
+        
+        let JSNodeAPI
+        JSNodeAPI=(()=>{
+            let nameref="JSNodeAPI"
+            let Es=[]
+            let i=0
+            let itot=0
+            // array or single object
+            if (isOb(tt.state.data[nameref])){}else{                
+                if (typeof(tt.state.data[nameref])==="object"){ 
+                    //tt.reactmongoDBDataRefs=[]
+                    
+                    tt.state.data[nameref].forEach((r ,i) => {                      
+                        Es.push(
+                            <div key={i}>
+                                <JSNodeMongo  mainTitle={"JS <----> API"} refData={tt[nameref + "Refs"]} iter={i} startEx={false}/>
+                            </div>
+                        )
+                        itot=i
+                    });
+                    
+                }
+            }
 
-                    }}
-                />  
+            let addbuttonE=(()=>{
+                itot++
+                let i=itot
+                return (
+                    <button
+                        onClick={
+                            ()=>{
+                                let nameref="JSNodeAPI"
+                                let data={...tt.state.data}
+
+                                if (isUn(data[nameref])){
+                                    data={}
+                                }
+                                if (isUn(data[nameref])){
+                                    data[nameref]=[]
+                                }
+
+                                let nr={}
+                                data[nameref].push(nr)
+                           
+                                
+                                tt.setState({ data : data })
+                            }
+                        }
+                    >
+                        add NodeAPI/js
+                    </button>
+                )
+            })()
+
+            return (
+                <div>
+                    {addbuttonE}
+                    {Es}
+                </div>
             )
         })()
 
 
         return (
             <div style={mainStyle}> 
-                {background}
+                <Background />
 
                 <Tools style={{zIndex :99}} />
                
@@ -362,10 +443,17 @@ export class Main extends Component {
                      style={{ position : "relative"}}
                 >
                     <HeaderPanel/>
-                </div>               
+                </div>     
+
+                <div style={{ position : "relative",left :35,width :undefined}}>                    
+                    {JSNodeAPI}
+                </div>
+
                 <div style={{ position : "relative",left :35,width :undefined}}>                    
                     {JSNodeMongoEs}
                 </div>
+
+              
 
                 <SideBar>
                     <div
