@@ -9,7 +9,7 @@ import $lnd from  "../common/libNativeDom"
 import { HeaderPanel } from './headerPanel';
 import { Tools } from './tools';
 import { Background } from './common/backround'
-import { TextEditor } from './textEditor';
+import { TextEditor } from './common/textEditor';
 let $cn=require( "../common/libNative").$cn
 
 let cl=$cn.l
