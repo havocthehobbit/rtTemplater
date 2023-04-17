@@ -1,11 +1,12 @@
 import React,{ useState, useEffect, useRef } from "react"
 import { v4 as uuid } from 'uuid';
 
-export const TextEditor=(props,refs)=>{
+export const TextEditor=React.forwardRef((props,refs)=>{
     let [text, setText]=useState("")
     let thisE=useRef()
+    let textbox=useRef()
     let [state,setState]=useState({})
-    let tt=useRef({})
+    let tt=useRef({ name : ""})
     let init=useRef(true)
     let uid=useRef(uuid())
 
@@ -13,22 +14,32 @@ export const TextEditor=(props,refs)=>{
     let style={...style_def,...props.style}
 
     useEffect(()=>{
-        console.log("use effect text", text)
+        //console.log("use effect text", text)
     },[text])
 
-
+    React.useImperativeHandle(refs,()=>{
+        return {
+            getText , parse
+        }
+    },[])
+   
 
     useEffect(()=>{
         if (init.current){ 
             init.current=false 
 
+
             if (!window.relems){ window.rtElems={} }
-            if (!window.rtElems.textEditor){ window.rtElems.textEditor={} }
+            if (!window.rtElems.textEditor){ window.rtElems.textEditor={} }            
+            window.rtElems.textEditor[uid.current]={
+                getText : getText
+            }
             //window.rtElems.textEditor
             
             console.log("refs :",refs)
+            console.log("props ref refs :",props.refs)
 
-            let e=thisE.current
+            let e=textbox.current
             e.addEventListener("input",(...args)=>{
                 inputPutFN(args[0]) 
             })  
@@ -37,7 +48,7 @@ export const TextEditor=(props,refs)=>{
     },[])
     let keycode=""
     let inputPutFN=(...args)=>{
-        let e=thisE.current  
+        let e=textbox.current  
 
 
         if ( args[0].inputType==="insertParagraph"){ // hack to prevent carot/cursor focus out from element
@@ -125,49 +136,58 @@ export const TextEditor=(props,refs)=>{
             // handle special characters
             .replace(/\n/gm, "<br>")
             .replace(/\t/gm, "&#9;")
-            .replace(/ the /gm, " <span onclick='allert()' style='color:orange'>the</span> ") // bold
+            //.replace(/ the /gm, " <span onclick='allert()' style='color:orange'>the</span> ") // bold
+            .replace(/ the /gm, ` <span onclick='alert(rtElems.textEditor["${uid.current}"].getText().text)' style='color:orange'>the</span> `) // bold
 
         );
     }
 
 
     let textUpdate=()=>{
-       // thisE.current.innerHTML=text       
-        //setText(thisE.current.innerHTML)
+       // textbox.current.innerHTML=text       
+        //setText(textbox.current.innerHTML)
 
-        //thisE.current.textContent=text
-        setText(thisE.current.textContent)
+        //textbox.current.textContent=text
+        setText(textbox.current.textContent)
+    }
+
+    let getText=()=>{
+        return { text : textbox.current.innerText, html : textbox.current.innerHTML }
+    }
+
+    
+
+    if (props.getText){
+        props.getText.current=getText
+    }
+
+    if (props.parse){
+        props.parse.current=parse
     }
 
 
     return (
         <div
-            style={{padding : 5,background : "lightgrey"}}
-            
-        >
-            <button
-                onClick={()=>{
-                    thisE.current.innerHTML=""
-                    setText(thisE.current.innerHTML)
+            style={{
+                    //padding : 5,background : "lightgrey"
                 }}
-            >
-                test button
-            </button>
+            
+        >            
             <div
                 style={style}
                 contentEditable={"true"}
                 ref={
-                    thisE
-                   // e=>thisE.current=e                
-                }
+                    textbox
+                   // e=>textbox.current=e                
+                }                
                 onInput={(e)=>{
                     //console.log("test :",text)                                        
-                    //console.log("thisE text :",thisE.current.innerHTML)
+                    //console.log("textbox text :",textbox.current.innerHTML)
                     //setText(e.currentTarget.textContent)
 
                     // let pos=getCaretPosition(e)
                    
-                    // console.log("pos :", thisE.current)
+                    // console.log("pos :", textbox.current)
 
                     //console.log("e :", e)
                     //textUpdate(e.currentTarget.innerHTML)       
@@ -195,4 +215,4 @@ export const TextEditor=(props,refs)=>{
         </div>
     )
 
-}
+})

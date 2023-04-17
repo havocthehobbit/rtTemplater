@@ -24,6 +24,8 @@ export class Main extends Component {
         this.reactmongoDBDataRefs=React.createRef(); this.reactmongoDBDataRefs.current={}
         this.JSNodeAPIRefs=React.createRef(); this.JSNodeAPIRefs.current={}
         
+        this.testText=React.createRef(); 
+        
         this.importBrowseButtonRef=React.createRef()
 
         this.state={
@@ -454,8 +456,18 @@ export class Main extends Component {
                     {JSNodeMongoEs}
                 </div>
 
-                <TextEditor/>
-
+                { 
+                    /*
+                    <button
+                        onClick={()=>{
+                            console.log(tt.testText.current.getText())
+                        }}
+                    >
+                        testText
+                    </button>
+                    <TextEditor ref={tt.testText} />
+                    */ 
+                }
                 <SideBar>
                     <div
                         style={{ color : "black"  }}
