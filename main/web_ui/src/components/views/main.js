@@ -9,6 +9,7 @@ import $lnd from  "../common/libNativeDom"
 import { HeaderPanel } from './headerPanel';
 import { Tools } from './tools';
 import { Background } from './common/backround'
+import { TextEditor } from './textEditor';
 let $cn=require( "../common/libNative").$cn
 
 let cl=$cn.l
@@ -453,7 +454,7 @@ export class Main extends Component {
                     {JSNodeMongoEs}
                 </div>
 
-              
+                <TextEditor/>
 
                 <SideBar>
                     <div
