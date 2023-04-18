@@ -10,6 +10,10 @@ import { HeaderPanel } from './headerPanel';
 import { Tools } from './tools';
 import { Background } from './common/backround'
 import { TextEditor } from './common/textEditor';
+import { HTtree } from './common/httree'
+
+import {$gl} from "../common/global"
+
 let $cn=require( "../common/libNative").$cn
 
 let cl=$cn.l
@@ -21,18 +25,20 @@ export class Main extends Component {
     constructor(props){
         super(props)
 
-        this.reactmongoDBDataRefs=React.createRef(); this.reactmongoDBDataRefs.current={}
-        this.JSNodeAPIRefs=React.createRef(); this.JSNodeAPIRefs.current={}
         
         this.testText=React.createRef(); 
         
         this.importBrowseButtonRef=React.createRef()
+
+        
 
         this.state={
             name : "", name2 : "",
             tmplOut : "",  
             data :{} ,        
         }
+
+        this.createAlltoolItems()
     }
 
     componentDidMount(){
@@ -46,7 +52,7 @@ export class Main extends Component {
         } 
         
         
-
+        
     }
 
     data={
@@ -81,10 +87,13 @@ export class Main extends Component {
                 
                 tt.setState({data : proj.data },()=>{
                     if (isOb(tt.state.data.JSNodeMongo)){
-                        JSNodeMongoTemp=proj.data.JSNodeMongo
-                        tt.reactmongoDBSetDataRun(JSNodeMongoTemp)
+                        //JSNodeMongoTemp=proj.data.JSNodeMongo
+                        //tt.reactmongoDBSetDataRun(JSNodeMongoTemp)
                     }else{
-                        tt.reactmongoDBSetDataRuns()
+                        //tt.reactmongoDBSetDataRuns()
+                        tt.alltoolitems.forEach((r,i)=>{
+                            r.SetRefsRuns()
+                        })
                     }
                 })
 
@@ -189,16 +198,25 @@ export class Main extends Component {
         
         
 
-        let JSNodeMongoTemp
+        //let JSNodeMongoTemp
 
         //JSNodeMongoTemp=tt.reactmongoDBGetDataRun()
 
-        JSNodeMongoTemp=tt.reactmongoDBGetDataRuns()
+        //JSNodeMongoTemp=tt.reactmongoDBGetDataRuns()
+
+        tt.alltoolitems.forEach((r,i)=>{
+
+        })
 
         try {
             let saveFile=""
             all.lastProj=nameIn
-            newProj.data["JSNodeMongo"]=JSNodeMongoTemp
+            //newProj.data["JSNodeMongo"]=JSNodeMongoTemp
+
+            tt.alltoolitems.forEach((r,i)=>{
+                newProj.data[r.name]=r.GetRefsRuns()                
+            })
+
             saveFile=JSON.stringify(all,null,2)
             localStorage.setItem( tt.localAllProjFile , saveFile )              
         } catch (error) {
@@ -209,90 +227,367 @@ export class Main extends Component {
     }
 
 
-    reactmongoDBDataRefs={}
-    reactmongoDBGetDataRuns=()=>{
+    alltoolitems=[]
+    toolItemsO=(...args)=>{
         let tt=this
-        let data=[]
-        $cn.each(tt.reactmongoDBDataRefs.current,(r,i)=>{
-            if (tt.reactmongoDBDataRefs.current[r.uuid]){
-                
-                //data[r.uuid]=tt.reactmongoDBDataRefs.current[r.uuid].get()                
-                data.push(tt.reactmongoDBDataRefs.current[r.uuid].get())               
-               
-            }else{
-                if (tt.reactmongoDBDataRefs.current[i]){
-                    
-                    //data[i]=tt.reactmongoDBDataRefs.current[i].get()                    
-                    data.push(tt.reactmongoDBDataRefs.current[i].get())                   
-                    
-                }
+
+        let obj={
+            name :  "",
+            title : "",
+            tt : tt,
+            Refs : {},
+            main : undefined,
+            GetRefsRuns : undefined,
+            SetRefsRuns : undefined,
+            init : (...args)=>{
+                obj.Refs=React.createRef(); obj.Refs.current={}
+        
             }
-        })
-        return data
-    }
-    reactmongoDBSetDataRuns=()=>{
-        let tt=this
+        }
 
-        if (tof(tt.state.data.JSNodeMongo)==="array"){
-            tt.state.data.JSNodeMongo.forEach((r,i)=>{
-                let data=r
-                if (tt.reactmongoDBDataRefs.current[r.uuid]){
-                    if (tt.reactmongoDBDataRefs.current[r.uuid].set){
-                        tt.reactmongoDBDataRefs.current[r.uuid].set(data)
-                    }    
-                }else{
-                    if (tt.reactmongoDBDataRefs.current[i]){
-                        tt.reactmongoDBDataRefs.current[i].set(data)
-                    }  
-                }
-                
-            })
-        }        
+        obj.init.apply(this,args)
+
+        return obj 
     }
 
-    JSNodeAPIRefs={}
-    JSNodeAPIGetRefsRuns=()=>{
-        let nameref="JSNodeAPI"
+    createAlltoolItems=()=>{
         let tt=this
-        let data=[]
-        $cn.each(tt[nameref + "Refs"].current,(r,i)=>{
-            if (tt[nameref + "Refs"].current[r.uuid]){
-                
-                //data[r.uuid]=tt.reactmongoDBDataRefs.current[r.uuid].get()                
-                data.push(tt[nameref + "Refs"].current[r.uuid].get())               
-               
-            }else{
-                if (tt[nameref + "Refs"].current[i]){
+
+        if (true){
+            let tool=new tt.toolItemsO()
+            
+            tool.name="JSNodeAPI"
+            tool.GetRefsRuns=()=>{
+                let nameref=tool.name
+                let tt=this
+                let data=[]
+                $cn.each(tool.Refs.current,(r,i)=>{
+                    if (tool.Refs.current[r.uuid]){
+                        
+                        //data[r.uuid]=tt.reactmongoDBDataRefs.current[r.uuid].get()                
+                        data.push(tool.Refs.current[r.uuid].get())               
                     
-                    //data[i]=tt.reactmongoDBDataRefs.current[i].get()                    
-                    data.push(tt[nameref + "Refs"].current[i].get())                   
-                    
-                }
+                    }else{
+                        if (tool.Refs.current[i]){
+                            
+                            //data[i]=tt.reactmongoDBDataRefs.current[i].get()                    
+                            data.push(tool.Refs.current[i].get())                   
+                            
+                        }
+                    }
+                })
+                return data
             }
-        })
-        return data
-    }
-    JSNodeAPISetRefsRuns=()=>{
-        let nameref="JSNodeAPI"
-        let tt=this
-
-        if (tof(tt.state.data[nameref])==="array"){
-            tt.state.data[nameref].forEach((r,i)=>{
-                let data=r
-                if (tt[nameref + "Refs"].current[r.uuid]){
-                    if (tt[nameref + "Refs"].current[r.uuid].set){
-                        tt[nameref + "Refs"].current[r.uuid].set(data)
-                    }    
-                }else{
-                    if (tt[nameref + "Refs"].current[i]){
-                        tt[nameref + "Refs"].current[i].set(data)
-                    }  
+            tool.SetRefsRuns=()=>{
+                let nameref=tool.name
+                let tt=this
+        
+                if (tof(tt.state.data[nameref])==="array"){
+                    tt.state.data[nameref].forEach((r,i)=>{
+                        let data=r
+                        if (tool.Refs.current[r.uuid]){
+                            if (tool.Refs.current[r.uuid].set){
+                                tool.Refs.current[r.uuid].set(data)
+                            }    
+                        }else{
+                            if (tool.Refs.current[i]){
+                                tool.Refs.current[i].set(data)
+                            }  
+                        }
+                        
+                    })
+                }        
+            }
+            tool.main=()=>{
+                let tt=this
+                let nameref=tool.name
+                let Es=[]
+                let i=0
+                let itot=0
+                // array or single object
+                if (isOb(tt.state.data[nameref])){}else{                
+                    if (typeof(tt.state.data[nameref])==="object"){                   
+                        tt.state.data[nameref].forEach((r ,i) => {                      
+                            Es.push(
+                                <div key={i}>
+                                    <JSNodeMongo  mainTitle={"JS <----> API"} refData={tool.Refs} iter={i} startEx={false}/>
+                                </div>
+                            )
+                            itot=i
+                        });
+                        
+                    }
                 }
-                
-            })
-        }        
+        
+                let addbuttonE=(()=>{
+                    itot++
+                    let i=itot
+                    return (
+                        <button
+                            nameref={nameref}
+                            onClick={
+                                (e)=>{
+                                    let nameref=e.target.getAttribute("nameref")
+                                    let data={...tt.state.data}
+        
+                                    if (isUn(data)){
+                                        data={}
+                                    }
+                                    if (isUn(data[nameref])){
+                                        data[nameref]=[]
+                                    }
+        
+                                    let nr={}
+                                    data[nameref].push(nr)
+                            
+                                    let stnr={}
+                                    stnr["data"]=data
+
+                                    tt.setState(stnr)
+                                }
+                            }
+                        >
+                            add {nameref}
+                        </button>
+                    )
+                })()
+        
+                return (
+                    <div>
+                        {addbuttonE}
+                        {Es}
+                    </div>
+                )
+            }
+
+            tt.alltoolitems.push(tool) 
+        }
+
+        if (true){
+            let tool=new tt.toolItemsO()
+            
+            tool.name="JSNodeAPI2"
+            tool.GetRefsRuns=()=>{
+                let nameref=tool.name
+                let tt=this
+                let data=[]
+                $cn.each(tool.Refs.current,(r,i)=>{
+                    if (tool.Refs.current[r.uuid]){
+                        
+                        //data[r.uuid]=tt.reactmongoDBDataRefs.current[r.uuid].get()                
+                        data.push(tool.Refs.current[r.uuid].get())               
+                    
+                    }else{
+                        if (tool.Refs.current[i]){
+                            
+                            //data[i]=tt.reactmongoDBDataRefs.current[i].get()                    
+                            data.push(tool.Refs.current[i].get())                   
+                            
+                        }
+                    }
+                })
+                return data
+            }
+            tool.SetRefsRuns=()=>{
+                let nameref=tool.name
+                let tt=this
+        
+                if (tof(tt.state.data[nameref])==="array"){
+                    tt.state.data[nameref].forEach((r,i)=>{
+                        let data=r
+                        if (tool.Refs.current[r.uuid]){
+                            if (tool.Refs.current[r.uuid].set){
+                                tool.Refs.current[r.uuid].set(data)
+                            }    
+                        }else{
+                            if (tool.Refs.current[i]){
+                                tool.Refs.current[i].set(data)
+                            }  
+                        }
+                        
+                    })
+                }        
+            }
+            tool.main=()=>{
+                let tt=this
+                let nameref=tool.name
+                let Es=[]
+                let i=0
+                let itot=0
+                // array or single object
+                if (isOb(tt.state.data[nameref])){}else{                
+                    if (typeof(tt.state.data[nameref])==="object"){                   
+                        tt.state.data[nameref].forEach((r ,i) => {                      
+                            Es.push(
+                                <div key={i}>
+                                    <JSNodeMongo  mainTitle={"JS <----> API"} refData={tool.Refs} iter={i} startEx={false}/>
+                                </div>
+                            )
+                            itot=i
+                        });
+                        
+                    }
+                }
+        
+                let addbuttonE=(()=>{
+                    itot++
+                    let i=itot
+                    return (
+                        <button
+                            nameref={nameref}
+                            onClick={
+                                (e)=>{
+                                    let nameref=e.target.getAttribute("nameref")
+                                    let data={...tt.state.data}
+        
+                                    if (isUn(data)){
+                                        data={}
+                                    }
+                                    if (isUn(data[nameref])){
+                                        data[nameref]=[]
+                                    }
+        
+                                    let nr={}
+                                    data[nameref].push(nr)
+                            
+                                    let stnr={}
+                                    stnr["data"]=data
+
+                                    tt.setState(stnr)
+                                }
+                            }
+                        >
+                            add {nameref}
+                        </button>
+                    )
+                })()
+        
+                return (
+                    <div>
+                        {addbuttonE}
+                        {Es}
+                    </div>
+                )
+            }
+
+            tt.alltoolitems.push(tool) 
+        }
+
+        if (true){
+            let tool=new tt.toolItemsO()
+            
+            tool.name="JSNodeMongo"
+            tool.GetRefsRuns=()=>{
+                let nameref=tool.name
+                let tt=this
+                let data=[]
+                $cn.each(tool.Refs.current,(r,i)=>{
+                    if (tool.Refs.current[r.uuid]){
+                        
+                        //data[r.uuid]=tt.reactmongoDBDataRefs.current[r.uuid].get()                
+                        data.push(tool.Refs.current[r.uuid].get())               
+                    
+                    }else{
+                        if (tool.Refs.current[i]){
+                            
+                            //data[i]=tt.reactmongoDBDataRefs.current[i].get()                    
+                            data.push(tool.Refs.current[i].get())                   
+                            
+                        }
+                    }
+                })
+                return data
+            }
+            tool.SetRefsRuns=()=>{
+                let nameref=tool.name
+                let tt=this
+        
+                if (tof(tt.state.data[nameref])==="array"){
+                    tt.state.data[nameref].forEach((r,i)=>{
+                        let data=r
+                        if (tool.Refs.current[r.uuid]){
+                            if (tool.Refs.current[r.uuid].set){
+                                tool.Refs.current[r.uuid].set(data)
+                            }    
+                        }else{
+                            if (tool.Refs.current[i]){
+                                tool.Refs.current[i].set(data)
+                            }  
+                        }
+                        
+                    })
+                }        
+            }
+            tool.main=()=>{
+                let tt=this
+                let nameref=tool.name
+                let Es=[]
+                let i=0
+                let itot=0
+                // array or single object
+                if (isOb(tt.state.data[nameref])){}else{                
+                    if (typeof(tt.state.data[nameref])==="object"){                   
+                        tt.state.data[nameref].forEach((r ,i) => {                      
+                            Es.push(
+                                <div key={i}>
+                                    <JSNodeMongo  mainTitle={"JS <----> API"} refData={tool.Refs} iter={i} startEx={false}/>
+                                </div>
+                            )
+                            itot=i
+                        });
+                        
+                    }
+                }
+        
+                let addbuttonE=(()=>{
+                    itot++
+                    let i=itot
+                    return (
+                        <button
+                            nameref={nameref}
+                            onClick={
+                                (e)=>{
+                                    let nameref=e.target.getAttribute("nameref")
+                                    let data={...tt.state.data}
+        
+                                    if (isUn(data)){
+                                        data={}
+                                    }
+                                    if (isUn(data[nameref])){
+                                        data[nameref]=[]
+                                    }
+        
+                                    let nr={}
+                                    data[nameref].push(nr)
+                            
+                                    let stnr={}
+                                    stnr["data"]=data
+
+                                    tt.setState(stnr)
+                                }
+                            }
+                        >
+                            add {nameref}
+                        </button>
+                    )
+                })()
+        
+                return (
+                    <div>
+                        {addbuttonE}
+                        {Es}
+                    </div>
+                )
+            }
+
+            tt.alltoolitems.push(tool) 
+        }
+
+
+        
     }
 
+   
 
     mainStyle={
         //backgroundColor: "#282c34",
@@ -308,134 +603,25 @@ export class Main extends Component {
     }
 
     render(){
-        let tt=this       
+        let tt=this
         
         let mainStyle=tt.mainStyle
 
+        //let JSNodeMongoEs
+        //JSNodeMongoEs=(tt.JSNodeMongo)()
         
-
-        let JSNodeMongoEs
-        JSNodeMongoEs=(()=>{
-            let Es=[]
-            let i=0
-            let itot=0
-            // array or single object
-            if (isOb(tt.state.data.JSNodeMongo)){}else{                
-                if (typeof(tt.state.data.JSNodeMongo)==="object"){ 
-                    //tt.reactmongoDBDataRefs=[]
-                    
-                    tt.state.data.JSNodeMongo.forEach((r ,i) => {                      
-                        Es.push(
-                            <div key={i}>
-                                <JSNodeMongo  mainTitle={"JS <----> MongoDb tables"} refData={tt.reactmongoDBDataRefs} iter={i} startEx={false}/>
-                            </div>
-                        )
-                        itot=i
-                    });
-                    
-                }
-            }
-
-            let addbuttonE=(()=>{
-                itot++
-                let i=itot
-                return (
-                    <button
-                        onClick={
-                            ()=>{
-                                let data={...tt.state.data}
-
-                                if (isUn(data.JSNodeMongo)){
-                                    data={}
-                                }
-                                if (isUn(data.JSNodeMongo)){
-                                    data.JSNodeMongo=[]
-                                }
-
-                                let nr={}
-                                data.JSNodeMongo.push(nr)
-                           
-                                
-                                tt.setState({ data : data })
-                            }
-                        }
-                    >
-                        add mongo/js
-                    </button>
-                )
-            })()
-
-            return (
-                <div>
-                    {addbuttonE}
-                    {Es}
+        let alltoolitemsE=[]
+        
+        tt.alltoolitems.forEach((r,i)=>{
+            let E=r.main()
+            alltoolitemsE.push(
+                <div key={i} style={{ position : "relative",left :35,width :undefined}}>                    
+                    {E}
                 </div>
-            )
-        })()
+            )            
+        })
 
         
-        let JSNodeAPI
-        JSNodeAPI=(()=>{
-            let nameref="JSNodeAPI"
-            let Es=[]
-            let i=0
-            let itot=0
-            // array or single object
-            if (isOb(tt.state.data[nameref])){}else{                
-                if (typeof(tt.state.data[nameref])==="object"){ 
-                    //tt.reactmongoDBDataRefs=[]
-                    
-                    tt.state.data[nameref].forEach((r ,i) => {                      
-                        Es.push(
-                            <div key={i}>
-                                <JSNodeMongo  mainTitle={"JS <----> API"} refData={tt[nameref + "Refs"]} iter={i} startEx={false}/>
-                            </div>
-                        )
-                        itot=i
-                    });
-                    
-                }
-            }
-
-            let addbuttonE=(()=>{
-                itot++
-                let i=itot
-                return (
-                    <button
-                        onClick={
-                            ()=>{
-                                let nameref="JSNodeAPI"
-                                let data={...tt.state.data}
-
-                                if (isUn(data[nameref])){
-                                    data={}
-                                }
-                                if (isUn(data[nameref])){
-                                    data[nameref]=[]
-                                }
-
-                                let nr={}
-                                data[nameref].push(nr)
-                           
-                                
-                                tt.setState({ data : data })
-                            }
-                        }
-                    >
-                        add NodeAPI/js
-                    </button>
-                )
-            })()
-
-            return (
-                <div>
-                    {addbuttonE}
-                    {Es}
-                </div>
-            )
-        })()
-
-
         return (
             <div style={mainStyle}> 
                 <Background />
@@ -448,13 +634,12 @@ export class Main extends Component {
                     <HeaderPanel/>
                 </div>     
 
-                <div style={{ position : "relative",left :35,width :undefined}}>                    
-                    {JSNodeAPI}
-                </div>
+               
+                
 
-                <div style={{ position : "relative",left :35,width :undefined}}>                    
-                    {JSNodeMongoEs}
-                </div>
+                {alltoolitemsE}
+                
+                <HTtree/>
 
                 { 
                     /*

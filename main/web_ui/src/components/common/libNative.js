@@ -8,7 +8,7 @@
 let cool_native_js={
     name : "cool_native_node",    
     each : function(inst,cb){ // for each in for objects and arrays
-        if (this.isObject){
+        if (cool_native_js.isObject){
             Object.keys(inst).forEach((v , p)=>{
                 cb(inst[v] , v) 
             })
@@ -62,7 +62,7 @@ let cool_native_js={
         return string.charAt(0).toUpperCase() + string.slice(1);
     },
     l : function(){ // console.log
-        console.log.apply(this,arguments)
+        console.log.apply(cool_native_js,arguments)
     },
 
     init : function(){
@@ -70,13 +70,13 @@ let cool_native_js={
         var args_l=args.length;
         var param={ name : "" }
 
-        this.l_this=this ;
+        cool_native_js.l_this=cool_native_js ;
 
-        this.isPlainObject=this.isObject
-        this.isOb=cool_native_js.isObject
-        this.isUn=this.isUndefined
+        cool_native_js.isPlainObject=cool_native_js.isObject
+        cool_native_js.isOb=cool_native_js.isObject
+        cool_native_js.isUn=cool_native_js.isUndefined
         
-        this.tof=this.typeof      
+        cool_native_js.tof=cool_native_js.typeof      
     }
 }
 cool_native_js.init()

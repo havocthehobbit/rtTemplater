@@ -336,7 +336,7 @@ export class BaseTemplate extends Component {
             let dt
 
             
-            let loopVarName="tables"
+            //let loopVarName="tables"
             let titleVar=""
             let title=""
             let template
@@ -492,7 +492,7 @@ export class BaseTemplate extends Component {
                                 >template</label>
                             </div>
                             <div
-                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2,
+                                style={{ background : "white",borderRadius : 10,margin : 2,
                                             height : tt.state.inputsTemplateHeight, overflow : tt.state.inputsTemplateHeightOverflow,
                                 }}
                             >                                           
@@ -535,8 +535,8 @@ export class BaseTemplate extends Component {
                                 }}>data</label>
                             </div>
                             <div
-                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2,
-                                            height : tt.state["inputs" + "Data" + "Height"], overflow : tt.state["inputs" + "Data" + "HeightOverflow"],
+                                style={{ background : "white",borderRadius : 10,margin : 2,
+                                            height : tt.state["inputsDataHeight"], overflow : tt.state["inputsDataHeightOverflow"],
                                 }}
                             >                        
                                 <textarea
@@ -585,7 +585,7 @@ export class BaseTemplate extends Component {
                                 }}>data extra</label>
                             </div>
                             <div
-                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2,
+                                style={{ background : "white",borderRadius : 10,margin : 2,
                                             height : tt.state["inputs" + "DataEx" + "Height"], overflow : tt.state["inputs" + "DataEx" + "HeightOverflow"],
                                 }}
                             >                        
@@ -635,7 +635,7 @@ export class BaseTemplate extends Component {
                                 }}>options</label>
                             </div>
                             <div
-                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2,
+                                style={{ background : "white",borderRadius : 10,margin : 2,
                                                 height : tt.state["inputs" + "Options" + "Height"], overflow : tt.state["inputs" + "Options" + "HeightOverflow"],                                    
                                 }}
                             >                        
@@ -683,7 +683,7 @@ export class BaseTemplate extends Component {
                                 }}>properties</label>
                             </div>
                             <div
-                                style={{ background : "white",borderRadius : 10,overflow : "hidden",margin : 2,
+                                style={{ background : "white",borderRadius : 10,margin : 2,
                                             height : tt.state["inputs" + "Properties" + "Height"], overflow : tt.state["inputs" + "Properties" + "HeightOverflow"],                                    
                                 }}
                             >                           
