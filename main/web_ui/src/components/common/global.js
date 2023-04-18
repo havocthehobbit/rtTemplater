@@ -229,7 +229,7 @@ let  tree_template_O=function(){
                 parent_obj.children.push(c)
     
                 path.push( c.name)
-                path={ ...parent_obj.path}
+                path=[ ...parent_obj.path]
                 path.push( c.name)
                 c.path=path;
             }
@@ -359,7 +359,7 @@ let  tree_template_O=function(){
             
                 //nrbt1 linkname
             //if (!_.isEmpty(recID)){
-            if (Object.keys(recID).length === 0){
+            if (Object.keys(recID).length !== 0){
                 //nrbt_li.value=r.propvars__custdyn__links.id
                 //linked_value=recID
                 has_remotetab_linkID=true
@@ -499,10 +499,10 @@ let  tree_template_O=function(){
                 
                                                 
     
-                
+                // initialised t.schemas.myTree_index.template
                 feach(t.myTree_index.id[id].style,(v,p)=>{
                     var us={} ;us[p]=v
-                    var ns={...tt.style , us }
+                    var ns={...tt.style , ...us }
                     tt.style=ns              
                     nst["prop_style_" + p + t.name_code]=tt.style[p]
                 })
@@ -510,7 +510,7 @@ let  tree_template_O=function(){
     
                 feach(t.myTree_index.id[id].attributes,(v,p)=>{
                     var us={} ;us[p]=v
-                    var ns={...tt.attributes , us }
+                    var ns={...tt.attributes , ...us }
                     tt.attributes=ns
                   
                     nst["prop_attributes_" + p + t.name_code]=tt.attributes[p]
@@ -518,7 +518,7 @@ let  tree_template_O=function(){
 
                 feach(t.myTree_index.id[id].propvars,(v,p)=>{
                     var us={} ;us[p]=v
-                    var ns={...tt.propvars , us }
+                    var ns={...tt.propvars , ...us }
                     tt.propvars=ns
                   
                     nst["prop_propvars_" + p + t.name_code]=tt.propvars[p]
@@ -527,39 +527,30 @@ let  tree_template_O=function(){
                 var tmp="propvars__custdyn"
                 feach(t.myTree_index.id[id][tmp],(v,p)=>{
                     var us={} ;us[p]=v
-                    var ns={...tt[tmp] , us }
+                    var ns={...tt[tmp] , ...us }
                     tt[tmp]=ns
                   
                     nst["prop_" + tmp + p + t.name_code]=tt[tmp][p]
                 })
 
-                //var tmp="propvars__custdyn__links"
+                var tmp="propvars__custdyn__links"
                 feach(t.myTree_index.id[id][tmp],(v,p)=>{
                     var us={} ;us[p]=v
-                    var ns={ ...tt[tmp] , us }
+                    var ns={ ...tt[tmp] , ...us }
                     tt[tmp]=ns
                   
                     nst["prop_" + tmp + p + t.name_code]=tt[tmp][p]
                 })
 
-                //var tmp="propvars__custdyn__groups"
+                var tmp="propvars__custdyn__groups"
                 feach(t.myTree_index.id[id][tmp],(v,p)=>{
                     var us={} ;us[p]=v
-                    var ns= { ...tt[tmp] , us }
+                    var ns= { ...tt[tmp] , ...us }
                     tt[tmp]=ns
                   
                     nst["prop_" + tmp + p + t.name_code]=tt[tmp][p]
                 })
-
-
-                
-
-                //propvars_custdyn__order
-                
-
-                
                
-                
                 t_main_reactcomponent.setState( 
                      nst,
                     function(){
@@ -581,7 +572,13 @@ let  tree_template_O=function(){
                     "children" : [], 
                     "name" : "root",
                     "id" : "0" ,
-                    "style" : {}  
+                    "style" : {},  
+                    "attributes" : {},
+                    "propvars" : {},
+                    "propvars__custdyn" : {},
+                    "propvars__custdyn__links": {},
+                    "propvars__custdyn__groups": {},
+                      
                 }
             },
             myTree_index : {
@@ -630,8 +627,12 @@ let  tree_template_O=function(){
         },
 
         styles : { 
-                components : { p : { background : "white" ,color : "black", padding : undefined ,margin : 3 , cursor : "pointer" }  },
+                components : { 
+                    main : {},
+                    p : { background : "white" ,color : "black", padding : undefined ,margin : 3 , cursor : "pointer" }  
+                },
                 components_groups : { 
+                    main : {},
                     p : { background : "white" ,color : "black", padding : undefined ,margin : 3 , cursor : "pointer",borderRadius :6 }
                 },
                 props : {
@@ -839,7 +840,7 @@ let  tree_template_O=function(){
                         <h3 style={{paddingTop : 2, marginTop : 2}}>components</h3>
                     </div>
                     
-                    <div style={{ display : "block" }}>   
+                    <div style={t.styles.components.main}>   
                         <div
                             style={{ position : "relative", float : "left", width : 45,fontSize : 12}} 
                         >                      
@@ -855,7 +856,7 @@ let  tree_template_O=function(){
                         <div
                             style={{ position : "relative", float : "left", width : 105,fontSize : 12, border : "solid thin lightgrey"}} 
                         >
-                            fghfgfg
+                            
                         </div>                                             
                         <div style={{ clear : "left" }} />                                             
                     </div>
@@ -918,7 +919,7 @@ let  tree_template_O=function(){
                                     var cssv="varname"                                    
                                     var cssv_ob="attributes"                                    
                                     var us={} ;us[cssv]= e.target.value
-                                    var ns={...t.myTree_index.id[id][cssv_ob] , us }
+                                    var ns={...t.myTree_index.id[id][cssv_ob] , ...us }
                                     t.myTree_index.id[id][cssv_ob]=ns
                                     
                                     var sr={}
@@ -1280,23 +1281,24 @@ let  tree_template_O=function(){
 
                 var found=false
 
-                if (  r.name.toLowerCase().includes( tt.state.tree_panel_filter_txt.toLowerCase()) ){
+                if (  r.name.toLowerCase().includes( tt.state["tree_panel_filter_txt" + t.name_code ].toLowerCase()) ){
                     found=true;
                 }
 
-                if ( r.type.toLowerCase().includes( tt.state.tree_panel_filter_txt.toLowerCase())){
+                if ( r.type.toLowerCase().includes( tt.state["tree_panel_filter_txt" + t.name_code ].toLowerCase())){
                     found=true;
                 }
 
-                if(tt.state.tree_panel_filter_txt===""){
+                if(tt.state["tree_panel_filter_txt" + t.name_code ]===""){
                     //var found=true
                 }       
 
-                var xpp={...tt.state[ "tree_expanded_paths" + t.name_code ] }
+                var xpp=[...tt.state[ "tree_expanded_paths" + t.name_code ] ]
 
-                 // is expanded
-                 var temp_obj_path_s_is_ex=JSON.stringify(r.path).toString()
-                 xpp.forEach(function(rx1,ix1){ // need to build up , get this  object ID's path and compare tit to the tree path , not iterate through each as this is a bug that prevents closure
+                // is expanded
+                var temp_obj_path_s_is_ex=JSON.stringify(r.path).toString()
+                //xpp.forEach(function(rx1,ix1){ // need to build up , get this  object ID's path and compare tit to the tree path , not iterate through each as this is a bug that prevents closure
+                feach(xpp ,function(rx1,ix1){ // need to build up , get this  object ID's path and compare tit to the tree path , not iterate through each as this is a bug that prevents closure
                         var temp_path_s_is_ex=JSON.stringify(rx1).toString()                            
                         if (temp_path_s_is_ex===temp_obj_path_s_is_ex){
                             is_child_expanded=true
@@ -1358,12 +1360,13 @@ let  tree_template_O=function(){
                                     var id=e.target.getAttribute("cid")
                                     var l_obj=t.myTree_index.id[id]
 
-                                    var xpp={...tt.state["tree_expanded_paths" + t.name_code]}
+                                    var xpp=[...tt.state["tree_expanded_paths" + t.name_code]]
 
                                     var found=false;
                                     //var found_path
                                     var found_path_i
-                                    xpp.forEach(function(rx1,ix1){ 
+                                    //xpp.forEach(function(rx1,ix1){ 
+                                    feach(xpp, function(rx1,ix1){ 
                                         var temp_path_s=JSON.stringify(rx1).toString()
                                         var temp_obj_path_s=JSON.stringify(l_obj.path).toString()
                                         if (temp_path_s===temp_obj_path_s){
@@ -1378,7 +1381,7 @@ let  tree_template_O=function(){
                                     if (found){                                            
                                         xpp.splice(found_path_i ,1 )
                                     }else{
-                                        xpp.push( {...l_obj.path} )
+                                        xpp.push( [...l_obj.path] )
                                     }         
                                     
                                     var lr={}
@@ -2104,7 +2107,7 @@ let  tree_template_O=function(){
             //var argsl=args.length;
 
             //if (_.isEmpty(t.temp.current_cp)){
-            if (Object.keys(t.temp.current_cp).length === 0){
+            if (Object.keys(t.temp.current_cp).length !== 0){
                 return
             }
 
@@ -2593,42 +2596,42 @@ let  tree_template_O=function(){
                     t["init2"]=inst[tmp]
                 }
 
-                //var tmp="init_first"
+                var tmp="init_first"
                 if (!isUn(inst[tmp])){
                     t[tmp]=inst[tmp]
                 }
 
-                //var tmp="styles"
+                var tmp="styles"
                 if (!isUn(inst[tmp])){
                     t[tmp]={...t[tmp] , ...inst[tmp] }
                 }
                 
-                //var tmp="components"
+                var tmp="components"
                 if (!isUn(inst[tmp])){
                     t[tmp].all=inst[tmp]
                 }                    
 
-                //var tmp="component_catagories"
+                var tmp="component_catagories"
                 if (!isUn(inst[tmp])){
                     t[tmp]=inst[tmp]
                 }
                 
-                //var tmp="component_selected_catagory"
+                var tmp="component_selected_catagory"
                 if (!isUn(inst[tmp])){
                     t[tmp]=inst[tmp]
                 }
 
-                //var tmp="layout_fn"
+                var tmp="layout_fn"
                 if (!isUn(inst[tmp])){
                     t["layout_fn_2"]=inst[tmp]
                 }
 
-                //var tmp="props_fn"
+                var tmp="props_fn"
                 if (!isUn(inst[tmp])){
                     t["props_fn_2"]=inst[tmp]
                 }
 
-                //var tmp="text_fn"
+                var tmp="text_fn"
                 if (!isUn(inst[tmp])){
                     t["text_fn_2"]=inst[tmp]
                 }
@@ -2647,8 +2650,8 @@ let  tree_template_O=function(){
             t.props.t_myTreeO=obj
             
             //t.mytree.tt=obj.tt
-
-            t.myTree_index={...t.schemas.myTree_index.template}
+            
+            t.myTree_index={...t.schemas.myTree_index.template}            
             t.myTree_index.tt=obj.tt
 
             t.myTree={...t.schemas.myTree.template}               
@@ -2659,6 +2662,8 @@ let  tree_template_O=function(){
             
             
             t.init2({ args : args, t : t , argsl : argsl },t)
+            
+            //t.rebuild_myTree_index_id_object_links()
 
             return t
         }

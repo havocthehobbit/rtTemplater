@@ -57,9 +57,12 @@ export class HTtree extends Component{
             ] , 
 
             styles : { 
-                props : { main : {height : 100} },
-                myTree : { main : { width : 300, margin : undefined } } ,
-                text : { main : { width : 300 , height : 200, margin : 10 } } ,
+                components : { main : { background : "lightgrey",borderRadius : 8,padding : 5,margin : 5, width : 150} },
+                props : { main : { color : "black",height : 100,width : 900, background : "lightgrey", overflow : "auto",borderRadius : 8, padding : 5,margin : 5} },
+                myTree : { main : { background : "lightgrey", color : "black", height : 250,width : 300, margin : undefined ,borderRadius : 8, padding : 5,margin : 5} } ,
+                text : { main : { color : "black",width : 300 , height : 200, margin : 10 ,borderRadius : 8, padding : 5,margin : 5} } ,                
+                //components_groups :  { background : "lightgrey" } ,
+                layout : { main : { background : "transparent" } }
             },
 
             layout_fn : function(d1 ,d2, tt , t){
@@ -173,13 +176,13 @@ export class HTtree extends Component{
 
                         if (!isUn(r.propvars[ "linkedID_code" + "_" + event_type])){  
                             //if (!_.isEmpty(r.propvars[ "linkedID_code" + "_" + event_type])){  
-                            if (Object.keys(r.propvars["linkedID_code"+ "_" + event_type]).length === 0){ 
+                            if (Object.keys(r.propvars["linkedID_code"+ "_" + event_type]).length !== 0){ 
                             
                                 /////////////////////////////////////////////////////
                                     var has_remotetab_link=false
                                     if (!isUn(r.propvars["remTablinked_code"+ "_" + event_type])){  
                                         //if (!_.isEmpty(r.propvars["remTablinked_code"+ "_" + event_type])){
-                                        if (Object.keys(r.propvars["remTablinked_code"+ "_" + event_type]).length === 0){  
+                                        if (Object.keys(r.propvars["remTablinked_code"+ "_" + event_type]).length !== 0){  
                                             has_remotetab_link=true
                                             remTablinked_code=r.propvars["remTablinked_code"+ "_" + event_type]
                                         }
@@ -761,7 +764,7 @@ export class HTtree extends Component{
                                                     var us={} ;us[cssv]= e.target.value  // if one value not object  // var us={} ;us[cssv]=parseInt( e.target.value) // if limiting to an int
                                                     //var us={} ;us[cssv]={} // if object
 
-                                                    var ns={...t.myTree_index.id[id][sobj] , us }
+                                                    var ns={...t.myTree_index.id[id][sobj] , ...us }
                                                     t.myTree_index.id[id][sobj]=ns
                                                     //tt.prop.style=ns
                                                     var sr={}
@@ -796,7 +799,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="position"                                    
                                                     var us={} ;us[cssv]= e.target.value
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
 
@@ -830,7 +833,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="padding"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
 
@@ -864,7 +867,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="margin"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
 
@@ -897,7 +900,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="display"                                    
                                                     var us={} ;us[cssv]= e.target.value
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
 
@@ -934,7 +937,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="left"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -967,7 +970,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="right"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1000,7 +1003,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="top"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1033,7 +1036,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="bottom"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1069,7 +1072,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="width"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1102,7 +1105,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="height"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1135,7 +1138,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="float"
                                                     var us={} ;us[cssv]=e.target.value
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     
                                                     var st={}                      
@@ -1166,7 +1169,7 @@ export class HTtree extends Component{
                                                 if (!isUn(obj)){
                                                     var cssv="background"
                                                     var us={} ;us[cssv]=e.target.value
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     
                                                     var st={}                      
@@ -1203,7 +1206,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="fontSize"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1236,7 +1239,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="color"                                    
                                                     var us={} ;us[cssv]= e.target.value
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1269,7 +1272,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="font"                                    
                                                     var us={} ;us[cssv]= e.target.value
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1307,7 +1310,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="border"                                    
                                                     var us={} ;us[cssv]= e.target.value
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1340,7 +1343,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="borderRadius"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1391,7 +1394,7 @@ export class HTtree extends Component{
                                                         return
                                                     }
 
-                                                    //var ns={...t.myTree_index.id[id][sobj], us }
+                                                    //var ns={...t.myTree_index.id[id][sobj], ...us }
                                                     var ns={...us }
                                                     t.myTree_index.id[id][sobj]=ns
                                                     //tt.prop.style=ns
@@ -1432,7 +1435,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="zIndex"                                    
                                                     var us={} ;us[cssv]=parseInt( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1464,7 +1467,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="opacity"                                    
                                                     var us={} ;us[cssv]=parseFloat( e.target.value)
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns
                                                     
                                                     //tt.prop.style=ns
@@ -1499,7 +1502,7 @@ export class HTtree extends Component{
                                                     //obj.style.background=e.target.value
                                                     var cssv="transform"                                    
                                                     var us={} ;us[cssv]= e.target.value
-                                                    var ns={...t.myTree_index.id[id].style, us }
+                                                    var ns={...t.myTree_index.id[id].style, ...us }
                                                     t.myTree_index.id[id].style=ns                                                
                                                     //tt.prop.style=ns
                                                     
@@ -1536,7 +1539,7 @@ export class HTtree extends Component{
                                                     var us={} ;us[cssv]= e.target.value  // if one value not object  // var us={} ;us[cssv]=parseInt( e.target.value) // if limiting to an int
                                                     //var us={} ;us[cssv]={} // if object
 
-                                                    var ns={...t.myTree_index.id[id][sobj], us }
+                                                    var ns={...t.myTree_index.id[id][sobj], ...us }
                                                     t.myTree_index.id[id][sobj]=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1573,7 +1576,7 @@ export class HTtree extends Component{
                                                     var us={} ;us[cssv]= e.target.value  // if one value not object  // var us={} ;us[cssv]=parseInt( e.target.value) // if limiting to an int
                                                     //var us={} ;us[cssv]={} // if object
 
-                                                    var ns={...t.myTree_index.id[id][sobj], us }
+                                                    var ns={...t.myTree_index.id[id][sobj], ...us }
                                                     t.myTree_index.id[id][sobj]=ns
                                                     //tt.prop.style=ns
                                                     
@@ -1646,11 +1649,25 @@ export class HTtree extends Component{
 
         return (
             <div>
-                {tt.global_trees["ht"].tree.components_E}
-                {tt.global_trees["ht"].tree.myTree_E}
-                {tt.global_trees["ht"].tree.props_E}
-                {tt.global_trees["ht"].tree.layout_E}
-                {tt.global_trees["ht"].tree.text_E}
+                <div style={{ float : "left"}}>
+                    {tt.global_trees["ht"].tree.components_E}
+                </div>
+                
+                <div style={{ float : "left"}}>
+                    {tt.global_trees["ht"].tree.layout_E}
+                </div>
+                <div style={{ float : "left"}}>
+                    
+                </div>
+
+                <div style={{ float : "left"}}>
+                    {tt.global_trees["ht"].tree.myTree_E}
+                    {tt.global_trees["ht"].tree.text_E}
+                </div>                                
+                <div style={{clear : "left"}} />
+                <div>
+                    {tt.global_trees["ht"].tree.props_E}                    
+                </div>
             </div>
         )
     }

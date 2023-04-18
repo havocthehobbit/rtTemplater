@@ -418,8 +418,6 @@ export class Main extends Component {
 
             tt.alltoolitems.push(tool) 
         }
-
-
         
     }
 
@@ -441,10 +439,7 @@ export class Main extends Component {
     render(){
         let tt=this
         
-        let mainStyle=tt.mainStyle
-
-        //let JSNodeMongoEs
-        //JSNodeMongoEs=(tt.JSNodeMongo)()
+        let mainStyle=tt.mainStyle   
         
         let alltoolitemsE=[]
         
@@ -468,15 +463,12 @@ export class Main extends Component {
                      style={{ position : "relative"}}
                 >
                     <HeaderPanel/>
-                </div>     
-
-               
-                
+                </div>  
 
                 {alltoolitemsE}
                 
                 {
-                    //<HTtree/>
+                    <HTtree/>
                 }
 
                 { 
