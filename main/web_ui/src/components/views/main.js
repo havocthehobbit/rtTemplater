@@ -9,6 +9,8 @@ import $lnd from  "../common/libNativeDom"
 import { HeaderPanel } from './headerPanel';
 import { Tools } from './tools';
 import { Background } from './common/backround'
+import { saveload } from './common/saveload'
+
 import { TextEditor } from './common/textEditor';
 import { HTtree } from './common/httree'
 
@@ -59,173 +61,7 @@ export class Main extends Component {
         tools : [],
     }
 
-    localAllProjFile="rtTemplaterProjects"
-
-    loadtextProj=(loaddataSTR,nameIn)=>{
-        let tt=this
-        let cancel=false
-        let all
-
-        if (isUn(nameIn)){ nameIn="__default" }
-
-        if (tof(loaddataSTR)==="string"){
-            try {
-                all=JSON.parse(loaddataSTR)                
-            } catch (error) {
-                alert("load err : ", error)
-            }
-
-            if (cancel===true){
-                return
-            }
-
-            if (isOb(all)){
-                cl("all " , all)
-                let proj=all.projects[nameIn]
-                let JSNodeMongoTemp
-                
-                
-                tt.setState({data : proj.data },()=>{
-                    if (isOb(tt.state.data.JSNodeMongo)){
-                        //JSNodeMongoTemp=proj.data.JSNodeMongo
-                        //tt.reactmongoDBSetDataRun(JSNodeMongoTemp)
-                    }else{
-                        //tt.reactmongoDBSetDataRuns()
-                        tt.alltoolitems.forEach((r,i)=>{
-                            r.SetRefsRuns()
-                        })
-                    }
-                })
-
-                
-            }else{                
-                alert("load error ")
-            }            
-        }
-    }
-    loadDataLocal=(nameIn)=>{
-        let tt=this
-        
-        let loaddataSTR=localStorage.getItem( tt.localAllProjFile )        
-
-        if (isUn(nameIn)){ nameIn="__default" }
-        tt.loadtextProj(loaddataSTR, nameIn)
-        
-    }
-
-    downloadDataLocal=(nameIn)=>{
-        let tt=this
-        let cancel=false
-        let loaddataSTR=localStorage.getItem( tt.localAllProjFile )
-        let all
-        let str
-
-        if (isUn(nameIn)){ nameIn="__default" }
-
-        if (tof(loaddataSTR)==="string"){
-            try {
-                $lnd.download( nameIn + ".json" ,loaddataSTR)
-            } catch (error) {
-                alert("load err : ", error)
-            }
-
-         
-        }
-    }
-
-    importBrowseButtonRef=undefined    
-    importProjLocal=(e)=>{
-        let tt=this
-        let files= e.target.files && e.target.files[0]
-        
-        e.target.value = null; // clear out files on element
-        //cl("files : " , files )
-        
-
-        var reader = new FileReader();
-        reader.onload = function() {
-            var text = reader.result;            
-
-            tt.loadtextProj(text)
-
-            
-        };
-        reader.readAsText(files);
-        //reader.readAsDataURL(files)
-
-    }
-    importProjLocalClickHndl=(e )=>{
-        this.importProjLocal(e)
-    }
-    importBrowseInputButtonActivate=(e)=>{
-        this.importBrowseButtonRef.current.click()        
-    }
-
-    saveDataLocal=(nameIn)=>{
-        let tt=this
-        let def={
-
-        }
-        let cancel=false
-        
-        let loaddataSTR=localStorage.getItem( tt.localAllProjFile )
-        let loadedFile
-        if (tof(loaddataSTR)==="string"){
-            try {
-                loadedFile=JSON.parse(loaddataSTR)                
-            } catch (error) {
-                alert("save err unable to load file before saving : ", error)        
-            }
-        }
-
-        if (cancel===true){
-            return
-        }
-
-        if (isUn(nameIn)){ nameIn="__default" }
-
-        let newProj={ data : {},name : "",lastUpdated : new Date() }
-        let all
-        if (isOb(loadedFile)){
-            all=loadedFile
-        }else{
-            all={projects : {} , lastProj : "" }
-        }
-
-        all.projects[nameIn]=newProj
-        newProj.name=nameIn
-        newProj.lastUpdated=new Date()
-        
-        
-
-        //let JSNodeMongoTemp
-
-        //JSNodeMongoTemp=tt.reactmongoDBGetDataRun()
-
-        //JSNodeMongoTemp=tt.reactmongoDBGetDataRuns()
-
-        tt.alltoolitems.forEach((r,i)=>{
-
-        })
-
-        try {
-            let saveFile=""
-            all.lastProj=nameIn
-            //newProj.data["JSNodeMongo"]=JSNodeMongoTemp
-
-            tt.alltoolitems.forEach((r,i)=>{
-                newProj.data[r.name]=r.GetRefsRuns()                
-            })
-
-            saveFile=JSON.stringify(all,null,2)
-            localStorage.setItem( tt.localAllProjFile , saveFile )              
-        } catch (error) {
-            alert("save err : ", error)
-        }
-        
-        
-    }
-
+    importBrowseButtonRef=undefined     
 
     alltoolitems=[]
     toolItemsO=(...args)=>{
@@ -664,7 +500,7 @@ export class Main extends Component {
                     
                     <button
                         onClick={()=>{
-                            tt.loadDataLocal()
+                            saveload.loadDataLocal.apply(tt,[])
                         }}
                     >
                         load local
@@ -672,14 +508,14 @@ export class Main extends Component {
                     <br/>
                     <button
                         onClick={()=>{
-                            tt.saveDataLocal()
+                            saveload.saveDataLocal.apply(tt,[])
                         }}
                     >
                         save local
                     </button>
                     <button
                         onClick={()=>{
-                          tt.downloadDataLocal()
+                            saveload.downloadDataLocal.apply(tt,[])
                         }}
                     >
                         download local
@@ -687,7 +523,7 @@ export class Main extends Component {
                     <button
                         style={{}}
                         onClick={(e)=>{
-                            tt.importBrowseInputButtonActivate(e)
+                            saveload.importBrowseInputButtonActivate.apply(tt,[e])
                         }}
                     >
                         import project
@@ -697,7 +533,7 @@ export class Main extends Component {
                             type="file"
                             accept={"*" /* "image/star" for images filtered   */ }
                             onChange={(e)=>{
-                                tt.importProjLocal(e)
+                                saveload.importProjLocal.apply(tt,[e])
                             }}
                         />
                     </button>
