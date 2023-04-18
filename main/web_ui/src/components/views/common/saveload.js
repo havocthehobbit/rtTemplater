@@ -45,6 +45,13 @@ export const loadtextProj=function(loaddataSTR,nameIn){
                         r.SetRefsRuns()
                     })
                 }
+
+                if (isOb(tt.state.data.httree)){
+                    let httree=tt.HTtreeRef.current.global_trees["ht"].tree
+                    httree.load_data_fn(tt.state.data.httree) 
+                    tt.forceUpdate()
+                    //.load_data_fn( rd.data["all_trees"] )     
+                }
             })
 
             
@@ -147,6 +154,10 @@ export const saveDataLocal=function(nameIn){
     newProj.name=nameIn
     newProj.lastUpdated=new Date()
 
+    let httree=tt.HTtreeRef.current.global_trees["ht"].tree
+    httree.save_data_fn()                        
+    //cl("save_data :",httree.save_data)
+
     try {
         let saveFile=""
         all.lastProj=nameIn
@@ -155,6 +166,9 @@ export const saveDataLocal=function(nameIn){
         tt.alltoolitems.forEach((r,i)=>{
             newProj.data[r.name]=r.GetRefsRuns()                
         })
+
+        newProj.data["httree"]=httree.save_data
+        
 
         saveFile=JSON.stringify(all,null,2)
         localStorage.setItem(localAllProjFile , saveFile )              

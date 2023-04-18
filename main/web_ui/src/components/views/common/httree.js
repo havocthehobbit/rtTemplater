@@ -1,5 +1,6 @@
 import  React,{ Component } from "react";
 import {$gl} from "../../common/global"
+import './httree.css'
 
 let $cn=require( "../../common/libNative").$cn
 
@@ -1640,6 +1641,13 @@ export class HTtree extends Component{
         let tmp="ht"
         tt.global_trees[tmp]={}
         tt.global_trees[tmp].tree=new $gl.tree_template_O({this : tt , inst : tt.tree_instances[tmp + "_tree_Inst"]})
+        
+        
+        //tt.global_trees[tmp].tree.styles={ ...tt.global_trees[tmp].tree.styles,...{ myTree : { main : {}, className : "httreeMytree"}}}
+        //tt.global_trees[tmp].tree.styles={ ...tt.global_trees[tmp].tree.styles,...{ props : { main : {}, className : "httreeProps"}}}
+        //tt.global_trees[tmp].tree.styles={ ...tt.global_trees[tmp].tree.styles,...{ components : { main : {}, className : "httreeComponents"}}}
+        //tt.global_trees[tmp].tree.styles={ ...tt.global_trees[tmp].tree.styles,...{ layout : { main : {}, className : ""}}}
+        //tt.global_trees[tmp].tree.styles={ ...tt.global_trees[tmp].tree.styles,...{ text : { main : {}, className : ""}}}
     }
 
     render(){
@@ -1647,24 +1655,31 @@ export class HTtree extends Component{
 
         tt.global_trees["ht"].tree.render()
 
+        let floatLeft="left"
+
         return (
-            <div>
-                <div style={{ float : "left"}}>
+            <div
+                className={
+                    ""
+                    //"httrees"
+                }
+            >
+                <div style={{ float : floatLeft}}>
                     {tt.global_trees["ht"].tree.components_E}
                 </div>
                 
-                <div style={{ float : "left"}}>
+                <div style={{ float : floatLeft}}>
                     {tt.global_trees["ht"].tree.layout_E}
                 </div>
-                <div style={{ float : "left"}}>
+                <div style={{ float : floatLeft}}>
                     
                 </div>
 
-                <div style={{ float : "left"}}>
+                <div style={{ float : floatLeft}}>
                     {tt.global_trees["ht"].tree.myTree_E}
                     {tt.global_trees["ht"].tree.text_E}
                 </div>                                
-                <div style={{clear : "left"}} />
+                <div style={{clear : floatLeft}} />
                 <div>
                     {tt.global_trees["ht"].tree.props_E}                    
                 </div>

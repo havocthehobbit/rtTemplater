@@ -774,7 +774,7 @@ let  tree_template_O=function(){
                     main_tool_E.push(
                         <p  
                             key={i}
-                            style={t.styles.components_groups.p} 
+                            style={t.styles.components_groups.p}                             
                             tc_code={r.tc_code}
                             onClick={(e)=>{
                                     var tc_code=e.target.getAttribute("tc_code")
@@ -817,6 +817,7 @@ let  tree_template_O=function(){
                     
                     <p 
                         key={i}
+                        className={t.styles.components_groups.className} 
                         style={t.styles.components_groups.p} 
                         cat={r.code}
                         onClick={(e)=>{
@@ -840,7 +841,10 @@ let  tree_template_O=function(){
                         <h3 style={{paddingTop : 2, marginTop : 2}}>components</h3>
                     </div>
                     
-                    <div style={t.styles.components.main}>   
+                    <div 
+                        className={t.styles.components.className} 
+                        style={t.styles.components.main}
+                    >   
                         <div
                             style={{ position : "relative", float : "left", width : 45,fontSize : 12}} 
                         >                      
@@ -1016,7 +1020,7 @@ let  tree_template_O=function(){
             t.props_fn_2(d1 , d2,tt,t)
 
             t.props_E=( 
-                <div style={t.styles.props.main}>
+                <div className={t.styles.props.className} style={t.styles.props.main}>
                     {d2.ret_E}
                   
                 </div>
@@ -1124,6 +1128,7 @@ let  tree_template_O=function(){
             
             var layout_E=(
                 <div
+                    className={t.styles.layout.className}
                     style={t.styles.layout.main}
                 >   
                     <div
@@ -1157,7 +1162,11 @@ let  tree_template_O=function(){
             }
 
             if (isUn(t.text_fn_2)){
-                t.text_E=<textarea style={t.styles.text.main} value={t.text} onChange={(e)=>{}} />
+                t.text_E=<textarea 
+                    className={t.styles.text.className} 
+                    style={t.styles.text.main} 
+                    value={t.text} onChange={(e)=>{}} 
+                />
             }else{
                 var d1={ 
                     tt : tt, 
@@ -1577,6 +1586,7 @@ let  tree_template_O=function(){
             
             t.myTree_E=(
                 <div
+                    className={t.styles.myTree.className}
                     style={t.styles.myTree.main}
                 >   
                     {filter_E}

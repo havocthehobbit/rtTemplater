@@ -1,0 +1,76 @@
+
+
+.httree {
+    width : 300px;     
+}
+.httree3  {
+    width : 100px;
+}
+@media screen and (min-width: 100px) { /* if using min-width : screen > min-with  or using max-width :  screen < max-width   */
+    .httrees {        
+        width : 100px;   
+             
+    }
+}
+
+@media screen and (min-width: 400px) {
+    .httrees {
+        width : 130px;
+        left : 200px;
+    }
+    
+}
+
+@media screen and (min-width: 500px) {
+    .httrees {
+        position : "relative";
+        width : 150px;
+        
+    }
+    .httree3  {
+        width : 415px;
+    }
+}
+
+
+@media screen and (min-width: 501px) {
+    .httrees {
+        width : 150px;
+        
+    }
+    
+}
+
+@media screen and (min-width: 1000px) {
+    .httrees {
+        width : 430px;
+        left : 200px;
+    }
+    .httree3  {
+        width : 875px;
+    }
+  
+}
+
+@media screen and (min-width: 1499px) {
+    .httrees {
+        width : 430px;
+       
+    }
+}
+
+
+
+
+.httreeMytree{
+    background : lightgrey;
+    height : 100px
+
+}
+
+.httreeProps{
+    background : lightgrey;
+    height : 100px
+
+}
+

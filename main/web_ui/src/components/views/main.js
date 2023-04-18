@@ -11,6 +11,8 @@ import { Tools } from './tools';
 import { Background } from './common/backround'
 import { saveload } from './common/saveload'
 
+import './main.css'
+
 import { TextEditor } from './common/textEditor';
 import { HTtree } from './common/httree'
 
@@ -31,6 +33,9 @@ export class Main extends Component {
         this.testText=React.createRef(); 
         
         this.importBrowseButtonRef=React.createRef()
+        
+        
+        this.HTtreeRef =React.createRef()
 
         
 
@@ -199,7 +204,7 @@ export class Main extends Component {
             tt.alltoolitems.push(tool) 
         }
 
-        if (true){
+        if (false){
             let tool=new tt.toolItemsO()
             
             tool.name="JSNodeAPI2"
@@ -426,14 +431,16 @@ export class Main extends Component {
     mainStyle={
         //backgroundColor: "#282c34",
         // minHeight: "100vh",
-        height : "100%",
+        height : "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         //font-size: calc(10px + 2vmin),
         color: "white",
-        width : "100%",
+        width : "100vw",
+        overflowX : 'auto'
+        
     }
 
     render(){
@@ -458,31 +465,47 @@ export class Main extends Component {
                 <Background />
 
                 <Tools style={{zIndex :99}} />
-               
-                <div
-                     style={{ position : "relative"}}
-                >
-                    <HeaderPanel/>
-                </div>  
-
-                {alltoolitemsE}
                 
-                {
-                    <HTtree/>
-                }
-
-                { 
-                    /*
-                    <button
-                        onClick={()=>{
-                            console.log(tt.testText.current.getText())
+                    <div
+                        style={{ position : "relative"}}
+                    >
+                        <HeaderPanel/>
+                    </div>  
+                <div
+                    className=''
+                    style={{ 
+                        overflowX : "hidden",overflowY : "hidden"
+                        //,height : 790,width : 1482
+                    }}
+                >
+                    <div
+                        className=''
+                        style={{ 
+                            overflowX : "auto",overflowY : "auto", 
+                            //height : 750,width : 1400,padding : 50
                         }}
                     >
-                        testText
-                    </button>
-                    <TextEditor ref={tt.testText} />
-                    */ 
-                }
+                        {alltoolitemsE}
+                        
+                        
+                        {
+                            <HTtree ref={tt.HTtreeRef} />
+                        }
+
+                        { 
+                            /*
+                            <button
+                                onClick={()=>{
+                                    console.log(tt.testText.current.getText())
+                                }}
+                            >
+                                testText
+                            </button>
+                            <TextEditor ref={tt.testText} />
+                            */ 
+                        }
+                    </div>
+                </div>
                 <SideBar>
                     <div
                         style={{ color : "black"  }}
