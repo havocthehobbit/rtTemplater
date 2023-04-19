@@ -1,4 +1,4 @@
-let ps=require("./parser.js").ps
+let ps=require("./parser").ps
 let $cn=require("../common/libNative").$cn
 let cl=$cn.l
 let tof=$cn.tof
