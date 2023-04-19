@@ -368,15 +368,17 @@ export class Main extends Component {
                 // array or single object
                 if (isOb(tt.state.data[nameref])){}else{                
                     if (typeof(tt.state.data[nameref])==="object"){                   
-                        tt.state.data[nameref].forEach((r ,i) => {                      
+                        tt.state.data[nameref].forEach((r ,i) => {                                                  
                             Es.push(
                                 <div key={i}>
                                     <JSNodeMongo  mainTitle={"JS <----> API"} refData={tool.Refs} iter={i} startEx={false}/>
                                 </div>
                             )
+                            
+                            
+
                             itot=i
-                        });
-                        
+                        });                        
                     }
                 }
         
@@ -423,6 +425,125 @@ export class Main extends Component {
 
             tt.alltoolitems.push(tool) 
         }
+
+        if (true){
+            let tool=new tt.toolItemsO()
+            
+            tool.name="httree"
+            tool.GetRefsRuns=()=>{ //fetch components data
+                let nameref=tool.name
+                let tt=this
+                let data=[]
+                $cn.each(tool.Refs.current,(r,i)=>{
+                    if (tool.Refs.current[r.uuid]){                        
+                        if (tool.Refs.current[r.uuid].get){                        
+                            data.push(tool.Refs.current[r.uuid].get())               
+                        }
+                    }else{
+                        if (tool.Refs.current[i]){
+                            if (tool.Refs.current[i].get){                                                        
+                                data.push(tool.Refs.current[i].get())                   
+                                
+                            }else{
+
+                            }
+                        }
+                    }
+                })
+                return data
+            }
+            tool.SetRefsRuns=()=>{ // load compnent data
+                let nameref=tool.name
+                let tt=this
+        
+                if (tof(tt.state.data[nameref])==="array"){                    
+                    tt.state.data[nameref].forEach((r,i)=>{
+                        let data=r
+                        if (tool.Refs.current[r.uuid]){
+                            if (tool.Refs.current[r.uuid].set){
+                                tool.Refs.current[r.uuid].set(data)
+                            }    
+                        }else{
+                            if (tool.Refs.current[i]){
+                                if (tool.Refs.current[i].set){
+                                    tool.Refs.current[i].set(data)
+                                }else{
+                                    //tool.Refs.current[i]
+                                    cl("tree :",tool.Refs.current[i])
+                                } 
+                            }  
+                        }
+                        
+                    })
+                }        
+            }
+
+            tool.main=()=>{
+                let tt=this
+                let nameref=tool.name
+                let Es=[]
+                let i=0
+                let itot=0
+
+                if (isOb(tt.state.data[nameref])){}else{
+                    if (typeof(tt.state.data[nameref])==="object"){
+                        tt.state.data[nameref].forEach((r ,i) => {  
+                            // alternative to of doing this inside component with refData prop
+                            tool.Refs.current[i]={}
+
+                            Es.push(
+                                <div key={i}>
+                                    <HTtree ref={tt.HTtreeRef} />
+                                </div>
+                            )
+                            itot=i
+                        })
+                    }
+                }
+
+                let addbuttonE=(()=>{
+                    itot++
+                    let i=itot
+                    return (
+                        <button
+                            nameref={nameref}
+                            onClick={
+                                (e)=>{
+                                    let nameref=e.target.getAttribute("nameref")
+                                    let data={...tt.state.data}
+        
+                                    if (isUn(data)){
+                                        data={}
+                                    }
+                                    if (isUn(data[nameref])){
+                                        data[nameref]=[]
+                                    }
+        
+                                    let nr={}
+                                    data[nameref].push(nr)
+                            
+                                    let stnr={}
+                                    stnr["data"]=data
+
+                                    tt.setState(stnr)
+                                }
+                            }
+                        >
+                            add {nameref}
+                        </button>
+                    )
+                })()
+        
+                return (
+                    <div>
+                        {addbuttonE}
+                        {Es}
+                    </div>
+                )
+            }
+            tt.alltoolitems.push(tool)     
+        }
+        
         
     }
 
@@ -466,15 +587,18 @@ export class Main extends Component {
 
                 <Tools style={{zIndex :99}} />
                 
-                    <div
-                        style={{ position : "relative"}}
-                    >
-                        <HeaderPanel/>
-                    </div>  
+                <div
+                    style={{ position : "relative", 
+                            //height : "100%",
+                }}
+                >
+                    <HeaderPanel/>
+                </div>  
                 <div
                     className=''
                     style={{ 
-                        overflowX : "hidden",overflowY : "hidden"
+                        overflowX : "hidden",overflowY : "hidden",
+                        height : "100%",
                         //,height : 790,width : 1482
                     }}
                 >
@@ -489,7 +613,7 @@ export class Main extends Component {
                         
                         
                         {
-                            <HTtree ref={tt.HTtreeRef} />
+                            //<HTtree ref={tt.HTtreeRef} />
                         }
 
                         { 

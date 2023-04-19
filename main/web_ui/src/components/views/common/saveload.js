@@ -38,7 +38,7 @@ export const loadtextProj=function(loaddataSTR,nameIn){
             
             
             tt.setState({data : proj.data },()=>{
-                if (isOb(tt.state.data.JSNodeMongo)){
+                if (isOb(tt.alltoolitems)){
                     
                 }else{                    
                     tt.alltoolitems.forEach((r,i)=>{
@@ -46,12 +46,11 @@ export const loadtextProj=function(loaddataSTR,nameIn){
                     })
                 }
 
-                if (isOb(tt.state.data.httree)){
-                    let httree=tt.HTtreeRef.current.global_trees["ht"].tree
-                    httree.load_data_fn(tt.state.data.httree) 
-                    tt.forceUpdate()
-                    //.load_data_fn( rd.data["all_trees"] )     
-                }
+                //if (isOb(tt.state.data.httree)){
+                //    let httree=tt.HTtreeRef.current.global_trees["ht"].tree
+                //    httree.load_data_fn(tt.state.data.httree) 
+                //    tt.forceUpdate()                 
+                //}
             })
 
             
@@ -167,7 +166,7 @@ export const saveDataLocal=function(nameIn){
             newProj.data[r.name]=r.GetRefsRuns()                
         })
 
-        newProj.data["httree"]=httree.save_data
+        //newProj.data["httree"]=httree.save_data
         
 
         saveFile=JSON.stringify(all,null,2)
