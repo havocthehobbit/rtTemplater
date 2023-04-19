@@ -447,7 +447,6 @@ export class Main extends Component {
                             }else{
                                 let eleRef=tool.Refs.current[i].instanceRef.current
                                 let httree=eleRef.global_trees["ht"].tree
-                                //let httree=tt.HTtreeRef.current[i].global_trees["ht"].tree
                                 httree.save_data_fn()
                                 data.push(httree.save_data)                   
                                 
@@ -616,8 +615,10 @@ export class Main extends Component {
                 <div
                     className=''
                     style={{ 
-                        overflowX : "hidden",overflowY : "hidden",
-                        height : "100%",
+                        overflow : "hidden",
+                        //position : "relative",
+                        "--heighth" : "100%",height : "calc(var(--heighth) )",margin : 20
+                        //"--widthw" : "100%", width :"calc(var(--widthw) - 800px)",
                         //,height : 790,width : 1482
                     }}
                 >
@@ -625,16 +626,18 @@ export class Main extends Component {
                         className=''
                         style={{ 
                             overflowX : "auto",overflowY : "auto", 
+                            //position : "relative",
+                            //height : "var(--heighth)",
+                            //height : "calc(var(--heighth) + 17px )",
+                            height : "calc(100% + 17px )",
+                            width : "calc(100% + 17px )",
+                            //width :"var(--widthw)",
+                            //height : "100%"
                             //height : 750,width : 1400,padding : 50
                         }}
                     >
                         {alltoolitemsE}
-                        
-                        
-                        {
-                            //<HTtree ref={tt.HTtreeRef} />
-                        }
-
+                   
                         { 
                             /*
                             <button
@@ -649,6 +652,7 @@ export class Main extends Component {
                         }
                     </div>
                 </div>
+
                 <SideBar>
                     <div
                         style={{ color : "black"  }}
