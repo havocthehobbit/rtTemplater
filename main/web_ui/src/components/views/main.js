@@ -445,7 +445,13 @@ export class Main extends Component {
                                 data.push(tool.Refs.current[i].get())                   
                                 
                             }else{
-
+                                let eleRef=tool.Refs.current[i].instanceRef.current
+                                let httree=eleRef.global_trees["ht"].tree
+                                //let httree=tt.HTtreeRef.current[i].global_trees["ht"].tree
+                                httree.save_data_fn()
+                                data.push(httree.save_data)                   
+                                
+                                
                             }
                         }
                     }
@@ -465,12 +471,17 @@ export class Main extends Component {
                             }    
                         }else{
                             if (tool.Refs.current[i]){
-                                if (tool.Refs.current[i].set){
-                                    tool.Refs.current[i].set(data)
-                                }else{
+                                //if (tool.Refs.current[i].set){ // use defualt set data function 
+                                  //  tool.Refs.current[i].set(data)
+                                //}else{
                                     //tool.Refs.current[i]
-                                    cl("tree :",tool.Refs.current[i])
-                                } 
+                                   // cl("tree :",tool.Refs.current[i])
+                                    let eleRef=tool.Refs.current[i].instanceRef.current
+                                    let httree=eleRef.global_trees["ht"].tree
+                                    httree.load_data_fn(tt.state.data.httree[i]) 
+                                    tt.forceUpdate()
+                                     
+                                //} 
                             }  
                         }
                         
@@ -489,11 +500,19 @@ export class Main extends Component {
                     if (typeof(tt.state.data[nameref])==="object"){
                         tt.state.data[nameref].forEach((r ,i) => {  
                             // alternative to of doing this inside component with refData prop
-                            tool.Refs.current[i]={}
+                            if (isUn(tool.Refs.current[i])){
+                                tool.Refs.current[i]={
+                                    instanceRef : React.createRef({})
+                                }
+                            }
 
                             Es.push(
                                 <div key={i}>
-                                    <HTtree ref={tt.HTtreeRef} />
+                                    <HTtree 
+                                        ref={tool.Refs.current[i].instanceRef
+                                                // tt.HTtreeRef // singular ref
+                                        }
+                                     />
                                 </div>
                             )
                             itot=i
