@@ -80,6 +80,13 @@ export class Main extends Component {
             main : undefined,
             GetRefsRuns : undefined,
             SetRefsRuns : undefined,
+            addbutton : undefined,
+            addFn : undefined,
+
+            toolbuttonClass :"",
+            toolbuttonStyle : { background : "lightyellow",color : "black",fontSize : 13 },
+            
+            
             init : (...args)=>{
                 obj.Refs=React.createRef(); obj.Refs.current={}
         
@@ -98,6 +105,9 @@ export class Main extends Component {
             let tool=new tt.toolItemsO()
             
             tool.name="JSNodeAPI"
+            tool.toolbuttonClass={...tool.toolbuttonClass, ...{}}
+            tool.toolbuttonStyle={...tool.toolbuttonStyle, ...{}}
+
             tool.GetRefsRuns=()=>{
                 let nameref=tool.name
                 let tt=this
@@ -160,32 +170,36 @@ export class Main extends Component {
                     }
                 }
         
-                let addbuttonE=(()=>{
+                tool.addFn=(e)=>{
+                    let nameref=e.target.getAttribute("nameref")
+                    let data={...tt.state.data}
+
+                    if (isUn(data)){
+                        data={}
+                    }
+                    if (isUn(data[nameref])){
+                        data[nameref]=[]
+                    }
+
+                    let nr={}
+                    data[nameref].push(nr)
+            
+                    let stnr={}
+                    stnr["data"]=data
+
+                    tt.setState(stnr)
+                }
+        
+                tool.addbutton=(()=>{
                     itot++
                     let i=itot
                     return (
                         <button
+                            className={tool.toolbuttonClass}
+                            style={tool.toolbuttonStyle}
                             nameref={nameref}
                             onClick={
-                                (e)=>{
-                                    let nameref=e.target.getAttribute("nameref")
-                                    let data={...tt.state.data}
-        
-                                    if (isUn(data)){
-                                        data={}
-                                    }
-                                    if (isUn(data[nameref])){
-                                        data[nameref]=[]
-                                    }
-        
-                                    let nr={}
-                                    data[nameref].push(nr)
-                            
-                                    let stnr={}
-                                    stnr["data"]=data
-
-                                    tt.setState(stnr)
-                                }
+                                tool.addFn
                             }
                         >
                             add {nameref}
@@ -195,7 +209,9 @@ export class Main extends Component {
         
                 return (
                     <div>
-                        {addbuttonE}
+                        {
+                            //    addbuttonE
+                        }
                         {Es}
                     </div>
                 )
@@ -271,33 +287,37 @@ export class Main extends Component {
                         });                        
                     }
                 }
+
+                tool.addFn=(e)=>{
+                    let nameref=e.target.getAttribute("nameref")
+                    let data={...tt.state.data}
+
+                    if (isUn(data)){
+                        data={}
+                    }
+                    if (isUn(data[nameref])){
+                        data[nameref]=[]
+                    }
+
+                    let nr={}
+                    data[nameref].push(nr)
+            
+                    let stnr={}
+                    stnr["data"]=data
+
+                    tt.setState(stnr)
+                }
         
-                let addbuttonE=(()=>{
+                tool.addbutton=(()=>{
                     itot++
                     let i=itot
                     return (
                         <button
+                            className={tool.toolbuttonClass}
+                            style={tool.toolbuttonStyle}
                             nameref={nameref}
                             onClick={
-                                (e)=>{
-                                    let nameref=e.target.getAttribute("nameref")
-                                    let data={...tt.state.data}
-        
-                                    if (isUn(data)){
-                                        data={}
-                                    }
-                                    if (isUn(data[nameref])){
-                                        data[nameref]=[]
-                                    }
-        
-                                    let nr={}
-                                    data[nameref].push(nr)
-                            
-                                    let stnr={}
-                                    stnr["data"]=data
-
-                                    tt.setState(stnr)
-                                }
+                                tool.addFn
                             }
                         >
                             add {nameref}
@@ -411,32 +431,36 @@ export class Main extends Component {
                     }
                 }
 
-                let addbuttonE=(()=>{
+                tool.addFn=(e)=>{
+                    let nameref=e.target.getAttribute("nameref")
+                    let data={...tt.state.data}
+
+                    if (isUn(data)){
+                        data={}
+                    }
+                    if (isUn(data[nameref])){
+                        data[nameref]=[]
+                    }
+
+                    let nr={}
+                    data[nameref].push(nr)
+            
+                    let stnr={}
+                    stnr["data"]=data
+
+                    tt.setState(stnr)
+                }
+        
+                tool.addbutton=(()=>{
                     itot++
                     let i=itot
                     return (
                         <button
+                            className={tool.toolbuttonClass}
+                            style={tool.toolbuttonStyle}
                             nameref={nameref}
                             onClick={
-                                (e)=>{
-                                    let nameref=e.target.getAttribute("nameref")
-                                    let data={...tt.state.data}
-        
-                                    if (isUn(data)){
-                                        data={}
-                                    }
-                                    if (isUn(data[nameref])){
-                                        data[nameref]=[]
-                                    }
-        
-                                    let nr={}
-                                    data[nameref].push(nr)
-                            
-                                    let stnr={}
-                                    stnr["data"]=data
-
-                                    tt.setState(stnr)
-                                }
+                                tool.addFn
                             }
                         >
                             add {nameref}
@@ -446,7 +470,9 @@ export class Main extends Component {
         
                 return (
                     <div>
-                        {addbuttonE}
+                        {
+                            //    addbuttonE
+                        }
                         {Es}
                     </div>
                 )
@@ -481,6 +507,7 @@ export class Main extends Component {
         
         let alltoolitemsE=[]
         
+        // all tools 
         tt.alltoolitems.forEach((r,i)=>{
             let E=r.main()
             alltoolitemsE.push(
@@ -489,6 +516,33 @@ export class Main extends Component {
                 </div>
             )            
         })
+
+        let alltoolitemsButtonsE;
+        // all button
+        (
+            ()=>{
+                    let arrE=[]
+                    tt.alltoolitems.forEach((r,i)=>{
+                        let E=r.addbutton
+                        arrE.push(
+                            <div key={i} style={{ 
+                                                    position : "relative",
+                                                    float : "left",
+                                                    width :undefined
+                                                }}>                    
+                                {E}
+                            </div>
+                        )            
+                    })
+
+                    alltoolitemsButtonsE=(
+                        <div>
+                            {arrE}
+                            <div style={{clear : "left"}} />
+                        </div>
+                    )
+            }
+        )();
 
         
         return (
@@ -505,8 +559,11 @@ export class Main extends Component {
                 >
                     <HeaderPanel/>
                 </div>  
+
+                {alltoolitemsButtonsE}
+
                 <div
-                    className=''
+                     className='mainboxTools'
                     style={{ 
                         overflow : "hidden",
                         //position : "relative",
@@ -516,7 +573,7 @@ export class Main extends Component {
                     }}
                 >
                     <div
-                        className=''
+                       
                         style={{ 
                             overflowX : "auto",overflowY : "auto", 
                             //position : "relative",
