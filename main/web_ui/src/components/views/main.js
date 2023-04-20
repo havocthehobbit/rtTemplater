@@ -204,116 +204,6 @@ export class Main extends Component {
             tt.alltoolitems.push(tool) 
         }
 
-        if (false){
-            let tool=new tt.toolItemsO()
-            
-            tool.name="JSNodeAPI2"
-            tool.GetRefsRuns=()=>{
-                let nameref=tool.name
-                let tt=this
-                let data=[]
-                $cn.each(tool.Refs.current,(r,i)=>{
-                    if (tool.Refs.current[r.uuid]){
-                        
-                        //data[r.uuid]=tt.reactmongoDBDataRefs.current[r.uuid].get()                
-                        data.push(tool.Refs.current[r.uuid].get())               
-                    
-                    }else{
-                        if (tool.Refs.current[i]){
-                            
-                            //data[i]=tt.reactmongoDBDataRefs.current[i].get()                    
-                            data.push(tool.Refs.current[i].get())                   
-                            
-                        }
-                    }
-                })
-                return data
-            }
-            tool.SetRefsRuns=()=>{
-                let nameref=tool.name
-                let tt=this
-        
-                if (tof(tt.state.data[nameref])==="array"){
-                    tt.state.data[nameref].forEach((r,i)=>{
-                        let data=r
-                        if (tool.Refs.current[r.uuid]){
-                            if (tool.Refs.current[r.uuid].set){
-                                tool.Refs.current[r.uuid].set(data)
-                            }    
-                        }else{
-                            if (tool.Refs.current[i]){
-                                tool.Refs.current[i].set(data)
-                            }  
-                        }
-                        
-                    })
-                }        
-            }
-            tool.main=()=>{
-                let tt=this
-                let nameref=tool.name
-                let Es=[]
-                let i=0
-                let itot=0
-                // array or single object
-                if (isOb(tt.state.data[nameref])){}else{                
-                    if (typeof(tt.state.data[nameref])==="object"){                   
-                        tt.state.data[nameref].forEach((r ,i) => {                      
-                            Es.push(
-                                <div key={i}>
-                                    <JSNodeMongo  mainTitle={"JS <----> API"} refData={tool.Refs} iter={i} startEx={false}/>
-                                </div>
-                            )
-                            itot=i
-                        });
-                        
-                    }
-                }
-        
-                let addbuttonE=(()=>{
-                    itot++
-                    let i=itot
-                    return (
-                        <button
-                            nameref={nameref}
-                            onClick={
-                                (e)=>{
-                                    let nameref=e.target.getAttribute("nameref")
-                                    let data={...tt.state.data}
-        
-                                    if (isUn(data)){
-                                        data={}
-                                    }
-                                    if (isUn(data[nameref])){
-                                        data[nameref]=[]
-                                    }
-        
-                                    let nr={}
-                                    data[nameref].push(nr)
-                            
-                                    let stnr={}
-                                    stnr["data"]=data
-
-                                    tt.setState(stnr)
-                                }
-                            }
-                        >
-                            add {nameref}
-                        </button>
-                    )
-                })()
-        
-                return (
-                    <div>
-                        {addbuttonE}
-                        {Es}
-                    </div>
-                )
-            }
-
-            tt.alltoolitems.push(tool) 
-        }
-
         if (true){
             let tool=new tt.toolItemsO()
             
@@ -417,7 +307,9 @@ export class Main extends Component {
         
                 return (
                     <div>
-                        {addbuttonE}
+                        {
+                            //    addbuttonE
+                        }
                         {Es}
                     </div>
                 )
@@ -588,7 +480,8 @@ export class Main extends Component {
                 <Tools style={{zIndex :99}} />
                 
                 <div
-                    style={{ position : "relative", 
+                    style={{ 
+                        //position : "relative", 
                             //height : "100%",
                 }}
                 >

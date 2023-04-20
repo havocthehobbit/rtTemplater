@@ -20,6 +20,8 @@
 @media screen and (min-width: 500px) {
     .headerPanels {
         width : 200px;
+        left : 40px;
+        position : relative;
     }
     .headerPanel3  {
         width : 415px;
@@ -30,6 +32,7 @@
 @media screen and (min-width: 501px) {
     .headerPanels {
         width : 150px;
+        
     }
     
 }
@@ -37,7 +40,8 @@
 @media screen and (min-width: 1000px) {
     .headerPanels {
         width : 430px;
-       
+        left : 240px;
+        
     }
     .headerPanel3  {
         width : 875px;
@@ -48,6 +52,6 @@
 @media screen and (min-width: 1499px) {
     .headerPanels {
         width : 430px;
-       
+        left : 40px;
     }
 }

@@ -3,7 +3,10 @@ export const HeaderPanel=()=>{
 
     return (
         <div 
-            style={{ position : "relative", width : "100%"}}
+            style={{ 
+                //position : "relative",
+                //width : "100vw"
+            }}
         >
             <div
                 className="headerPanels"
