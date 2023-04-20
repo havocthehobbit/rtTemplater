@@ -337,7 +337,12 @@ export class Main extends Component {
                                 data.push(tool.Refs.current[i].get())                   
                                 
                             }else{
-
+                                let eleRef=tool.Refs.current[i].instanceRef.current
+                                let httree=eleRef.global_trees["ht"].tree
+                                httree.save_data_fn()
+                                data.push(httree.save_data)                   
+                                
+                                
                             }
                         }
                     }
@@ -357,12 +362,17 @@ export class Main extends Component {
                             }    
                         }else{
                             if (tool.Refs.current[i]){
-                                if (tool.Refs.current[i].set){
-                                    tool.Refs.current[i].set(data)
-                                }else{
+                                //if (tool.Refs.current[i].set){ // use defualt set data function 
+                                  //  tool.Refs.current[i].set(data)
+                                //}else{
                                     //tool.Refs.current[i]
-                                    cl("tree :",tool.Refs.current[i])
-                                } 
+                                   // cl("tree :",tool.Refs.current[i])
+                                    let eleRef=tool.Refs.current[i].instanceRef.current
+                                    let httree=eleRef.global_trees["ht"].tree
+                                    httree.load_data_fn(tt.state.data.httree[i]) 
+                                    tt.forceUpdate()
+                                     
+                                //} 
                             }  
                         }
                         
@@ -381,11 +391,19 @@ export class Main extends Component {
                     if (typeof(tt.state.data[nameref])==="object"){
                         tt.state.data[nameref].forEach((r ,i) => {  
                             // alternative to of doing this inside component with refData prop
-                            tool.Refs.current[i]={}
+                            if (isUn(tool.Refs.current[i])){
+                                tool.Refs.current[i]={
+                                    instanceRef : React.createRef({})
+                                }
+                            }
 
                             Es.push(
                                 <div key={i}>
-                                    <HTtree ref={tt.HTtreeRef} />
+                                    <HTtree 
+                                        ref={tool.Refs.current[i].instanceRef
+                                                // tt.HTtreeRef // singular ref
+                                        }
+                                     />
                                 </div>
                             )
                             itot=i
@@ -490,8 +508,10 @@ export class Main extends Component {
                 <div
                     className=''
                     style={{ 
-                        overflowX : "hidden",overflowY : "hidden",
-                        height : "100%",
+                        overflow : "hidden",
+                        //position : "relative",
+                        "--heighth" : "100%",height : "calc(var(--heighth) )",margin : 20
+                        //"--widthw" : "100%", width :"calc(var(--widthw) - 800px)",
                         //,height : 790,width : 1482
                     }}
                 >
@@ -499,16 +519,18 @@ export class Main extends Component {
                         className=''
                         style={{ 
                             overflowX : "auto",overflowY : "auto", 
+                            //position : "relative",
+                            //height : "var(--heighth)",
+                            //height : "calc(var(--heighth) + 17px )",
+                            height : "calc(100% + 17px )",
+                            width : "calc(100% + 17px )",
+                            //width :"var(--widthw)",
+                            //height : "100%"
                             //height : 750,width : 1400,padding : 50
                         }}
                     >
                         {alltoolitemsE}
-                        
-                        
-                        {
-                            //<HTtree ref={tt.HTtreeRef} />
-                        }
-
+                   
                         { 
                             /*
                             <button
@@ -523,6 +545,7 @@ export class Main extends Component {
                         }
                     </div>
                 </div>
+
                 <SideBar>
                     <div
                         style={{ color : "black"  }}

@@ -11,6 +11,15 @@
 
 
 /main/web_uic
+
+
+/main/node_serv/node_modules
+/main/node_serv/.pnp
+/main/node_serv/.pnp.js
+# testing
+/main/web_ui/coverage
+/main/node_serv/coverage
+
 # production
 /main/web_ui/build
 
@@ -26,7 +35,17 @@
 /main/web_ui/yarn-debug.log*
 /main/web_ui/yarn-error.log*
 
+/main/node_serv/l_node_modules_auto_*
+/main/node_serv/cust_folder_*
+/main/node_serv/cust_*.js
 
+/main/node_serv/startdevwc.bat
+/main/node_serv/cstartdevw.bat
+/main/node_serv/startdevc.sh
+/main/node_serv/cstartdev.sh
+
+
+/main/node_serv/modules/custom_*
 
 ############ 
 
@@ -38,6 +57,9 @@
 #data
 /main/data/settings.json
 
+/main/data/db1
+/main/data/dbs
+/main/data/usershome
 
 
 /main/datac
@@ -47,3 +69,9 @@
 /main/backups
 /main/custom
 /main/logs
+
+/main/ignoreme
+/main/.ignoreme
+/main/.cert
+
+/main/startdevc.sh

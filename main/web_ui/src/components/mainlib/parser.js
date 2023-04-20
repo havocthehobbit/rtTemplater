@@ -725,7 +725,6 @@ const parseLang=(params)=>{
 } 
 exp.parseLang=parseLang
 
-
 escapeStringRegExp.matchOperatorsRe = /[\\{}[\]^$+*?.]/g;
 function escapeStringRegExp(str) {
     return str.replace(escapeStringRegExp.matchOperatorsRe, '\\$&');
@@ -775,8 +774,7 @@ exp.indexOfSmallest=indexOfSmallest
 function valueOfSmallest(a) {
     return  arrnumSmallest(a).v
 }
-exp.valueOfSmallest=valueOfSmallest
+exp.valueOfSmallest=valueOfSmallest;
 
-//window.parseLang=parseLang
-
-module.exports.ps=exp
+export const ps=exp
+//module.exports.$ps=exp;

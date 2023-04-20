@@ -1,5 +1,8 @@
-let ps=require("./parser.js").ps
+import { ps  } from './parser'
+//let ps=require("../mainlib/parser").$ps
+
 let $cn=require("../common/libNative").$cn
+
 let cl=$cn.l
 let tof=$cn.tof
 let isUn=$cn.isUn
