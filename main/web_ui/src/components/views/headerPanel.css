@@ -13,6 +13,12 @@
 @media screen and (min-width: 400px) {
     .headerPanels {
         width : 130px;
+        left : 70px;
+        position : relative;
+    }
+    .headerPanel3  {
+        width : 275px;
+        
     }
     
 }
@@ -21,7 +27,7 @@
     .headerPanels {
         width : 200px;
         left : 40px;
-        position : relative;
+        
     }
     .headerPanel3  {
         width : 415px;
@@ -31,7 +37,7 @@
 
 @media screen and (min-width: 501px) {
     .headerPanels {
-        width : 150px;
+        
         
     }
     

@@ -5,14 +5,14 @@
 
 @media screen and (min-width: 100px) { /* if using min-width : screen > min-with  or using max-width :  screen < max-width   */
     .mainboxTools {        
-        width : 100px;   
+        width : 320px;   
              
     }
 }
 
 @media screen and (min-width: 400px) {
     .mainboxTools {
-        width : 130px;        
+        width : 480px;             
     }
     
 }
