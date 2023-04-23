@@ -60,17 +60,45 @@
 }
 
 
+.httreeComponents{
+    background : lightgrey;
+    height : 300px;
+    width : 100px;
+    display: inline-block;
+    float: left;
+    overflow : auto;
+    border-radius: 8px;
+}
 
 
 .httreeMytree{
     background : lightgrey;
-    height : 100px
+    height : 100px;
+    display: inline-block;
+    float: left;
+    overflow : auto;
+}
 
+.httreeLayhout{
+    display: inline-block;
+    float: left;
+    overflow : auto;
+}
+
+.httreeText{
+    display: inline-block;
+    float: left;
+    overflow : auto;
+    height : 100px;
 }
 
 .httreeProps{
     background : lightgrey;
-    height : 100px
-
+    color :black;
+    height : 300px;
+    width : 200px;
+    display: inline-block;
+    float: left;
+    overflow : auto;
 }
 
