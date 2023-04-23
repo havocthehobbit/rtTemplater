@@ -838,7 +838,7 @@ let  tree_template_O=function(){
                             tt.setState({})
                         }}
                     >                            
-                        <h3 style={{paddingTop : 2, marginTop : 2}}>components</h3>
+                        { /*<h3 style={{paddingTop : 2, marginTop : 2}}>components</h3> */}
                     </div>
                     
                     <div 
